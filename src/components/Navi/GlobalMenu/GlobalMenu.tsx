@@ -23,7 +23,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/orders/list"
           >
-            <div className={'titleImg'}><img src="order-list.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/order-list.png"/></div>
             <div className={'title'}>オーダー一覧</div>
           </Link>
         </li>
@@ -32,7 +32,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/delivery-document/list"
           >
-            <div className={'titleImg'}><img src="delivery-document-list.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/delivery-document-list.png"/></div>
             <div className={'title'}>入出荷一覧</div>
           </Link>
         </li>
@@ -42,7 +42,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/invoice-document/list"
           >
-            <div className={'titleImg'}><img src="invoice-document.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/invoice-document.png"/></div>
             <div className={'title'}>請求一覧</div>
           </Link>
         </li>
@@ -51,7 +51,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/product/list"
           >
-            <div className={'titleImg'}><img src="product-list.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/product-list.png"/></div>
             <div className={'title'}>品目一覧</div>
           </Link>
         </li>
@@ -61,7 +61,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/supply-chain-relationship/list"
           >
-            <div className={'titleImg'}><img src="scr-list.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/scr-list.png"/></div>
             <div className={'title'}>SCR一覧</div>
           </Link>
         </li>
@@ -71,7 +71,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/bill-of-material/list"
            >
-             <div className={'titleImg'}><img src="bill-of-material-list.png"/></div>
+             <div className={'titleImg'}><img src="global-menu/bill-of-material-list.png"/></div>
             <div className={'title'}>部品表一覧</div>
           </Link>
         </li>
@@ -81,7 +81,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/operations/list"
           >
-            <div className={'titleImg'}><img src="operations-list.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/operations-list.png"/></div>
             <div className={'title'}>作業手順一覧</div>
           </Link>
         </li>
@@ -92,7 +92,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/production-version/list"
           >
-            <div className={'titleImg'}><img src="production-version-list.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/production-version-list.png"/></div>
             <div className={'title'}>製造バージョン一覧</div>
           </Link>
         </li>
@@ -102,7 +102,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/production-order/list"
           >
-            <div className={'titleImg'}><img src="production-order-list.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/production-order-list.png"/></div>
             <div className={'title'}>製造指図一覧</div>
           </Link>
         </li>
@@ -112,7 +112,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/business-partner/list"
           >
-            <div className={'titleImg'}><img src="business-partner-list.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/business-partner-list.png"/></div>
             <div className={'title'}>BP一覧</div>
           </Link>
         </li>
@@ -122,7 +122,7 @@ export const GlobalMenu = ({ className }: {
            className={'listLink'}
            href="/equipment/list"
          >
-           <div className={'titleImg'}><img src="equipment-list.png"/></div>
+           <div className={'titleImg'}><img src="global-menu/equipment-list.png"/></div>
            <div className={'title'}>設備一覧</div>
          </Link>
         </li>
@@ -131,7 +131,7 @@ export const GlobalMenu = ({ className }: {
             className={'listLink'}
             href="/price-master/list"
           >
-            <div className={'titleImg'}><img src="price-list.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/price-list.png"/></div>
             <div className={'title'}>価格一覧</div>
           </Link>
         </li>
@@ -142,7 +142,7 @@ export const GlobalMenu = ({ className }: {
            className={'listLink'}
            href="/work-center/list"
           >
-            <div className={'titleImg'}><img src="work-center-list.png"/></div>
+            <div className={'titleImg'}><img src="global-menu/work-center-list.png"/></div>
            <div className={'title'}>ワークセンタ一覧</div>
          </Link>
         </li>

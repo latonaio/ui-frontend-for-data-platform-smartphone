@@ -100,88 +100,6 @@ const ProductionOrderDetailList: React.FC<PageProps> = (data) => {
     dispatch(setLoading({ isOpen: false }));
 
   };
-  const onUpdateItem = async (
-    value: any,
-    updateItemIndex: number,
-    updateItemKey: string,
-    params: any,
-    listType: string,
-    apiType: string = 'update',
-  ) => {
-    const {
-      language,
-      businessPartner,
-      emailAddress,
-    }: AuthedUser = getLocalStorage('auth');
-
-    dispatch(setLoading({ isOpen: true }));
-
-    const accepter = (params: any) => {
-      if (!params.hasOwnProperty('accepter')) {
-        return {
-          ...params,
-          accepter: ['Header'],
-        };
-      }
-
-      return params;
-    }
-
-    if (apiType === 'delete') {
-      await deletes({
-        ...params,
-        business_partner: businessPartner,
-        accepter: accepter(params).accepter,
-      });
-    } else {
-      await updates({
-        ...params,
-        accepter: accepter(params).accepter,
-      });
-    }
-
-    productionOrderCache.updateProductionOrderList({
-      language,
-      businessPartner,
-      emailAddress,
-      userType: toLowerCase(UserTypeEnum.OwnerProductionPlantBusinessPartner),
-    });
-
-    const itemIdentification = params.ProductionOrderMaster.ProductionOrder;
-
-    const updateData = {
-      ...formData,
-      [listType]: [
-        ...formData[listType].map((item: any, index: number) => {
-          if (item.BillOfMaterial === itemIdentification) {
-            return {
-              ...item,
-              [updateItemKey]: value,
-            }
-          }
-          return { ...item }
-        })
-      ],
-    };
-
-    if (apiType !== 'cancel') {
-      updateData.editList = {
-        ...formData.editList,
-        [listType]: [
-          ...formData.editList[listType].map((item: any, index: number) => {
-            return {
-              isEditing: index === updateItemIndex ? !item.isEditing : item.isEditing,
-            };
-          })
-        ]
-      }
-    }
-
-    setFormData(updateData);
-
-    dispatch(setLoading({ isOpen: false }));
-  }
-
 
   useEffect(() => {
     initLoadTabData(data.productionOrder, data.userType);
@@ -189,28 +107,9 @@ const ProductionOrderDetailList: React.FC<PageProps> = (data) => {
 
   return (
     <Wrapper className={'Wrapper'}>
-      <Header title={'データ連携基盤 製造指図詳細一覧'} className={'text-2xl'} />
+      <Header title={'トップ'} className={'text-2xl'} />
       <Main className={'Main'}>
-        <ContentsTop
-          className={'ContentsTopNav'}
-          title={'製造指図詳細を照会しています'}
-          searchTextDescription={getSearchTextDescription(
-            toUpperCase(data.userType),
-            {
-              [UserTypeEnum.OwnerProductionPlantBusinessPartner]:
-                [UserTypeEnum.OwnerProductionPlantBusinessPartner],
-            },
-          )}
-        />
-        {displayData && formData &&
-          <Content
-            data={displayData}
-            formData={formData}
-            userType={data.userType}
-            productionOrder={data.productionOrder}
-            onUpdateItem={onUpdateItem}
-          />
-        }
+        <Content />
       </Main>
       <Footer hrefPath={`/production-order/list`}></Footer>
     </Wrapper>

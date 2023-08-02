@@ -5,21 +5,20 @@ import {
   Wrapper,
 } from '@/styles/global/globals.style';
 import { Header } from '@/components/Header';
-import { ContentsTop } from '@/components/ContentsTop';
 import { Footer } from '@/components/Footer';
 import { ProductionOrderDetail as Content } from '@/components/Content';
-import { getLocalStorage, paginationArrow, toUpperCase } from '@/helpers/common';
+import { getLocalStorage } from '@/helpers/common';
 import {
   AuthedUser,
   ProductionOrderTablesEnum,
   ProductionOrderDetailProps,
   UserTypeEnum,
 } from '@/constants';
-import { productionOrderCache } from '@/services/cacheDatabase/productionOrder';
 import { useDispatch } from 'react-redux';
-import { getSearchTextDescription } from '@/helpers/pages';
-import { readsPagination } from '@/api/productionOrder/detail';
 import { setLoading } from '@/store/slices/loadging';
+import { useAppDispatch } from '@/store/hooks';
+import { initializeUpdate } from '@/store/slices/production-order/detail';
+import { productionOrderCache } from '@/services/cacheDatabase/productionOrder';
 
 interface PageProps {
   productionOrder: number;
@@ -39,17 +38,8 @@ export enum ActiveMenuTab {
 }
 
 const ProductionOrderDetail: React.FC<PageProps> = (data) => {
-  const [displayData, setDisplayData] = useState<ProductionOrderDetailProps | null>(null);
-
-  const [formData, setFormData] = useState<formData>({
-    editList: {},
-    [ProductionOrderTablesEnum.productionOrderDetail]: {} as ProductionOrderDetailProps,
-  });
-
-  const [paginationData, setPaginationData] = useState({});
-  const [activeMenuTab, setActiveMenuTab] = useState<ActiveMenuTab>(ActiveMenuTab.configurationItem);
-
   const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
 
   const setFormDataForPage = async (
     productionOrder: number,
@@ -57,6 +47,17 @@ const ProductionOrderDetail: React.FC<PageProps> = (data) => {
     userType: string,
     product: string,
   ) => {
+    const detail = await productionOrderCache.getProductionOrderDetail(
+      productionOrder,
+      productionOrderItem,
+      product,
+    );
+
+    if (detail) {
+      appDispatch(initializeUpdate({
+        [ProductionOrderTablesEnum.productionOrderDetail]: detail,
+      }));
+    }
   }
 
   const initLoadTabData = async (
@@ -65,6 +66,8 @@ const ProductionOrderDetail: React.FC<PageProps> = (data) => {
     product: string,
     userType: UserTypeEnum,
   ) => {
+    dispatch(setLoading({ isOpen: true }));
+
     const {
       language,
       businessPartner,
@@ -77,6 +80,25 @@ const ProductionOrderDetail: React.FC<PageProps> = (data) => {
       userType,
       product,
     );
+
+    await productionOrderCache.updateProductionOrderDetail({
+      productionOrder,
+      productionOrderItem,
+      userType,
+      product,
+      language,
+      businessPartner,
+      emailAddress,
+    });
+
+    await setFormDataForPage(
+      productionOrder,
+      productionOrderItem,
+      userType,
+      product,
+    );
+
+    dispatch(setLoading({ isOpen: false }));
   }
 
   useEffect(() => {
@@ -94,7 +116,7 @@ const ProductionOrderDetail: React.FC<PageProps> = (data) => {
       <Main className={'Main'}>
         <Content />
       </Main>
-      <Footer hrefPath={`/production-order/detail/list/${data.userType}/${data.productionOrder}`}></Footer>
+      <Footer></Footer>
     </Wrapper>
   )
 }

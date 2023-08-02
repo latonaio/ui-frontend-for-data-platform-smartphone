@@ -14,6 +14,7 @@ interface ButtonProps {
   children?: ReactNode,
   className?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  style?: React.CSSProperties,
 }
 
 interface GreenButtonProps extends ButtonProps {
@@ -33,17 +34,20 @@ export const BackButton = (
     hrefPath,
     children,
     className,
-  }: ButtonProps
+    style = {},
+  }: ButtonProps,
 ) => {
   const router = useRouter();
 
   return (
     <ButtonElement className={clsx(
-      'text-2xl font-bold text-white',
-      className
+      'font-bold',
+      className,
     )} onClick={async () => {
       await router.push(hrefPath === 'undefined' ? '/' : hrefPath === undefined ? '/' : hrefPath);
-    }}>
+    }}
+                   style={style}
+    >
       {children}
     </ButtonElement>
   );
@@ -55,13 +59,13 @@ export const GreenButton = (
     children,
     className,
     onClick,
-  }: GreenButtonProps
+  }: GreenButtonProps,
 ) => {
   return (
     <GreenButtonElement
       className={clsx(
         `${isFinished ? 'deep' : ''}`,
-        className
+        className,
       )}
       onClick={(e) => onClick && onClick(e)}
     >
@@ -76,13 +80,13 @@ export const BlueButton = (
     children,
     className,
     onClick,
-  }: GreenButtonProps
+  }: GreenButtonProps,
 ) => {
   return (
     <BlueButtonElement
       className={clsx(
         `${isFinished ? 'deep' : ''}`,
-        className
+        className,
       )}
       onClick={(e) => onClick && onClick(e)}
     >
@@ -95,17 +99,17 @@ export const WhiteButton = (
   {
     children,
     className,
-  }: WhiteButtonProps
+  }: WhiteButtonProps,
 ) => {
   return (
     <WhiteButtonElement className={clsx(
       '',
-      className
+      className,
     )}>
       {children}
     </WhiteButtonElement>
   );
-}
+};
 
 export const OtherButton = (
   {
@@ -113,19 +117,19 @@ export const OtherButton = (
     className,
     closedPopup,
     setClosedPopup,
-  }: OtherButtonButtonProps
+  }: OtherButtonButtonProps,
 ) => {
   return (
     <OtherButtonElement className={clsx(
       '',
       className,
     )}
-    onClick={() => {
-      setClosedPopup(!closedPopup);
-    }}
+                        onClick={() => {
+                          setClosedPopup(!closedPopup);
+                        }}
     >
       {children}
     </OtherButtonElement>
   );
-}
+};
 

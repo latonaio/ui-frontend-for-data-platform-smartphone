@@ -14,7 +14,9 @@ const deletes = async (
 };
 
 const updates = async (
-  params: UpdateParams,
+  // params: UpdateParams,
+  params: any,
+  type: string,
 ): Promise<any> => {
   const endpointUrl = 'DPFM_API_PRODUCT_MASTER_SRV/deletes';
   const response = await apiCallUpdate(methods.POST, endpointUrl, params);

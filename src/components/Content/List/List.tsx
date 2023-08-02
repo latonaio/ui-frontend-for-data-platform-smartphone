@@ -9,7 +9,8 @@ export const summaryHead = (summary: string[]) => {
             style={{
               width: `${100 / summary.length}%`
             }}
-          >{item}</td>
+            dangerouslySetInnerHTML={{ __html: item }}
+          />
         );
       })}
     </tr>

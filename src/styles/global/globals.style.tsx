@@ -9,6 +9,6 @@ export const Wrapper = styled.div`
 export const Main = styled.div`
   display: block;
   width: 100%;
-  margin: 0 auto ${rem(5)};
+  margin: 0 auto ${rem(150)};
   padding: 0;
 `;

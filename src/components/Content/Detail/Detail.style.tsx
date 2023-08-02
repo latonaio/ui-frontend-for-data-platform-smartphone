@@ -3,8 +3,6 @@ import { rem } from 'polished';
 import { style } from '@/constants';
 
 export const Content = styled.div`
-  display: flex;
-  justify-content: space-around;
   width: 100%;
   margin: ${rem(10)} auto 0;
   box-sizing: border-box;
@@ -206,3 +204,85 @@ export const QuantityInfo = styled.div`
     }
   }
 `;
+
+export const ProductDetailSection = styled.section`
+  margin: ${rem(0)} ${rem(20)};
+  font-size: ${rem(14)};
+  
+  &.spacePadding {
+    margin: 0 !important;
+    padding: ${rem(0)} ${rem(20)};
+  }
+`;
+
+export const ProductDetailSectionHeader = styled.div`
+  display: block;
+  font-size: ${rem(16)};
+  position: relative;
+  height: ${rem(24)};
+
+  &:after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: ${rem(1)};
+    background-color: #000;
+    position: absolute;
+    top: ${rem(12)};
+    left: 0;
+    z-index: 10;
+  }
+
+  div {
+    display: inline-block;
+    padding-right: ${rem(6)};
+    background-color: #ffffff;
+    top: 0;
+    position: absolute;
+    z-index: 11;
+  }
+`;
+
+export const ProductDetailSectionInfo = styled.div`
+`;
+
+export const ProductDetailSectionContent = styled.div`
+`;
+
+export const ProductDetailSectionContentQRCodeBoxWrapper = styled.div`
+  padding: ${rem(20)} ${rem(20)} ${rem(0)};
+`;
+
+export  const ProductDetailSectionContentQRCodeBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  .column-left,
+  .column-right {
+    width: 40%;
+  }
+
+  .column-left {
+    padding-right: ${rem( 10)};
+  }
+
+  .column-right {
+    padding-left: ${rem( 10)};
+  }
+  
+  .productMenu {
+    padding-bottom: ${rem( 10)};
+    text-align: center;
+    
+    &:last-child {
+      padding-bottom: ${rem( 0)};
+    }
+  }
+
+  .productMenuTitle {
+    font-size: ${rem( 13)};
+  }
+`;
+
+

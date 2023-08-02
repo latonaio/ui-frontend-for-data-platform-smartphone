@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import { rem } from 'polished';
 
 export const Button = styled.button`
-  padding: ${rem(10)} ${rem(16)};
+  padding: ${rem(5)} ${rem(8)};
   background-color: #253962;
   border-radius: ${rem(4)};
+  font-size: ${rem(10)};
 
   &.whiteInfo {
     border: 1px solid #000;

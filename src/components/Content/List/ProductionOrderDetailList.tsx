@@ -7,8 +7,10 @@ import {
   ListHeaderInfoTop,
   ListHeaderInfoBottom,
   ListHeaderInfo,
+  ListSection,
 } from './List.style';
 import {
+  DeliveryDocumentTablesEnum,
   ProductionOrderDetailHeader,
   ProductionOrderDetailListItem,
   ProductionOrderTablesEnum,
@@ -19,42 +21,25 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import {
   formData, onUpdateItem,
-} from '@/pages/production-order/detail/list/[userType]/[productionOrder]';
+} from '@/pages/production-order/operation/[userType]/[productionOrder]';
 import { texts } from '@/constants/message';
 import { setDialog } from '@/store/slices/dialog';
 import { Template as cancelDialogTemplate } from '@/components/Dialog';
+import { generateImageProductUrl } from '@/helpers/common';
+import { rem } from 'polished';
 
 export interface ProductionOrderDetailListProps {
   className?: string;
-  userType: string;
-  productionOrder: number;
-  data: {
-    businessPartner?: number;
-    productionOrderDetailListItem?: ProductionOrderDetailListItem[];
-    productionOrderDetailHeader?: ProductionOrderDetailHeader;
-  };
-  formData: formData;
-  onUpdateItem: onUpdateItem;
 }
 
 interface DetailListTableElementProps {
-  userType: string;
-  productionOrder: number;
   summary: string[];
-  businessPartner?: number;
   list: ProductionOrderDetailListItem[];
-  formData: formData;
-  onUpdateItem: onUpdateItem;
 }
 
 const DetailListTableElement = ({
-                                  userType,
-                                  productionOrder,
                                   summary,
-                                  businessPartner,
                                   list,
-                                  formData,
-								  onUpdateItem,
                                 }: DetailListTableElementProps) => {
   const router = useRouter();
   const listType = ProductionOrderTablesEnum.productionOrderDetailListOwnerProductionPlantBusinessPartnerItem;
@@ -64,119 +49,22 @@ const DetailListTableElement = ({
     if (list && list.length > 0) {
       return list.map((item, index) => {
         return (
-          <tr key={index} className={`record ${item.IsCancelled ? 'disabled' : ''}`} onClick={(e) => {
+          <tr key={index} className={`record ${item.IsCancelled ? 'disabled' : ''} ${item.IsActive ? 'active' : ''}`} onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             clickHandler(
-              `/production-order/detail/${productionOrder}/${item.ProductionOrderItem}/${userType}/${item.Product}`,
+              // `/production-order/detail/${productionOrder}/${item.ProductionOrderItem}/${userType}/${item.Product}`,
+              ``,
               router
             );
           }}>
             <td>{item.ProductionOrderItem}</td>
-            <td>{item.Product}/{item.ProductName}</td>
-            <td>{item.MRPArea}</td>
+            <td>{item.OrderItemTextBySeller}</td>
+            <td>X</td>
             <td>{item.TotalQuantity}</td>
-            <td>{item.ConfirmedYieldQuantity}</td>
-            <td>
-              <Checkbox
-                isChecked={item.ItemIsConfirmed}
-              />
-            </td>
-            <td>
-              <Checkbox
-                isChecked={item.ItemIsPartiallyConfirmed}
-              />
-            </td>
-            <td>
-              <Checkbox
-                isChecked={item.ItemIsReleased}
-              />
-            </td>
-            <td>
-              <div className={'w-full inline-flex justify-evenly items-center'}>
-                <GreenButton
-                  className={'size-relative'}
-                  isFinished={item.IsCancelled}
-                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-
-                    dispatch(setDialog({
-                      type: 'consent',
-                      consent: {
-                        isOpen: true,
-                        children: (
-                          cancelDialogTemplate(
-                            dispatch,
-                            item.IsCancelled  ?
-                              'オーダーのキャンセルを取り消しますか？' : 'オーダーをキャンセルしますか？',
-                            () => {
-                              onUpdateItem(
-                                !item.IsCancelled,
-                                index,
-                                'IsCancelled',
-                                {
-                                  ProductionOrder: {
-                                    ProductionOrder: item.ProductionOrder,
-                                    IsCancelled: !item.IsCancelled,
-                                  }
-                                },
-                                listType,
-                              );
-                            },
-                          )
-                        ),
-                      }
-                    }));
-                  }}
-                >
-                  {texts.button.cancel}
-                </GreenButton>
-                <BlueButton
-                  className={'size-relative'}
-                  isFinished={item.ItemIsReleased}
-                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-
-                    dispatch(setDialog({
-                      type: 'consent',
-                      consent: {
-                        isOpen: true,
-                        children: (
-                          cancelDialogTemplate(
-                            dispatch,
-                            item.ItemIsReleased ? 'オーダーの削除を取り消しますか？' : 'オーダーを削除しますか？',
-                            () => {
-                              onUpdateItem(
-                                !item.ItemIsReleased,
-                                index,
-                                'ItemIsReleased',
-                                {
-                                  ProductionOrder: {
-                                    ProductionOrder: item.ProductionOrder,
-                                    IsMarkedForDeletion: !item.ItemIsReleased,
-                                  }
-                                },
-                                listType,
-                              );
-                            },
-                          )
-                        ),
-                      }
-                    }));
-                  }}
-                >
-                  {texts.button.delete}
-                </BlueButton>
-                {/*<i*/}
-                {/*  className="icon-schedule"*/}
-                {/*  style={{*/}
-                {/*    fontSize: rem(32),*/}
-                {/*  }}*/}
-                {/*/>*/}
-              </div>
-            </td>
+            <td>九州たまご製造</td>
+            <td></td>
+            <td></td>
           </tr>
         );
       });
@@ -202,56 +90,153 @@ const DetailListTableElement = ({
 };
 
 export const ProductionOrderDetailList = ({
-                                            userType,
-                                            productionOrder,
-                                            data,
                                             className,
-                                            formData,
-											onUpdateItem,
                                           }: ProductionOrderDetailListProps) => {
   const summary = [
-    '製造指図明細番号',
-    '品目コード/品目名称',
-    'MRPエリア',
-    '数量',
-    '確認済み生産数量',
-    '在庫確認',
-    '部分的確認済み明細',
-    'リリース済み',
-    '',
+    '作業<br />番号',
+    '作業テキスト',
+    '構成品目<br />消費',
+    '構成品目<br />出荷',
+    '外注業者<br />(Seller)',
+    '入荷',
+    '作業完了<br />確認',
   ];
+
+  const header = {
+    [ProductionOrderTablesEnum.productionOrderDetail]: {
+      Images: {
+        Product: '',
+      }
+    }
+  };
 
   return (
     <ListElement className={clsx(
       `List`,
       className
     )}>
-      <div>
-        <ListHeaderInfo className={'flex justify-end'}>
+      <ListSection>
+        <ListHeaderInfo>
           <div className={'columnLeft'}>
-            <ListHeaderInfoTop className={'flex justify-start text-xl'}>
-              <div>製造指図番号: {data.productionOrderDetailHeader?.ProductionOrder}</div>
-              <div>製造指図計画開始日付 / 時刻: {data.productionOrderDetailHeader?.ProductionOrderPlannedStartDate} {data.productionOrderDetailHeader?.ProductionOrderPlannedStartTime}</div>
-              <div>製造指図計画終了日付 / 時刻: {data.productionOrderDetailHeader?.ProductionOrderPlannedEndDate} {data.productionOrderDetailHeader?.ProductionOrderPlannedEndTime}</div>
-            </ListHeaderInfoTop>
-            <ListHeaderInfoBottom className={'flex justify-start text-xl'}>
-              <div>OwnerProductionPlantBusinessPartner: {data.productionOrderDetailHeader?.OwnerProductionPlant}</div>
-            </ListHeaderInfoBottom>
+            {/*<img*/}
+            {/*  src={header[ProductionOrderTablesEnum.productionOrderDetail] &&*/}
+            {/*    generateImageProductUrl(*/}
+            {/*      header[ProductionOrderTablesEnum.productionOrderDetail].Images.Product.BusinessPartnerID.toString(),*/}
+            {/*      header[ProductionOrderTablesEnum.productionOrderDetail].Images.Product,*/}
+            {/*    )}*/}
+            {/*  alt={``}*/}
+            {/*/>*/}
+            <img alt="" src="http://34.209.222.142:30000/doc/201/642be1c5d070b605cb250ac9534f6a0ab210e8fd9253a4e8a0a756ee7c589143.jpg"></img>
           </div>
           <div className={'columnRight'}>
-            <BackButton className={'whiteInfo text-sm'}>その他の情報</BackButton>
+            <div>
+              <span>製造指図番号: 794939</span>
+              <span style={{
+                marginLeft: rem(10)
+              }}>計画開始日付/時刻: <span style={{
+                fontSize: rem(10)
+              }}>2023-07-24 / 11:20:00</span></span>
+              <span style={{
+                marginLeft: rem(10)
+              }}>計画終了日付/時刻: <span style={{
+                fontSize: rem(10)
+              }}>2023-07-24 / 14:30:00</span></span>
+            </div>
+            <div>
+              <span>オーナーBP: 山崎製パン</span>
+              <span style={{
+                marginLeft: rem(10)
+              }}>オーナープラント: 松戸第二工場</span>
+            </div>
+            <div className={'flex justify-between items-center'}>
+              <div className={'flex justify-end items-center'}>
+                <div>
+                  <span>計画製造数量(基): <span style={{
+                    fontSize: rem(16)
+                  }}>3,000</span></span>
+                </div>
+                <div style={{
+                  marginLeft: rem(10)
+                }}>
+                  <span>計画製造数量(製): <span style={{
+                    fontSize: rem(16)
+                  }}>6,000</span></span>
+                </div>
+              </div>
+              <div className={'m-0'}>
+                <BackButton
+                  className={'whiteInfo'}
+                  style={{
+                    marginRight: rem(10),
+                  }}
+                >Cockpit</BackButton>
+                <BackButton className={'whiteInfo'}>その他の情報</BackButton>
+              </div>
+            </div>
           </div>
         </ListHeaderInfo>
-      </div>
-      <DetailListTableElement
-        userType={userType}
-        summary={summary}
-        productionOrder={productionOrder}
-        businessPartner={data.businessPartner}
-        list={formData[ProductionOrderTablesEnum.productionOrderDetailList] || []}
-        formData={formData}
-        onUpdateItem={onUpdateItem}
-      />
+      </ListSection>
+
+      <ListSection>
+        <DetailListTableElement
+          summary={summary}
+          list={[
+            {
+              "ProductionOrder": 1,
+              "ProductionOrderItem": 1,
+              "Product": "A3750",
+              "ProductName": "",
+              "OrderItemTextBySeller": "たまご作成",
+              "TotalQuantity": 1,
+              "ConfirmedYieldQuantity": 1,
+              "ItemIsConfirmed": false,
+              "ItemIsPartiallyConfirmed": false,
+              "ItemIsReleased": false,
+              "IsCancelled": false,
+              "MRPArea": "",
+              "IsActive": true,
+            },
+            {
+              "ProductionOrder": 1,
+              "ProductionOrderItem": 2,
+              "Product": "A3750",
+              "ProductName": "",
+              "OrderItemTextBySeller": "パン成形",
+              "TotalQuantity": 1,
+              "ConfirmedYieldQuantity": 1,
+              "ItemIsConfirmed": false,
+              "ItemIsPartiallyConfirmed": false,
+              "ItemIsReleased": false,
+              "IsCancelled": false,
+              "MRPArea": ""
+            },
+            {
+              "ProductionOrder": 1,
+              "ProductionOrderItem": 3,
+              "Product": "A3750",
+              "ProductName": "",
+              "OrderItemTextBySeller": "中身封入",
+              "TotalQuantity": 1,
+              "ConfirmedYieldQuantity": 1,
+              "ItemIsConfirmed": false,
+              "ItemIsPartiallyConfirmed": false,
+              "ItemIsReleased": false,
+              "IsCancelled": false,
+              "MRPArea": ""
+            }
+          ]}
+        />
+      </ListSection>
+
+      {/*<DetailListTableElement*/}
+      {/*  userType={userType}*/}
+      {/*  summary={summary}*/}
+      {/*  productionOrder={productionOrder}*/}
+      {/*  businessPartner={data.businessPartner}*/}
+      {/*  list={formData[ProductionOrderTablesEnum.productionOrderDetailList] || []}*/}
+      {/*  formData={formData}*/}
+      {/*  onUpdateItem={onUpdateItem}*/}
+      {/*/>*/}
     </ListElement>
   );
 };

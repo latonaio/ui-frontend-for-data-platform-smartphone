@@ -5,6 +5,11 @@ import { rem } from 'polished';
 export const List = styled.div`
 `;
 
+export const ListSection = styled.section`
+  margin: ${rem(20)} ${rem(20)} 0;
+  font-size: ${rem(14)};
+`;
+
 export const HeadTab = styled.ul`
   display: flex;
   justify-content: flex-start;
@@ -13,15 +18,15 @@ export const HeadTab = styled.ul`
   
   li {
     width: calc(50% - 4px);
-    border-bottom: 2px solid ${style.theme.lightBlue400};
-    border-top: 2px solid ${style.theme.lightBlue400};
-    border-left: 2px solid ${style.theme.lightBlue400};
+    border-bottom: 2px solid #000;
+    border-top: 2px solid #000;
+    border-left: 2px solid #000;
     padding: ${rem(8)} ${rem(8)};
     box-sizing: border-box;
     cursor: pointer;
     
     &:last-child {
-      border-right: 2px solid ${style.theme.lightBlue400};
+      border-right: 1px solid #000;
     }
     
     &.active {
@@ -32,6 +37,7 @@ export const HeadTab = styled.ul`
 `;
 
 export const DetailList = styled.div`
+  font-size: ${rem(12)};
 `;
 
 export const DetailListTable = styled.table`
@@ -40,55 +46,38 @@ export const DetailListTable = styled.table`
 
   td {
     vertical-align: middle;
-    border-right: 2px solid #e0e0e0;
-
+    border-right: 1px solid #000;
+    
     &:first-child {
-      border-left: 2px solid #e0e0e0;
+      border-left: 1px solid #000;
     }
-
-    // &:last-child {
-      //   width: ${rem(200)};
-    // }
   }
-
-  // &.deliveryDocumentDetailList {
-  //   .head {
-  //     td:nth-child(6),
-  //     td:nth-child(7) {
-    //       width: ${rem(200)};
-  //     }
-  //   }
-  // }
-  //
-  // &.productionOrderList {
-  //   .head {
-  //     td:last-child {
-    //       width: ${rem(170)};
-  //     }
-  //   }
-  // }
 
   .head {
     td {
+      padding: ${rem(10)} 0;
       font-weight: bold;
-      padding: ${rem(20)};
       text-align: center;
       color: #ffffff;
-      background-color: ${style.theme.lightBlue400};
+      background-color: #404040;
     }
   }
 
   tbody {
     tr {
       &:last-child {
-        border-bottom: 2px solid #e0e0e0;
+        border-bottom: 1px solid #000;
       }
     }
   }
 
   .record {
     cursor: pointer;
-    border-top: 2px solid #e0e0e0;
+    border-top: 1px solid #000;
+
+    &.active {
+      background-color: #E2F0D9;
+    }
 
     &.disabled {
       background-color: #c9c8c8;
@@ -100,14 +89,10 @@ export const DetailListTable = styled.table`
 
     td {
       padding: ${rem(10)};
-      color: #989898;
+      color: #000;
       word-wrap: break-word;
       overflow-wrap: break-word;
       text-align: center;
-
-      &:first-child {
-        text-align: left;
-      }
 
       &:last-child {
         padding: ${rem(10)} 0;
@@ -160,16 +145,21 @@ export const IcnInvoice = styled.button`
 `;
 
 export const ListHeaderInfo = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
   margin-bottom: ${rem(20)};
+  font-size: ${rem(11)};
+  font-weight: bold;
   
   .columnLeft {
+    width: ${rem(100)};
     margin-right: auto;
     padding-left: ${rem(0)};
   }
 
-  .columnRight {
-
-  }
+  .columnRight {}
 `;
 
 const EditMenu = styled.div`

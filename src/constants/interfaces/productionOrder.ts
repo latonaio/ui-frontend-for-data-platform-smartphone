@@ -26,6 +26,7 @@ interface ProductionOrderDetailListItem {
   ItemIsReleased: boolean;
   IsCancelled: boolean;
   MRPArea: string;
+  IsActive?: boolean;
 }
 
 interface ProductionOrderDetailHeader {

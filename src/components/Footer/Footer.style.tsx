@@ -7,6 +7,7 @@ export const FooterWrapper = styled.footer`
   position: fixed;
   bottom: 0;
   background-color: #fff;
+  border-top: ${rem(1)} solid #c0c0c0;
 `;
 
 export const FooterUl = styled.ul`
