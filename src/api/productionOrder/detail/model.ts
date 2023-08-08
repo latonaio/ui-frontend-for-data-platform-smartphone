@@ -3,7 +3,7 @@ import {
   ProductionOrderDetailHeader,
   UIKeyGeneral,
   Pagination,
-  ProductionOrderDetailProps,
+  ProductionOrderCockpitProps,
 } from '@/constants';
 
 export interface ReadsDetailListParams extends UIKeyGeneral {
@@ -22,7 +22,7 @@ export interface ReadsDetailParams extends UIKeyGeneral {
 }
 
 export interface ReadsDetailResponse {
-  productionOrderDetail: ProductionOrderDetailProps;
+  productionOrderDetail: ProductionOrderCockpitProps;
 }
 
 interface DetailPagination {

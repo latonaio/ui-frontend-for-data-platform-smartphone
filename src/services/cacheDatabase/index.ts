@@ -46,7 +46,8 @@ export class CacheDatabase extends Tables {
       [ProductionOrderTablesEnum.productionOrderListOwnerProductionPlantBusinessPartnerItem]: 'ProductionOrder',
       [ProductionOrderTablesEnum.productionOrderDetailListOwnerProductionPlantBusinessPartnerItem]: '[ProductionOrder+ProductionOrderItem]',
       [ProductionOrderTablesEnum.productionOrderDetailHeader]: 'ProductionOrder',
-      [ProductionOrderTablesEnum.productionOrderDetail]: '[ProductionOrder+ProductionOrderItem+Product]',
+      [ProductionOrderTablesEnum.productionOrderCockpit]: '[ProductionOrder+ProductionOrderItem+Product]',
+      [ProductionOrderTablesEnum.productionOrderOperation]: '[ProductionOrder+ProductionOrderItem]',
 
       [ProductTablesEnum.productListBusinessPartnerItem]: 'Product, ProductDescription, ProductGroup, BaseUnit, ValidityStartDate',
       [ProductTablesEnum.productDetailExconfListHeader]: 'Product',
@@ -55,7 +56,7 @@ export class CacheDatabase extends Tables {
       [EquipmentTablesEnum.equipmentListBusinessPartnerItem]: 'Equipment, EquipmentDescription, EquipmentGroup, BaseUnit, ValidityStartDate',
 
       [BusinessPartnerTablesEnum.businessPartnerListBusinessPartnerItem]: '++id, BusinessPartner',
-	  [BusinessPartnerTablesEnum.businessPartnerDetailExconfList]: 'BusinessPartner',
+	    [BusinessPartnerTablesEnum.businessPartnerDetailExconfList]: 'BusinessPartner',
       [BusinessPartnerTablesEnum.businessPartnerDetailExconfListHeader]: 'BusinessPartner',
 
       [PriceMasterTablesEnum.priceMasterListBuyerItem]: '++id',

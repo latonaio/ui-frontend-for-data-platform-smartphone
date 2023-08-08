@@ -4,38 +4,24 @@ import {
   ProductionOrderTablesEnum,
   ProductionOrderDetailListItem,
   ProductionOrderDetailHeader,
-  UserTypeEnum,
 } from '@/constants';
-import { toLowerCase } from '@/helpers/common';
 import { ProductionOrderUserType } from './index';
 import {
   readsDetailList,
 } from '@/api/productionOrder/detail';
 
-export class Detail extends CacheDatabase {
-  async getProductionOrderDetailList(
+export class Operation extends CacheDatabase {
+  async getProductionOrderOperation(
     productionOrder: number,
     userType: ProductionOrderUserType[keyof ProductionOrderUserType],
   ): Promise<{
-    [ProductionOrderTablesEnum.productionOrderDetailList]:
+    [ProductionOrderTablesEnum.productionOrderOperation]:
       ProductionOrderDetailListItem[];
     [ProductionOrderTablesEnum.productionOrderDetailHeader]:
       ProductionOrderDetailHeader | undefined;
   }> {
-    if (userType === toLowerCase(UserTypeEnum.OwnerProductionPlantBusinessPartner)) {
-      return {
-        [ProductionOrderTablesEnum.productionOrderDetailList]:
-          await this.productionOrderDetailListOwnerProductionPlantBusinessPartnerItem
-            .where('ProductionOrder')
-            .equals(productionOrder)
-            .toArray(),
-        [ProductionOrderTablesEnum.productionOrderDetailHeader]:
-          await this.productionOrderDetailHeader.get({ ProductionOrder: productionOrder }),
-      }
-    }
-
     return {
-      [ProductionOrderTablesEnum.productionOrderDetailList]:
+      [ProductionOrderTablesEnum.productionOrderOperation]:
         await this.productionOrderDetailListOwnerProductionPlantBusinessPartnerItem
           .where('ProductionOrder')
           .equals(productionOrder)
@@ -45,7 +31,7 @@ export class Detail extends CacheDatabase {
     }
   }
 
-  async updateProductionOrderDetailList(
+  async updateProductionOrderOperation(
     params: {
       productionOrder: number;
       userType: ProductionOrderUserType[keyof ProductionOrderUserType],
@@ -56,7 +42,6 @@ export class Detail extends CacheDatabase {
   ): Promise<void> {
     const response = await readsDetailList({
       isMarkedForDeletion: false,
-      // isCancelled: false,
       productionOrder: params.productionOrder,
       productionOrderIsReleased: true,
       language: params.language,
@@ -65,16 +50,12 @@ export class Detail extends CacheDatabase {
       userType: params.userType,
     });
 
-    if (response.numberOfRecords > 0) {
+    if (response.productionOrderDetailList.length > 0) {
       for (const productionOrderDetailListItem of response.productionOrderDetailList) {
-        if (params.userType === toLowerCase(UserTypeEnum.OwnerProductionPlantBusinessPartner)) {
-          await this.productionOrderDetailListOwnerProductionPlantBusinessPartnerItem.put({
-            ...productionOrderDetailListItem,
-            ProductionOrder: params.productionOrder,
-          });
-        } else {
-
-        }
+        await this.productionOrderOperation.put({
+          ...productionOrderDetailListItem,
+          ProductionOrder: params.productionOrder,
+        });
       }
 
       await this.productionOrderDetailHeader.put({
@@ -82,10 +63,7 @@ export class Detail extends CacheDatabase {
         ProductionOrder: params.productionOrder,
       });
     } else {
-      if (params.userType === toLowerCase(UserTypeEnum.OwnerProductionPlantBusinessPartner)) {
-        await this.productionOrderDetailListOwnerProductionPlantBusinessPartnerItem.clear();
-      }
-
+      await this.productionOrderOperation.clear();
       await this.productionOrderDetailHeader.clear();
     }
   }

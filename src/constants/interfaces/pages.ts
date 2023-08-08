@@ -98,7 +98,7 @@ interface BusinessPartnerDetailProps {
   tags: string[];
 }
 
-interface ProductionOrderDetailProps {
+interface ProductionOrderCockpitProps {
   ProductionOrder: number;
   ProductionOrderItem: number;
   OrderItemText: string;
@@ -238,7 +238,7 @@ export type {
   OrdersProductDetailProps,
   BusinessPartnerDetailProps,
   DeliveryDocumentDetailProps,
-  ProductionOrderDetailProps,
+  ProductionOrderCockpitProps,
   ComponentItem,
   OperationItem,
   PriceMasterDetailProps,

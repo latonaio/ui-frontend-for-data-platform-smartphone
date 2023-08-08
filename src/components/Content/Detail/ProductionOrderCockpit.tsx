@@ -23,14 +23,14 @@ import {
   ComponentItem,
   OperationItem,
   ProductImage,
-  ProductionOrderDetailProps,
+  ProductionOrderCockpitProps,
   ProductionOrderTablesEnum,
 } from '@/constants';
 import { rem } from 'polished';
 import { Carousel } from '@/components/Carousel';
 import { useAppSelector } from '@/store/hooks';
 
-export const ProductionOrderDetail = ({
+export const ProductionOrderCockpit = ({
                                         className,
                                       }: {
   className?: string;
@@ -54,8 +54,8 @@ export const ProductionOrderDetail = ({
   //   return null;
   // }
 
-  const detail  = useAppSelector(state => state.productionOrderDetail) as {
-    [ProductionOrderTablesEnum.productionOrderDetail]: ProductionOrderDetailProps,
+  const detail  = useAppSelector(state => state.productionOrderCockpit) as {
+    [ProductionOrderTablesEnum.productionOrderCockpit]: ProductionOrderCockpitProps,
   };
 
   return (
@@ -67,10 +67,10 @@ export const ProductionOrderDetail = ({
         <ProductDetailSlider>
           <Carousel>
             <img
-              src={detail[ProductionOrderTablesEnum.productionOrderDetail] &&
+              src={detail[ProductionOrderTablesEnum.productionOrderCockpit] &&
                 generateImageProductUrl(
-                  detail[ProductionOrderTablesEnum.productionOrderDetail].Images.Product.BusinessPartnerID.toString(),
-                  detail[ProductionOrderTablesEnum.productionOrderDetail].Images.Product,
+                  detail[ProductionOrderTablesEnum.productionOrderCockpit].Images.Product.BusinessPartnerID.toString(),
+                  detail[ProductionOrderTablesEnum.productionOrderCockpit].Images.Product,
                 )}
               alt={``}
             />

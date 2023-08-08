@@ -6,25 +6,30 @@ import {
 import { List } from './list';
 import { toLowerCase } from '@/helpers/common';
 import { Detail } from './detail';
+import { Cockpit } from './cockpit';
+import { Operation } from './operation';
 
 export interface ProductionOrderUserType {
   ownerProductionPlantBusinessPartner: string;
 }
 
-class ProductionOrderCache extends CacheDatabase implements List {
+class ProductionOrderCache extends CacheDatabase implements List, Detail {
   private list: List;
   private detail: Detail;
+  private cockpit: Cockpit;
+  private operation: Operation;
 
   constructor() {
     super();
     this.list = new List();
     this.detail = new Detail();
+    this.cockpit = new Cockpit();
+    this.operation = new Operation();
   }
 
   async getProductionOrderList() {
     return this.list.getProductionOrderList();
   }
-
 
   async updateProductionOrderList(
     params: {
@@ -40,23 +45,45 @@ class ProductionOrderCache extends CacheDatabase implements List {
   async getProductionOrderDetailList(
     productionOrder: number,
     productionOrderItem: string,
-    ) {
+  ) {
     return await this.detail.getProductionOrderDetailList(
       productionOrder,
       productionOrderItem,
     );
   }
 
-  async getProductionOrderDetail(
+  async getProductionOrderOperation(
+    productionOrder: number,
+    productionOrderItem: string,
+  ) {
+    return await this.operation.getProductionOrderOperation(
+      productionOrder,
+      productionOrderItem,
+    );
+  }
+
+  async getProductionOrderCockpit(
     productionOrder: number,
     productionOrderItem: number,
     product: string,
   ) {
-    return await this.detail.getProductionOrderDetail(
+    return await this.cockpit.getProductionOrderCockpit(
       productionOrder,
       productionOrderItem,
-      product
+      product,
     );
+  }
+
+  async updateProductionOrderOperation(
+    params: {
+      productionOrder: number;
+      userType: ProductionOrderUserType[keyof ProductionOrderUserType],
+      language: AuthedUser['language'];
+      businessPartner: AuthedUser['businessPartner'];
+      emailAddress: AuthedUser['emailAddress'];
+    },
+  ): Promise<void> {
+    return await this.operation.updateProductionOrderOperation(params);
   }
 
   async updateProductionOrderDetailList(
@@ -71,7 +98,7 @@ class ProductionOrderCache extends CacheDatabase implements List {
     return await this.detail.updateProductionOrderDetailList(params);
   }
 
-  async updateProductionOrderDetail(
+  async updateProductionOrderCockpit(
     params: {
       productionOrder: number;
       productionOrderItem: number;
@@ -82,7 +109,7 @@ class ProductionOrderCache extends CacheDatabase implements List {
       emailAddress: AuthedUser['emailAddress'];
     },
   ) {
-    return await this.detail.updateProductionOrderDetail(params);
+    return await this.cockpit.updateProductionOrderCockpit(params);
   }
 }
 

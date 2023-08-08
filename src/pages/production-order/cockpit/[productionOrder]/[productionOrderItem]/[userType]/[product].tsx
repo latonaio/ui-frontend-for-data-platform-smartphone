@@ -6,18 +6,18 @@ import {
 } from '@/styles/global/globals.style';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { ProductionOrderDetail as Content } from '@/components/Content';
+import { ProductionOrderCockpit as Content } from '@/components/Content';
 import { getLocalStorage } from '@/helpers/common';
 import {
   AuthedUser,
   ProductionOrderTablesEnum,
-  ProductionOrderDetailProps,
+  ProductionOrderCockpitProps,
   UserTypeEnum,
 } from '@/constants';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/store/slices/loadging';
 import { useAppDispatch } from '@/store/hooks';
-import { initializeUpdate } from '@/store/slices/production-order/detail';
+import { initializeUpdate } from '@/store/slices/production-order/cockpit';
 import { productionOrderCache } from '@/services/cacheDatabase/productionOrder';
 
 interface PageProps {
@@ -29,7 +29,7 @@ interface PageProps {
 
 export interface formData {
   editList: any;
-  [ProductionOrderTablesEnum.productionOrderDetail]: ProductionOrderDetailProps | null;
+  [ProductionOrderTablesEnum.productionOrderCockpit]: ProductionOrderCockpitProps | null;
 }
 
 export enum ActiveMenuTab {
@@ -47,7 +47,7 @@ const ProductionOrderDetail: React.FC<PageProps> = (data) => {
     userType: string,
     product: string,
   ) => {
-    const detail = await productionOrderCache.getProductionOrderDetail(
+    const detail = await productionOrderCache.getProductionOrderCockpit(
       productionOrder,
       productionOrderItem,
       product,
@@ -55,7 +55,7 @@ const ProductionOrderDetail: React.FC<PageProps> = (data) => {
 
     if (detail) {
       appDispatch(initializeUpdate({
-        [ProductionOrderTablesEnum.productionOrderDetail]: detail,
+        [ProductionOrderTablesEnum.productionOrderCockpit]: detail,
       }));
     }
   }
@@ -81,7 +81,7 @@ const ProductionOrderDetail: React.FC<PageProps> = (data) => {
       product,
     );
 
-    await productionOrderCache.updateProductionOrderDetail({
+    await productionOrderCache.updateProductionOrderCockpit({
       productionOrder,
       productionOrderItem,
       userType,

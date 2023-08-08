@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  ProductionOrderDetailProps as DefaultProductionOrderDetailProps,
+  ProductionOrderDetailHeader as DefaultProductionOrderDetailHeader,
+  ProductionOrderDetailListItem as DefaultProductionOrderDetailListItem,
   ProductionOrderTablesEnum,
 } from '@/constants';
 import { setLoading } from '@/store/slices/loadging';
@@ -16,29 +17,36 @@ interface errors {
   };
 }
 
-export interface ProductionOrderDetailProps extends DefaultProductionOrderDetailProps {
+export interface ProductionOrderDetailListItem extends DefaultProductionOrderDetailListItem {
   isEditing: {
     [key: string]: boolean;
   };
   errors: errors
 }
 
+export interface ProductionOrderDetailHeader extends DefaultProductionOrderDetailHeader {
+}
+
 export interface InitialState {
-  [ProductionOrderTablesEnum.productionOrderDetail]: ProductionOrderDetailProps | null;
+  [ProductionOrderTablesEnum.productionOrderOperation]: ProductionOrderDetailListItem[] | [];
+  [ProductionOrderTablesEnum.productionOrderDetailHeader]: ProductionOrderDetailHeader | {};
 }
 
 const initialState: InitialState = {
-  [ProductionOrderTablesEnum.productionOrderDetail]: null,
+  [ProductionOrderTablesEnum.productionOrderOperation]: [],
+  [ProductionOrderTablesEnum.productionOrderDetailHeader]: {},
 };
 
 const isEditingObject = {
+  ComponentProductStandardQuantityInBaseUnit: false,
+  ProductionOrderItemText: false,
 }
 
 interface editItemParam {
   params: {
     ProductionOrder: {
       ProductionOrder: number;
-      Item: ProductionOrderDetailProps;
+      Item: ProductionOrderDetailListItem[];
     };
     accepter: string[];
     api_type: string;
@@ -48,16 +56,18 @@ interface editItemParam {
 }
 
 interface pushEditItem {
-  item: ProductionOrderDetailProps;
+  index: number;
+  item: ProductionOrderDetailListItem;
   key: string;
 }
 
-export const productionOrderDetail = createSlice({
-  name: 'productionOrderDetail',
+export const ProductionOrderOperation = createSlice({
+  name: 'ProductionOrderOperation',
   initialState,
   reducers: {
     initializeUpdate: (state, action: PayloadAction<{
-      [ProductionOrderTablesEnum.productionOrderDetail]: DefaultProductionOrderDetailProps;
+      [ProductionOrderTablesEnum.productionOrderOperation]: DefaultProductionOrderDetailListItem[] | [];
+      [ProductionOrderTablesEnum.productionOrderDetailHeader]: DefaultProductionOrderDetailHeader | {};
     }>) => {
       const errors = (): errors => {
         return Object.keys(isEditingObject).reduce((collection, key) => {
@@ -70,19 +80,21 @@ export const productionOrderDetail = createSlice({
         }, {} as { [key: string]: { isError: boolean, message: string | null } });
       };
 
-      if (!action.payload[ProductionOrderTablesEnum.productionOrderDetail]) { return; }
+      if (!action.payload[ProductionOrderTablesEnum.productionOrderOperation]) { return; }
 
-      state[ProductionOrderTablesEnum.productionOrderDetail] = {
-        isEditing: isEditingObject,
-        errors: errors(),
-        ...action.payload[ProductionOrderTablesEnum.productionOrderDetail],
-      }
+      state[ProductionOrderTablesEnum.productionOrderOperation] = action.payload[ProductionOrderTablesEnum.productionOrderOperation]
+        .map((item) => {
+          return {
+            ...item,
+            isEditing: isEditingObject,
+            errors: errors()
+          }
+        });
+      state[ProductionOrderTablesEnum.productionOrderDetailHeader] = action
+        .payload[ProductionOrderTablesEnum.productionOrderDetailHeader];
     },
-    pushItemToEdit: (state: InitialState, action: PayloadAction<pushEditItem>) => {
-      const targetState = state[ProductionOrderTablesEnum.productionOrderDetail];
-
-      if (!targetState) { return; }
-
+    pushItemToEdit: (state, action: PayloadAction<pushEditItem>) => {
+      const targetState = state[ProductionOrderTablesEnum.productionOrderOperation][action.payload.index];
       const payload = JSON.stringify(action.payload);
       const parsedDetail = JSON.parse(payload);
       const actionData = {
@@ -91,19 +103,16 @@ export const productionOrderDetail = createSlice({
 
       actionData.item.isEditing[actionData.key] = !targetState.isEditing[actionData.key];
 
-      state[ProductionOrderTablesEnum.productionOrderDetail] = {
+      state[ProductionOrderTablesEnum.productionOrderOperation][action.payload.index] = {
         ...actionData.item,
       }
     },
     editedItem: (state, action: PayloadAction<{
       index: number;
-      item: ProductionOrderDetailProps;
+      item: ProductionOrderDetailListItem;
       key: string;
     }>) => {
-      const targetState = state[ProductionOrderTablesEnum.productionOrderDetail];
-
-      if (!targetState) { return; }
-
+      const targetState = state[ProductionOrderTablesEnum.productionOrderOperation][action.payload.index];
       const payload = JSON.stringify(action.payload);
       const parsedDetail = JSON.parse(payload);
       const actionData = {
@@ -111,13 +120,13 @@ export const productionOrderDetail = createSlice({
       };
 
       actionData.item.isEditing[actionData.key] = !targetState.isEditing[actionData.key];
-      state[ProductionOrderTablesEnum.productionOrderDetail] = {
+      state[ProductionOrderTablesEnum.productionOrderOperation][action.payload.index] = {
         ...actionData.item,
       }
     },
     closeItem: (state, action: PayloadAction<{
       index: number;
-      item: ProductionOrderDetailProps;
+      item: ProductionOrderDetailListItem;
       key: string;
     }>) => {
       const payload = JSON.stringify(action.payload);
@@ -127,13 +136,13 @@ export const productionOrderDetail = createSlice({
       };
 
       actionData.item.isEditing[actionData.key] = false;
-      state[ProductionOrderTablesEnum.productionOrderDetail] = {
+      state[ProductionOrderTablesEnum.productionOrderOperation][action.payload.index] = {
         ...actionData.item,
       }
     },
     setErrorItem: (state, action: PayloadAction<{
       index: number;
-      item: ProductionOrderDetailProps;
+      item: ProductionOrderDetailListItem;
       key: string;
       isError: boolean;
       message: string;
@@ -147,7 +156,7 @@ export const productionOrderDetail = createSlice({
       actionData.item.errors[actionData.key].isError = actionData.isError;
       actionData.item.errors[actionData.key].message = actionData.message;
 
-      state[ProductionOrderTablesEnum.productionOrderDetail] = {
+      state[ProductionOrderTablesEnum.productionOrderOperation][action.payload.index] = {
         ...actionData.item,
       }
     },
@@ -160,9 +169,9 @@ export const checkInvalid = ({
                                key,
                                checkValue,
                              }: {
-                               index: number,
-                               item: ProductionOrderDetailProps,
-                               key: string,
+                               index: number
+                               item: ProductionOrderDetailListItem
+                               key: string
                                checkValue: any,
                              },
                              appDispatch: Dispatch,
@@ -188,15 +197,16 @@ export const checkInvalid = ({
   }
 };
 
-const isError = (index: number, detailState: {
-  [ProductionOrderTablesEnum.productionOrderDetail]: ProductionOrderDetailProps,
+const isError = (index: number, listState: {
+  [ProductionOrderTablesEnum.productionOrderDetailHeader]: ProductionOrderDetailHeader,
+  [ProductionOrderTablesEnum.productionOrderOperation]: ProductionOrderDetailListItem[],
 }) => {
-  const detail  = detailState[ProductionOrderTablesEnum.productionOrderDetail];
+  const list  = listState;
 
   return Object.keys(
-    detail.errors,
+    list[ProductionOrderTablesEnum.productionOrderOperation][index].errors,
   ).some((key) => {
-    return detail.errors[key].isError
+    return list[ProductionOrderTablesEnum.productionOrderOperation][index].errors[key].isError
   })
 }
 
@@ -204,7 +214,8 @@ export const editItemAsync = async (
   editItemParam: editItemParam,
   appDispatch: Dispatch,
   listState: {
-    [ProductionOrderTablesEnum.productionOrderDetail]: ProductionOrderDetailProps,
+    [ProductionOrderTablesEnum.productionOrderDetailHeader]: ProductionOrderDetailHeader,
+    [ProductionOrderTablesEnum.productionOrderOperation]: ProductionOrderDetailListItem[],
   },
 ) => {
   appDispatch(setLoading({ isOpen: true }))
@@ -243,10 +254,10 @@ export const editItemAsync = async (
       api_type: params.api_type,
     }, 'item');
 
-    appDispatch(productionOrderDetail.actions.editedItem(
+    appDispatch(ProductionOrderOperation.actions.editedItem(
       {
         index: index,
-        item: params.ProductionOrder.Item,
+        item: params.ProductionOrder.Item[0]  ,
         key: key,
       },
     ));
@@ -264,4 +275,4 @@ export const {
   editedItem,
   closeItem,
   setErrorItem,
-} = productionOrderDetail.actions;
+} = ProductionOrderOperation.actions;

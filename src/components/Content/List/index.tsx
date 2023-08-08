@@ -5,7 +5,7 @@ export * from './DeliveryDocumentDetailList';
 export * from './InvoiceDocumentList';
 export * from './InvoiceDocumentDetailList';
 export * from './ProductionOrderList';
-export * from './ProductionOrderDetailList';
+export * from './ProductionOrderOperation';
 export * from './ProductList';
 export * from './BusinessPartnerList';
 export * from './EquipmentList';

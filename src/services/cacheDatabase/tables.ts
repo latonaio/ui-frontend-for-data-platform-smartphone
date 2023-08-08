@@ -28,7 +28,7 @@ import {
   ProductionOrderItem,
   ProductionOrderDetailListItem,
   ProductionOrderDetailHeader,
-  ProductionOrderDetailProps,
+  ProductionOrderCockpitProps,
 
   // Product
   ProductItem,
@@ -122,7 +122,8 @@ export class Tables extends Dexie {
   [ProductionOrderTablesEnum.productionOrderListOwnerProductionPlantBusinessPartnerItem]!: Table<ProductionOrderItem>;
   [ProductionOrderTablesEnum.productionOrderDetailListOwnerProductionPlantBusinessPartnerItem]!: Table<ProductionOrderDetailListItem>;
   [ProductionOrderTablesEnum.productionOrderDetailHeader]!: Table<ProductionOrderDetailHeader>;
-  [ProductionOrderTablesEnum.productionOrderDetail]!: Table<ProductionOrderDetailProps>;
+  [ProductionOrderTablesEnum.productionOrderCockpit]!: Table<ProductionOrderCockpitProps>;
+  [ProductionOrderTablesEnum.productionOrderOperation]!: Table<ProductionOrderDetailListItem>;
 
   [ProductTablesEnum.productListBusinessPartnerItem]!: Table<ProductItem>;
   [ProductTablesEnum.productDetailExconfListHeader]!: Table<ProductDetailExconfListHeader>;

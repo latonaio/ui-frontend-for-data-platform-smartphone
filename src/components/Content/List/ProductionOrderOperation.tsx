@@ -89,7 +89,7 @@ const DetailListTableElement = ({
   );
 };
 
-export const ProductionOrderDetailList = ({
+export const ProductionOrderOperation = ({
                                             className,
                                           }: ProductionOrderDetailListProps) => {
   const summary = [
@@ -103,7 +103,7 @@ export const ProductionOrderDetailList = ({
   ];
 
   const header = {
-    [ProductionOrderTablesEnum.productionOrderDetail]: {
+    [ProductionOrderTablesEnum.productionOrderCockpit]: {
       Images: {
         Product: '',
       }

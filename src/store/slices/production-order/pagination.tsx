@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ProductionOrderDetailProps } from '@/constants';
+import { ProductionOrderCockpitProps } from '@/constants';
 
 interface paginationState {
   ProductionOrder: number;
