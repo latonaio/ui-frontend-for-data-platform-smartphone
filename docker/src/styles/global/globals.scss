@@ -1,0 +1,41 @@
+@import './reset';
+@import './fonts';
+@import "~tailwindcss/base";
+@import "~tailwindcss/components";
+@import "~tailwindcss/utilities";
+.clearfix {
+  display: block;
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  &:before {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+.dis-flex {
+  display: flex !important;
+}
+
+.color-red {
+  color: red !important;
+}
+
+.fade-in {
+    animation: fadeIn ease 1s;
+    -webkit-animation: fadeIn ease 1s;
+    -moz-animation: fadeIn ease 1s;
+    -o-animation: fadeIn ease 1s;
+    -ms-animation: fadeIn ease 1s;
+}
+
+@keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
