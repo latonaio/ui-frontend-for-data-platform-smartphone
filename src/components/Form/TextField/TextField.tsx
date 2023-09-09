@@ -51,18 +51,16 @@ export const TextField = ({
         <TextFieldMaterial
           value={value}
           type={type}
-          inputProps={{
-            // inputMode: "numeric",
-            // pattern: "[0-9]*"
-          }}
+          // inputProps={{
+          //   // inputMode: "numeric",
+          //   // pattern: "[0-9]*"
+          // }}
+          inputProps={inputProps}
           onCompositionStart={() => setTyping(true)}
           onCompositionEnd={() => setTyping(false)}
           onChange={(e) => {
             const target = e.target as HTMLInputElement;
             setValue(target.value);
-
-            console.log(target.value)
-
             checkInvalid && checkInvalid(target.value);
           }}
           onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {

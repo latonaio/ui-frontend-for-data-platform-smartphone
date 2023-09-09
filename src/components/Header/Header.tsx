@@ -13,11 +13,19 @@ import React from "react";
 import { rem } from "polished";
 
 interface HeaderProps {
-  title: string;
+  backName?: string;
+  category?: string;
+  pageName?: string;
   className?: string;
+  title?: string;
 }
 
-export const Header = ({ title, className }: HeaderProps) => {
+export const Header = ({
+                         backName,
+                         category,
+                         pageName,
+                         className,
+                       }: HeaderProps) => {
   return (
     <HeaderWrapper className={clsx(
       `HeaderWrapper`,
@@ -33,7 +41,7 @@ export const Header = ({ title, className }: HeaderProps) => {
           <Link
               href="/"
               className={'backButton'}
-          >{title}</Link>
+          >{backName}</Link>
         </HeaderContentBack>
         <HeaderContentCenter>
           <div>
@@ -51,7 +59,7 @@ export const Header = ({ title, className }: HeaderProps) => {
             href="/"
           >
             <div className={'flex justify-start items-center'}>
-              <div>製造指図</div>
+              <div>{category}</div>
               <div>
                 <i className="icon-keyboard_arrow_right"
                    style={{
@@ -60,7 +68,7 @@ export const Header = ({ title, className }: HeaderProps) => {
                 />
               </div>
             </div>
-            <div>Cockpit</div>
+            <div>{pageName}</div>
           </Link>
         </HeaderContentNext>
       </HeaderContent>

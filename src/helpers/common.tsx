@@ -1,5 +1,12 @@
 import cookie from 'js-cookie';
-import { ProductInfo, BarcodeImage, form, ProductImage, UserTypeEnum } from '@/constants';
+import {
+  ProductInfo,
+  BarcodeImage,
+  QRCodeImage,
+  form,
+  ProductImage,
+  UserTypeEnum,
+} from '@/constants';
 import { IncomingMessage } from 'http';
 import { NextApiRequestCookies } from 'next/dist/server/api-utils';
 import { env } from '@/helpers/env';
@@ -43,12 +50,22 @@ export const setLocalStorage = (key: string, value: any) => {
 };
 
 export const getLocalStorage = (key: string) => {
-  if (process.browser) {
-    const value = localStorage.getItem(key);
-    return value ? JSON.parse(JSON.parse(value)) : null;
+  return {
+    "businessPartner": 201,
+    "businessPartnerName": "山崎パン",
+    "businessUserFirstName": "龍之介",
+    "businessUserFullName": "芥川龍之介",
+    "businessUserLastName": "芥川",
+    "emailAddress": "201@gmail.com",
+    "language": "JA"
   }
 
-  return null;
+  // if (process.browser) {
+  //   const value = localStorage.getItem(key);
+  //   return value ? JSON.parse(JSON.parse(value)) : null;
+  // }
+  //
+  // return null;
 };
 
 export const removeLocalStorage = (key: string) => {
@@ -62,6 +79,11 @@ export const generateBarcodeImageUrl = (barcode: BarcodeImage) => {
 
   return `${env.nest.host}:` +
     `${env.nest.port}/barcode/${barcode.BarcodeType}/${barcode.Id}.${fileExtension}`;
+};
+
+export const generateQRCodeImageUrl = (qrcode: QRCodeImage) => {
+  return `${env.nest.host}:` +
+    `${env.nest.port}/qr-code/${qrcode.DocID}.${qrcode.FileExtension}`;
 };
 
 export const generateImageProductUrl = (businessPartner: string | null, productImage: ProductImage) => {

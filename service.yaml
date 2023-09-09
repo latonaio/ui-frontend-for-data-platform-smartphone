@@ -39,8 +39,8 @@ spec:
     run: ui-frontend-for-data-platform-smartphone
   type: NodePort
   ports:
-    - port: 3000
+    - port: 3001
       protocol: TCP
-      targetPort: 3000
-      nodePort: 30030
+      targetPort: 3001
+      nodePort: 30031
 ---

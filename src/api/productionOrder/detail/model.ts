@@ -18,11 +18,12 @@ export interface ReadsDetailParams extends UIKeyGeneral {
   userType: string;
   productionOrder: number;
   productionOrderItem: number;
-  product: string;
+  product?: string;
 }
 
 export interface ReadsDetailResponse {
-  productionOrderDetail: ProductionOrderCockpitProps;
+  HeaderSingleUnit: ProductionOrderCockpitProps[];
+  ItemSingleUnit: any;
 }
 
 interface DetailPagination {

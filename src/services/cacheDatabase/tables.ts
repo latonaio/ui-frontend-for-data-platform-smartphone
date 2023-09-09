@@ -92,7 +92,7 @@ import {
   QuotationsBuyerItem,
   QuotationsSellerItem,
   QuotationsDetailListItem,
-  QuotationsDetailListHeader,
+  QuotationsDetailListHeader, ProductionOrderItemOperationItem, ProductionOrderItemOperationInputProps,
 
 } from '@/constants';
 
@@ -123,7 +123,9 @@ export class Tables extends Dexie {
   [ProductionOrderTablesEnum.productionOrderDetailListOwnerProductionPlantBusinessPartnerItem]!: Table<ProductionOrderDetailListItem>;
   [ProductionOrderTablesEnum.productionOrderDetailHeader]!: Table<ProductionOrderDetailHeader>;
   [ProductionOrderTablesEnum.productionOrderCockpit]!: Table<ProductionOrderCockpitProps>;
-  [ProductionOrderTablesEnum.productionOrderOperation]!: Table<ProductionOrderDetailListItem>;
+  [ProductionOrderTablesEnum.productionOrderItemOperationList]!: Table<ProductionOrderItemOperationItem>;
+  // todo 後でちゃんとした型を作成する
+  [ProductionOrderTablesEnum.productionOrderItemOperationInput]!: Table<any>;
 
   [ProductTablesEnum.productListBusinessPartnerItem]!: Table<ProductItem>;
   [ProductTablesEnum.productDetailExconfListHeader]!: Table<ProductDetailExconfListHeader>;

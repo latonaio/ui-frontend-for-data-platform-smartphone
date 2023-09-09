@@ -71,7 +71,7 @@ export const LoginForm = ({ className }: LoginFormProps) => {
 
     try {
       const localStorageData = getLocalStorage('auth');
-      const { emailAddress }: AuthedUser = localStorageData ? localStorageData : {};
+      const { emailAddress }: AuthedUser = localStorageData;
 
       if (emailAddress !== result.user.emailAddress) {
         await new CacheDatabase().cacheAllClear();

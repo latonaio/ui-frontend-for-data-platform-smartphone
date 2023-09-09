@@ -1,62 +1,38 @@
 import { clsx } from 'clsx';
 import {
-  ItemStructureTable,
-  OrderInfo,
-  ProductCode,
-  ProductDetailBottom,
   ProductDetailSection,
   ProductDetailSectionContent,
   ProductDetailSectionContentQRCodeBox,
+  ProductDetailSectionContentQRCodeBoxWrapper,
   ProductDetailSectionHeader,
   ProductDetailSectionInfo,
   ProductDetailSlider,
-  ProductDetailTop,
-  QuantityInfo,
-  ProductDetailSectionContentQRCodeBoxWrapper,
 } from './Detail.style';
-import { generateImageProductUrl } from '@/helpers/common';
-import { PublicImage } from '@/components/Image';
-import React, { useState } from 'react';
-import { Detail } from '@/components/Content/Detail/Detail';
 import {
-  AuthedUser,
-  ComponentItem,
-  OperationItem,
-  ProductImage,
-  ProductionOrderCockpitProps,
-  ProductionOrderTablesEnum,
-} from '@/constants';
+  generateImageProductUrl,
+  generateQRCodeImageUrl,
+} from '@/helpers/common';
+import { PublicImage } from '@/components/Image';
+import React from 'react';
+import { Detail } from '@/components/Content/Detail/Detail';
+import { ProductionOrderCockpitProps, ProductionOrderTablesEnum } from '@/constants';
 import { rem } from 'polished';
 import { Carousel } from '@/components/Carousel';
 import { useAppSelector } from '@/store/hooks';
+import { useRouter } from 'next/router';
 
 export const ProductionOrderCockpit = ({
                                         className,
                                       }: {
   className?: string;
-  // data: Partial<ProductionOrderDetailProps>;
 }) => {
-  const [closedPopup, setClosedPopup] = useState(true);
-
-  // const nextPagePath = () => {
-  //   if (paginationData.nextPage) {
-  //     return `/production-order/detail/${paginationData.nextPage.ProductionOrder}/${paginationData.nextPage.ProductionOrderItem}/${paginationData.userType}/${paginationData.nextPage.Product}`;
-  //   }
-  //
-  //   return null;
-  // }
-  //
-  // const prevPagePath = () => {
-  //   if (paginationData.prevPage) {
-  //     return `/production-order/detail/${paginationData.prevPage.ProductionOrder}/${paginationData.prevPage.ProductionOrderItem}/${paginationData.userType}/${paginationData.prevPage.Product}`;
-  //   }
-  //
-  //   return null;
-  // }
-
   const detail  = useAppSelector(state => state.productionOrderCockpit) as {
     [ProductionOrderTablesEnum.productionOrderCockpit]: ProductionOrderCockpitProps,
   };
+
+  if (!detail[ProductionOrderTablesEnum.productionOrderCockpit]) { return <div></div> }
+
+  const router = useRouter();
 
   return (
     <Detail className={clsx(
@@ -67,11 +43,12 @@ export const ProductionOrderCockpit = ({
         <ProductDetailSlider>
           <Carousel>
             <img
-              src={detail[ProductionOrderTablesEnum.productionOrderCockpit] &&
+              src={
+                detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.Product?.BusinessPartnerID &&
                 generateImageProductUrl(
-                  detail[ProductionOrderTablesEnum.productionOrderCockpit].Images.Product.BusinessPartnerID.toString(),
-                  detail[ProductionOrderTablesEnum.productionOrderCockpit].Images.Product,
-                )}
+                  detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.Product?.BusinessPartnerID.toString(),
+                  detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.Product,
+                ) || ''}
               alt={``}
             />
             <PublicImage
@@ -95,9 +72,10 @@ export const ProductionOrderCockpit = ({
           </ProductDetailSectionHeader>
 
           <ProductDetailSectionContent>
-            <div>サイズ/寸法: 10cm × 10cm × 10cm</div>
-            <div>ロットサイズ: 30 / 1000 / 30</div>
-            <div>内容量: 2  安全在庫/発注点: 30,000</div>
+            <div>サイズ/寸法: {detail[ProductionOrderTablesEnum.productionOrderCockpit].SizeOrDimensionText}</div>
+            <div>ロットサイズ: {detail[ProductionOrderTablesEnum.productionOrderCockpit].StandardProductionLotSizeQuantityInBaseUnit}</div>
+            <div>内容量: {detail[ProductionOrderTablesEnum.productionOrderCockpit].InternalCapacityQuantity}
+              <span style={{ marginLeft: rem(10) }}></span>安全在庫/発注点: {detail[ProductionOrderTablesEnum.productionOrderCockpit].SafetyStockQuantityInBaseUnit} / {detail[ProductionOrderTablesEnum.productionOrderCockpit].ReorderThresholdQuantityInBaseUnit}</div>
           </ProductDetailSectionContent>
         </ProductDetailSectionInfo>
       </ProductDetailSection>
@@ -118,7 +96,15 @@ export const ProductionOrderCockpit = ({
                   </div>
                   <div className={'productMenuTitle'}>部品表</div>
                 </div>
-                <div className={'productMenu'}>
+                <div className={'productMenu'}
+                     onClick={async () => {
+                       await router.push(`/DPFM_API_PRODUCTION_ORDER_SRV/reads/` +
+                         `itemOperation/list/` +
+                         `${detail[ProductionOrderTablesEnum.productionOrderCockpit].ProductionOrder}/` +
+                         `${detail[ProductionOrderTablesEnum.productionOrderCockpit].ProductionOrderItem}/`
+                       );
+                     }}
+                >
                   <div>
                     <PublicImage
                       className={'m-auto'}
@@ -130,12 +116,25 @@ export const ProductionOrderCockpit = ({
                 </div>
               </div>
               <div className={'column column-center'}>
-                <PublicImage
-                  imageName={'imageQrcode01'}
-                  style={{
-                    border: `${rem(1)} solid #C9C9C9FF`,
-                  }}
+                <img
+                  src={
+                    detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode?.DocID &&
+                    generateQRCodeImageUrl(
+                      detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode
+                    ) || ''}
+                  alt={``}
+                  width={96}
                 />
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >製造指図: {detail[ProductionOrderTablesEnum.productionOrderCockpit] && detail[ProductionOrderTablesEnum.productionOrderCockpit].ProductionOrder}</div>
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >明細: {detail[ProductionOrderTablesEnum.productionOrderCockpit] && detail[ProductionOrderTablesEnum.productionOrderCockpit].ProductionOrderItem}</div>
               </div>
               <div className={'column column-right'}>
                 <div className={'productMenu'}>
@@ -188,12 +187,25 @@ export const ProductionOrderCockpit = ({
                 </div>
               </div>
               <div className={'column column-center'}>
-                <PublicImage
-                  imageName={'imageQrcode01'}
-                  style={{
-                    border: `${rem(1)} solid #C9C9C9FF`,
-                  }}
+                <img
+                  src={
+                    detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode?.DocID &&
+                    generateQRCodeImageUrl(
+                      detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode
+                    ) || ''}
+                  alt={``}
+                  width={96}
                 />
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >製造指図: {detail[ProductionOrderTablesEnum.productionOrderCockpit] && detail[ProductionOrderTablesEnum.productionOrderCockpit].ProductionOrder}</div>
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >明細: {detail[ProductionOrderTablesEnum.productionOrderCockpit] && detail[ProductionOrderTablesEnum.productionOrderCockpit].ProductionOrderItem}</div>
               </div>
               <div className={'column column-right'}>
                 <div className={'productMenu'}>
@@ -246,12 +258,25 @@ export const ProductionOrderCockpit = ({
                 </div>
               </div>
               <div className={'column column-center'}>
-                <PublicImage
-                  imageName={'imageQrcode01'}
-                  style={{
-                    border: `${rem(1)} solid #C9C9C9FF`,
-                  }}
+                <img
+                  src={
+                    detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode?.DocID &&
+                    generateQRCodeImageUrl(
+                      detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode
+                    ) || ''}
+                  alt={``}
+                  width={96}
                 />
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >製造指図: {detail[ProductionOrderTablesEnum.productionOrderCockpit] && detail[ProductionOrderTablesEnum.productionOrderCockpit].ProductionOrder}</div>
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >明細: {detail[ProductionOrderTablesEnum.productionOrderCockpit] && detail[ProductionOrderTablesEnum.productionOrderCockpit].ProductionOrderItem}</div>
               </div>
               <div className={'column column-right'}>
                 <div className={'productMenu'}>
@@ -304,12 +329,24 @@ export const ProductionOrderCockpit = ({
                 </div>
               </div>
               <div className={'column column-center'}>
-                <PublicImage
-                  imageName={'imageQrcode01'}
-                  style={{
-                    border: `${rem(1)} solid #C9C9C9FF`,
-                  }}
+                <img
+                  src={
+                    detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode?.DocID &&
+                    generateQRCodeImageUrl(
+                      detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode
+                    ) || ''}
+                  alt={``}
                 />
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >製造指図: {detail[ProductionOrderTablesEnum.productionOrderCockpit] && detail[ProductionOrderTablesEnum.productionOrderCockpit].ProductionOrder}</div>
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >明細: {detail[ProductionOrderTablesEnum.productionOrderCockpit] && detail[ProductionOrderTablesEnum.productionOrderCockpit].ProductionOrderItem}</div>
               </div>
               <div className={'column column-right'}>
                 <div className={'productMenu'}>

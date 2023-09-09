@@ -100,7 +100,7 @@ export const GlobalMenu = ({ className }: {
         <li>
           <Link
             className={'listLink'}
-            href="/production-order/list"
+            href="/src/pages/DPFM_API_PRODUCTION_ORDER_SRV/list"
           >
             <div className={'titleImg'}><img src="global-menu/production-order-list.png"/></div>
             <div className={'title'}>製造指図一覧</div>

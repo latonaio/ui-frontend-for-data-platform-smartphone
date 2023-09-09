@@ -6,6 +6,8 @@ import snackbarReducer from './slices/snackbar';
 import ordersDetailReducer from './slices/orders/detail';
 import deliveryDocumentDetailReducer from './slices/delivery-document/detail';
 import { productionOrderCockpit } from './slices/production-order/cockpit';
+import { productionOrderItemOperationList } from './slices/production-order/item-operation/list';
+import { productionOrderItemOperationInput } from './slices/production-order/item-operation/input';
 import ordersPaginationReducer from './slices/orders/pagination';
 import deliveryDocumentPaginationReducer from './slices/delivery-document/pagination';
 import productionOrderPaginationReducer from './slices/production-order/pagination';
@@ -25,6 +27,8 @@ export const store = configureStore({
         snackbar: snackbarReducer,
         deliveryDocumentDetail: deliveryDocumentDetailReducer,
         productionOrderCockpit: productionOrderCockpit.reducer,
+        productionOrderItemOperationList: productionOrderItemOperationList.reducer,
+        productionOrderItemOperationInput: productionOrderItemOperationInput.reducer,
         ordersPagination: ordersPaginationReducer,
         deliveryDocumentPagination: deliveryDocumentPaginationReducer,
         productionOrderPagination: productionOrderPaginationReducer,

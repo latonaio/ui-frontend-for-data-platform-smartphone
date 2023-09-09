@@ -37,6 +37,11 @@ interface BarcodeImage {
   BarcodeType: string;
 }
 
+interface QRCodeImage {
+  DocID: string;
+  FileExtension: string;
+}
+
 interface Accepter {
   accepter: string[];
   api_type: string;
@@ -99,6 +104,7 @@ export type {
   Stock,
   AvailabilityStock,
   ProductImage,
+  QRCodeImage,
   BarcodeImage,
   Quantity,
   ProductDetail,

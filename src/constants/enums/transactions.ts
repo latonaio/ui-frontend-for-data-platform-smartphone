@@ -47,7 +47,8 @@ export enum ProductionOrderTablesEnum {
   productionOrderDetailList = 'productionOrderDetailList',
   productionOrderDetailHeader = 'productionOrderDetailHeader',
   productionOrderCockpit = 'productionOrderCockpit',
-  productionOrderOperation = 'productionOrderOperation',
+  productionOrderItemOperationInput = 'productionOrderItemOperationInput',
+  productionOrderItemOperationList = 'productionOrderItemOperationList',
 }
 
 export enum ProductTablesEnum {
@@ -66,7 +67,6 @@ export enum BusinessPartnerTablesEnum {
 export enum EquipmentTablesEnum {
   equipmentListBusinessPartnerItem = 'equipmentListBusinessPartnerItem',
 }
-
 
 export enum ProductionVersionTablesEnum {
   productionVersionListOwnerBusinessPartnerItem = 'productionVersionListOwnerBusinessPartnerItem',

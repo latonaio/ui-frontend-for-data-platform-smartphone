@@ -285,4 +285,34 @@ export  const ProductDetailSectionContentQRCodeBox = styled.div`
   }
 `;
 
+export const ProductDetailSectionContentTwoColumn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  .infoLabel {
+    text-align: center;
+    background-color: #DEEBF7;
+    border-radius: ${rem( 4)};
+    color: #767171;
+  }
+  
+  .lightBlueInfo {
+    color: #2E75B6;
+    
+    .itemText {
+      color: #000;
+    }
+  }
+  
+  .lightBrownInfo {
+    color: #BF9000;
+    
+    .itemText {
+      color: #000;
+    }
+  }
+`;
 
+export const ProductDetailSectionContentThreeColumn = styled(ProductDetailSectionContentTwoColumn)`
+`;

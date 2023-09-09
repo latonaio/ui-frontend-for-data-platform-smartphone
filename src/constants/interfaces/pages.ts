@@ -4,7 +4,7 @@ import {
   Stock,
   ProductImage,
   BarcodeImage,
-  ProductDetail, Quantity,
+  ProductDetail, Quantity, ProductionOrderDetailHeader, ProductionOrderItemOperationItem, QRCodeImage,
 } from '@/constants';
 import { AuthedUser } from '@/constants';
 
@@ -130,6 +130,30 @@ interface ProductionOrderCockpitProps {
   Images: {
     Product: ProductImage;
     Barcode: BarcodeImage;
+    QRCode: QRCodeImage,
+  };
+
+  SizeOrDimensionText: string;
+  SafetyStockQuantityInBaseUnit: number;
+  InternalCapacityQuantity: number;
+  ReorderThresholdQuantityInBaseUnit: number;
+  StandardProductionLotSizeQuantityInBaseUnit: number;
+}
+
+// interface ProductionOrderItemOperationInputProps extends ProductionOrderDetailHeader, ProductionOrderItemOperationItem {
+interface ProductionOrderItemOperationInputProps extends ProductionOrderDetailHeader {
+  OwnerProductionPlantBusinessPartnerName: string;
+  OwnerProductionPlantName: string;
+  ProductionOrderQuantityInBaseUnit: number;
+  ProductionOrderQuantityInDestinationProductionUnit: number;
+  OperationText: string;
+  SellerName: string;
+  WorkCenter: number;
+  WorkCenterName: string;
+  Images: {
+    Product: ProductImage;
+    Barcode: BarcodeImage;
+    QRCode: QRCodeImage,
   };
 }
 
@@ -239,6 +263,7 @@ export type {
   BusinessPartnerDetailProps,
   DeliveryDocumentDetailProps,
   ProductionOrderCockpitProps,
+  ProductionOrderItemOperationInputProps,
   ComponentItem,
   OperationItem,
   PriceMasterDetailProps,

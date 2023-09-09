@@ -27,20 +27,10 @@ const readsDetailList = async (
 const readsDetail = async (
   params: ReadsDetailParams,
 ): Promise<ReadsDetailResponse> => {
-  const endpointUrl = `production-order/detail/${params.productionOrder}/${params.productionOrderItem}/${params.userType}/${params.product}`;
+  const endpointUrl = `production-order/item-single-unit/${params.userType}`;
   const response = await apiCallReads(methods.GET, endpointUrl, {
-    language: params.language,
-    businessPartner: params.businessPartner,
-    userId: params.userId,
-  });
-  return { ...response.data };
-};
-
-const readsPagination = async (
-  params: ReadsDetailParams,
-): Promise<ReadsPaginationResponse> => {
-  const endpointUrl = `production-order/detail/pagination/${params.productionOrder}/${params.productionOrderItem}/${params.userType}/${params.product}`;
-  const response = await apiCallReads(methods.GET, endpointUrl, {
+    productionOrder: params.productionOrder,
+    productionOrderItem: params.productionOrderItem,
     language: params.language,
     businessPartner: params.businessPartner,
     userId: params.userId,
@@ -51,5 +41,4 @@ const readsPagination = async (
 export {
   readsDetailList,
   readsDetail,
-  readsPagination,
 }

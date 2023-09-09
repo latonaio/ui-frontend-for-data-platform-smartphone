@@ -5,6 +5,7 @@ import {
   WhiteButton as WhiteButtonElement,
   BlueButton as BlueButtonElement,
   OtherButton as OtherButtonElement,
+  QuantityPostCancelButton as QuantityPostCancelButtonElement,
 } from './Button.style';
 import { useRouter } from 'next/router';
 import React, { ReactNode } from 'react';
@@ -27,6 +28,9 @@ interface WhiteButtonProps extends ButtonProps {
 interface OtherButtonButtonProps extends ButtonProps {
   closedPopup?: boolean;
   setClosedPopup: (closedPopup: boolean) => void;
+}
+
+interface QuantityPostCancelButtonButtonProps extends ButtonProps {
 }
 
 export const BackButton = (
@@ -130,6 +134,25 @@ export const OtherButton = (
     >
       {children}
     </OtherButtonElement>
+  );
+};
+
+export const QuantityPostCancelButton = (
+  {
+    children,
+    className,
+  }: QuantityPostCancelButtonButtonProps,
+) => {
+  return (
+    <QuantityPostCancelButtonElement className={clsx(
+      '',
+      className,
+    )}
+                                     onClick={() => {
+                                     }}
+    >
+      {children}
+    </QuantityPostCancelButtonElement>
   );
 };
 

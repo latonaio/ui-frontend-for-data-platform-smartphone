@@ -9,6 +9,10 @@ import iconWing from '@public/icon-wing.png';
 import iconInvoice from '@public/icon-invoice.png';
 import iconEdit from '@public/icon-edit.png';
 import iconDelivery from '@public/icon-delivery.png';
+import yieldQuantity from '@public/yield-quantity.png';
+import defectiveQuantity from '@public/defective-quantity.png';
+import factory from '@public/factory.png';
+
 import globalMenuQrcode from '@public/global-menu-qrcode.png';
 import globalMenuCallFunction from '@public/global-menu-call-function.png';
 import globalMenuDataAnalyze from '@public/global-menu-data-analyze.png';
@@ -66,6 +70,9 @@ const publicImageMap = {
   iconInvoice,
   iconEdit,
   iconDelivery,
+  yieldQuantity,
+  defectiveQuantity,
+  factory,
 
   globalMenuQrcode,
   globalMenuCallFunction,

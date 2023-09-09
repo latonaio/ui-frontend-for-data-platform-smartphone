@@ -13,4 +13,4 @@ ENV ENV_TARGET ${ENV_TARGET}
 
 RUN npm run build:${ENV_TARGET}
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:aws"]

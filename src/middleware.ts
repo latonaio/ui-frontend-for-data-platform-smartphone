@@ -6,10 +6,11 @@ export function middleware(req: NextRequest) {
 
   if (url.pathname.startsWith('/_next')) return NextResponse.next();
 
-  if (!req.cookies.get('accessToken')) {
-    url.pathname = '/login';
-    return NextResponse.rewrite(url);
-  }
+  // 暫定対応として、スマホの場合、QRコードからページ遷移は認証不要にしておく
+  // if (!req.cookies.get('accessToken')) {
+  //   url.pathname = '/login';
+  //   return NextResponse.rewrite(url);
+  // }
 
   return NextResponse.next();
 }

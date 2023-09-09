@@ -12,12 +12,10 @@ export class Cockpit extends CacheDatabase {
   async getProductionOrderCockpit(
     productionOrder: number,
     productionOrderItem: number,
-    product: string,
   ): Promise<ProductionOrderCockpitProps | null> {
     const response = await this.productionOrderCockpit.get({
       ProductionOrder: productionOrder,
       ProductionOrderItem: productionOrderItem,
-      Product: product,
     });
 
     if (response) {
@@ -33,7 +31,6 @@ export class Cockpit extends CacheDatabase {
     params: {
       productionOrder: number;
       productionOrderItem: number;
-      product: string;
       userType: ProductionOrderUserType[keyof ProductionOrderUserType],
       language: AuthedUser['language'];
       businessPartner: AuthedUser['businessPartner'];
@@ -43,7 +40,6 @@ export class Cockpit extends CacheDatabase {
     const response = await readsDetail({
       productionOrder: params.productionOrder,
       productionOrderItem: params.productionOrderItem,
-      product: params.product,
       language: params.language,
       businessPartner: params.businessPartner,
       userId: params.emailAddress,
@@ -51,12 +47,15 @@ export class Cockpit extends CacheDatabase {
     });
 
     this.productionOrderCockpit.put({
-      ...response.productionOrderDetail,
+      ...response.ItemSingleUnit[0],
+      ProductionOrder: params.productionOrder,
+      ProductionOrderItem: params.productionOrderItem,
     });
 
     return {
-      ...response.productionOrderDetail,
+      ...response.ItemSingleUnit[0],
       ProductionOrder: params.productionOrder,
+      ProductionOrderItem: params.productionOrderItem,
     }
   }
 }

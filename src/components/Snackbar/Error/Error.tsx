@@ -39,9 +39,16 @@ export const SnackbarError = ({
   useEffect(() => {
     // handleClickVariant(state.message);
     if (state.message !== '') {
-      enqueueSnackbar(state.message, { variant: 'error' });
+
+      const variant = state.variant === 'success' ? state.variant : 'error';
+
+      enqueueSnackbar(state.message, {
+        variant,
+        autoHideDuration: 3000,
+      });
       appDispatch(setGlobalSnackbar({
         message: state.message,
+        variant,
       }));
       appDispatch(clearMessage({}));
     }

@@ -2,7 +2,12 @@ version: "3"
 
 services:
   dpfm-ui:
-    image: node:17.6-slim
+#    image: node:17.6-slim
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - ENV_TARGET=${ENV_TARGET}
     container_name: dpfm-ui
     restart: always
     volumes:
@@ -12,4 +17,4 @@ services:
     env_file:
       - docker/.env
     ports:
-      - "3000:3000"
+      - "3001:3001"
