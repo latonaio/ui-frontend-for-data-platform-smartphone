@@ -55,6 +55,10 @@ export const ProductionOrderInput = ({
                   detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].Images?.Product,
                 ) || ''}
               alt={``}
+              style={{
+                maxWidth: `120%`,
+                marginLeft: `-12px`,
+              }}
             />
             <div className={'infoLabel'}>在庫をみる</div>
           </div>
@@ -90,18 +94,12 @@ export const ProductionOrderInput = ({
               <span className={'itemName'}>計画開始日付/時刻: </span>
               <span
                 className={'itemText'}
-                style={{
-                  fontSize: rem(11)
-                }}
               >{detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].ProductionOrderPlannedStartDate} / {detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].ProductionOrderPlannedStartTime}</span>
             </div>
             <div>
               <span className={'itemName'}>計画終了日付/時刻: </span>
               <span
                 className={'itemText'}
-                style={{
-                  fontSize: rem(11)
-                }}
               >{detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].ProductionOrderPlannedEndDate} / {detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].ProductionOrderPlannedEndTime}</span>
             </div>
             <div>
@@ -119,7 +117,7 @@ export const ProductionOrderInput = ({
                 style={{
                   fontSize: rem(18)
                 }}
-              >{detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].ProductionOrderQuantityInBaseUnit}</span>
+              >{detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].ProductionOrderQuantityInBaseUnit.toLocaleString()}</span>
             </div>
             <div>
               <span className={'itemName'}>計画製造数量(製): </span>
@@ -128,7 +126,7 @@ export const ProductionOrderInput = ({
                 style={{
                   fontSize: rem(18)
                 }}
-              >{detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].ProductionOrderQuantityInDestinationProductionUnit}</span>
+              >{detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].ProductionOrderQuantityInDestinationProductionUnit.toLocaleString()}</span>
             </div>
           </div>
         </ProductDetailSectionContentTwoColumn>
@@ -361,7 +359,10 @@ export const ProductionOrderInput = ({
                   width: `50%`
                 }}
               >
-                <QuantityPostCancelButton>Post</QuantityPostCancelButton>
+                <QuantityPostCancelButton
+                  onClick={() => {
+                  }}
+                >Post</QuantityPostCancelButton>
               </div>
               <div
                 className={'text-center'}

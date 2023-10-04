@@ -1,4 +1,7 @@
 export const style = {
+  header: {
+    gray: '#2f2f2f',
+  },
   theme: {
     lightBlue400: '#38bdf8',
   },

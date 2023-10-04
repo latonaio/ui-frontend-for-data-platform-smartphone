@@ -50,6 +50,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.40.0",
     "react-material-ui-carousel": "^2.3.11",
+    "react-qr-reader": "^3.0.0-beta-1",
     "react-redux": "^8.0.5",
     "sass": "^1.56.1",
     "styled-components": "^5.3.6",

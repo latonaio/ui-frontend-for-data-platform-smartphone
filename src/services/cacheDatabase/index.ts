@@ -6,6 +6,7 @@ import {
   InvoiceDocumentTablesEnum,
   OrdersTablesEnum,
   ProductionOrderTablesEnum,
+  ProductStockTablesEnum,
   ProductTablesEnum,
   EquipmentTablesEnum,
   PriceMasterTablesEnum,
@@ -48,8 +49,11 @@ export class CacheDatabase extends Tables {
       [ProductionOrderTablesEnum.productionOrderDetailHeader]: 'ProductionOrder',
       [ProductionOrderTablesEnum.productionOrderCockpit]: '[ProductionOrder+ProductionOrderItem]',
       [ProductionOrderTablesEnum.productionOrderItemOperationList]: '[ProductionOrder+ProductionOrderItem+Operations+OperationsItem]',
-      // [ProductionOrderTablesEnum.productionOrderItemOperationInput]: '[ProductionOrder+ProductionOrderItem+Product]',
       [ProductionOrderTablesEnum.productionOrderItemOperationInput]: '[ProductionOrder+ProductionOrderItem]',
+
+      // Product Stock
+      [ProductStockTablesEnum.productStockSingleUnit]: '[Product+BusinessPartner+Plant]',
+      [ProductStockTablesEnum.productStockByStorageBinByBatch]: '[Product+BusinessPartner+Plant]',
 
       [ProductTablesEnum.productListBusinessPartnerItem]: 'Product, ProductDescription, ProductGroup, BaseUnit, ValidityStartDate',
       [ProductTablesEnum.productDetailExconfListHeader]: 'Product',

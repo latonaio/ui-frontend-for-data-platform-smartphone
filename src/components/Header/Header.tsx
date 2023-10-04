@@ -18,6 +18,8 @@ interface HeaderProps {
   pageName?: string;
   className?: string;
   title?: string;
+  color?: string;
+  headerContentNext?: string;
 }
 
 export const Header = ({
@@ -25,13 +27,15 @@ export const Header = ({
                          category,
                          pageName,
                          className,
+                         color = '',
+                         headerContentNext,
                        }: HeaderProps) => {
   return (
     <HeaderWrapper className={clsx(
       `HeaderWrapper`,
       className
     )}>
-      <HeaderContent>
+      <HeaderContent className={`${color}`}>
         <HeaderContentBack>
           <i className="icon-keyboard_arrow_left"
              style={{
@@ -55,21 +59,27 @@ export const Header = ({
           </HeaderIcon>
         </HeaderContentCenter>
         <HeaderContentNext>
-          <Link
-            href="/"
-          >
-            <div className={'flex justify-start items-center'}>
-              <div>{category}</div>
-              <div>
-                <i className="icon-keyboard_arrow_right"
-                   style={{
-                     fontSize: rem(24),
-                   }}
-                />
+          {
+            headerContentNext &&
+            <Link
+              href={headerContentNext}
+            >
+              <div className={'flex justify-start items-center'}>
+                <div>{category}</div>
+                <div>
+                  <i className="icon-keyboard_arrow_right"
+                     style={{
+                       fontSize: rem(24),
+                     }}
+                  />
+                </div>
               </div>
-            </div>
-            <div>{pageName}</div>
-          </Link>
+              {
+                pageName &&
+                <div>{pageName}</div>
+              }
+            </Link>
+          }
         </HeaderContentNext>
       </HeaderContent>
     </HeaderWrapper>

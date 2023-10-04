@@ -51,6 +51,11 @@ export enum ProductionOrderTablesEnum {
   productionOrderItemOperationList = 'productionOrderItemOperationList',
 }
 
+export enum ProductStockTablesEnum {
+  productStockSingleUnit = 'productStockSingleUnit',
+  productStockByStorageBinByBatch = 'productStockByStorageBinByBatch',
+}
+
 export enum ProductTablesEnum {
   productListBusinessPartnerItem = 'productListBusinessPartnerItem',
   productDetailExconfList = 'productDetailExconfList',

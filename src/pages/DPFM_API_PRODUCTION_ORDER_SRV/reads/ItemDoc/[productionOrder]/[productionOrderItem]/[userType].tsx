@@ -86,8 +86,6 @@ const ProductionOrderCockpit: React.FC<PageProps> = (data) => {
       emailAddress,
     });
 
-    console.log(2);
-
     await setFormDataForPage(
       productionOrder,
       productionOrderItem,
@@ -112,6 +110,11 @@ const ProductionOrderCockpit: React.FC<PageProps> = (data) => {
         category={'製造指図'}
         pageName={'Cockpit'}
         className={'text-2xl'}
+        headerContentNext={`/DPFM_API_PRODUCTION_ORDER_SRV/reads/` +
+          `itemDoc/` +
+          `${data.productionOrder}/` +
+          `${data.productionOrderItem}/` +
+          'seller'}
       />
       <Main className={'Main'}>
         <Content />

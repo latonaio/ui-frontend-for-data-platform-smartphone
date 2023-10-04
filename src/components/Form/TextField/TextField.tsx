@@ -11,6 +11,7 @@ interface TextFieldInternalProps {
   currentValue: any;
   onChange?: (value: any) => void;
   onClose?: () => void;
+  onblur?: () => void;
   inputProps?: any;
   type?: string;
   checkInvalid?: (value: any) => void;
@@ -28,6 +29,7 @@ export const TextField = ({
                             type,
                             onChange,
                             onClose,
+                            onblur,
                             inputProps,
                             checkInvalid,
                           }: TextFieldInternalProps) => {
@@ -82,6 +84,9 @@ export const TextField = ({
             if (e.code === 'Escape') {
               onClose && onClose();
             }
+          }}
+          onBlur={() => {
+            onblur && onblur();
           }}
         />
       </div>

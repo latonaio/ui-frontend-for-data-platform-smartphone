@@ -5,6 +5,14 @@ import { style } from "@/constants";
 export const HeaderWrapper = styled.header`
 `;
 
+export const HeaderContentDefault = styled.div`
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-weight: bold;
+  font-size: ${rem(20)};
+`;
+
 export const HeaderContent = styled.div`
   display: flex;
   justify-content: space-between;
@@ -12,14 +20,10 @@ export const HeaderContent = styled.div`
   align-items: center;
   padding: ${rem(4)};
   background-color: ${style.theme.lightBlue400};
-`;
 
-export const HeaderContentDefault = styled.div`
-  display: flex;
-  align-items: center;
-  color: #fff;
-  font-weight: bold;
-  font-size: ${rem(20)};
+  &.gray {
+    background-color: ${style.header.gray};
+  }
 `;
 
 export const HeaderContentCenter = styled(HeaderContentDefault)`

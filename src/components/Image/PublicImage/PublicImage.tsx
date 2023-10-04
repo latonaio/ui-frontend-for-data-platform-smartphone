@@ -4,6 +4,7 @@ import imgBox from '@public/image-box.png';
 import imgLeaf from '@public/image-leaf.png';
 import aionLogo from '@public/aion-logo.png';
 import headerGirl from '@public/header-girl.png';
+import headerGirlSteering from '@public/header-girl-steering.png';
 import iconPresent from '@public/icon-present.png';
 import iconWing from '@public/icon-wing.png';
 import iconInvoice from '@public/icon-invoice.png';
@@ -17,6 +18,13 @@ import globalMenuQrcode from '@public/global-menu-qrcode.png';
 import globalMenuCallFunction from '@public/global-menu-call-function.png';
 import globalMenuDataAnalyze from '@public/global-menu-data-analyze.png';
 import globalMenuUserInfo from '@public/global-menu-user-info.png';
+
+// info
+import infoFactory from '@public/info/factory.png';
+import infoPlant from '@public/info/plant.png';
+import infoProductStock from '@public/info/product-stocks.png';
+import infoProductStockDisable from '@public/info/product-stocks-disable.png';
+import infoDeliveryTodo from '@public/info/delivery-todo.png';
 
 import billOfMaterialList from '@public/global-menu/bill-of-material-list.png';
 import operationsList from '@public/global-menu/operations-list.png';
@@ -79,6 +87,12 @@ const publicImageMap = {
   globalMenuDataAnalyze,
   globalMenuUserInfo,
 
+  infoFactory,
+  infoPlant,
+  infoProductStock,
+  infoProductStockDisable,
+  infoDeliveryTodo,
+
   billOfMaterialList,
   operationsList,
   productionVersionList,
@@ -93,6 +107,7 @@ const publicImageMap = {
   scrList,
   orderList,
   underConstruction,
+  headerGirlSteering,
 } as PublicImageMap;
 
 const handleImageName = (imageName: string) => {

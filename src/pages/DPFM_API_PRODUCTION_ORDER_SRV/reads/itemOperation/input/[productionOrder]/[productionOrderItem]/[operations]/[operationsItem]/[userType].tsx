@@ -122,11 +122,16 @@ const ProductionOrderItemOperationInput: React.FC<PageProps> = (data) => {
         category={'製造指図'}
         pageName={'作業入力'}
         className={'text-2xl'}
+        headerContentNext={`/DPFM_API_PRODUCTION_ORDER_SRV/reads/` +
+          `itemDoc/` +
+          `${data.productionOrder}/` +
+          `${data.productionOrderItem}/` +
+          'seller'}
       />
       <Main className={'Main'}>
         <Content />
       </Main>
-      <Footer hrefPath={`/production-order/list`}></Footer>
+      <Footer></Footer>
     </Wrapper>
   )
 }

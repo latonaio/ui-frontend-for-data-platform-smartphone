@@ -153,7 +153,66 @@ interface ProductionOrderItemOperationInputProps extends ProductionOrderDetailHe
   Images: {
     Product: ProductImage;
     Barcode: BarcodeImage;
-    QRCode: QRCodeImage,
+    QRCode: QRCodeImage;
+  };
+}
+
+interface ProductStockSingleUnitProps {
+  Product: string;
+  ProductStock: number;
+  Plant: string;
+  PlantName: string;
+  BusinessPartner: number;
+  BusinessPartnerName: string;
+  StorageBin: string;
+  UserType: string;
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+  };
+}
+
+interface ProductStockByStorageBinByBatchProps {
+  BusinessPartner: number;
+  BusinessPartnerName: string;
+  Plant: string;
+  PlantName: string;
+  StorageLocation: string;
+  StorageBin: string;
+  Batch: string;
+  Product: string;
+  ProductDescription: string;
+  ProductStock: string;
+  ProductStockHeader: {
+    BusinessPartner: number;
+    BusinessPartnerName: string;
+    Plant: string;
+    PlantName: string;
+    StorageLocation: string;
+    StorageBin: string;
+    Batch: string;
+    Product: string;
+    ProductDescription: string;
+    ProductStock: string;
+    Images: {
+      Product: ProductImage;
+    };
+  }
+  ProductStockByStorageBinByBatchHeader: {
+    Batch: string;
+    Plant: string;
+    PlantName: string;
+    Product: string;
+    ProductStock: number;
+    StorageBin: string;
+    StorageLocation: string;
+    ValidityStartDate: string;
+    ValidityStartTime: string;
+    ValidityEndDate: string;
+    ValidityEndTime: string;
+  }[];
+  Images: {
+    Product: ProductImage;
   };
 }
 
@@ -269,4 +328,6 @@ export type {
   PriceMasterDetailProps,
   BillOfMaterialDetailProps,
   OperationsDetailProps,
+  ProductStockSingleUnitProps,
+  ProductStockByStorageBinByBatchProps,
 }

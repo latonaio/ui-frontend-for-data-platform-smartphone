@@ -97,6 +97,11 @@ const ProductionOrderItemOperationList: React.FC<PageProps> = (data) => {
         category={'製造指図'}
         pageName={'作業手順'}
         className={'text-2xl'}
+        headerContentNext={`/DPFM_API_PRODUCTION_ORDER_SRV/reads/` +
+          `itemDoc/` +
+          `${data.productionOrder}/` +
+          `${data.productionOrderItem}/` +
+          'seller'}
       />
       <Main className={'Main'}>
         <Content />

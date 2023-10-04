@@ -141,6 +141,7 @@ export const QuantityPostCancelButton = (
   {
     children,
     className,
+    onClick,
   }: QuantityPostCancelButtonButtonProps,
 ) => {
   return (
@@ -148,8 +149,7 @@ export const QuantityPostCancelButton = (
       '',
       className,
     )}
-                                     onClick={() => {
-                                     }}
+                                     onClick={(e) => onClick && onClick(e)}
     >
       {children}
     </QuantityPostCancelButtonElement>

@@ -123,7 +123,7 @@ export const ProductionOrderCockpit = ({
                       detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode
                     ) || ''}
                   alt={``}
-                  width={96}
+                  width={132}
                 />
                 <div
                   style={{
@@ -194,7 +194,7 @@ export const ProductionOrderCockpit = ({
                       detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode
                     ) || ''}
                   alt={``}
-                  width={96}
+                  width={132}
                 />
                 <div
                   style={{
@@ -265,7 +265,7 @@ export const ProductionOrderCockpit = ({
                       detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode
                     ) || ''}
                   alt={``}
-                  width={96}
+                  width={132}
                 />
                 <div
                   style={{
@@ -336,6 +336,7 @@ export const ProductionOrderCockpit = ({
                       detail[ProductionOrderTablesEnum.productionOrderCockpit].Images?.QRCode
                     ) || ''}
                   alt={``}
+                  width={132}
                 />
                 <div
                   style={{

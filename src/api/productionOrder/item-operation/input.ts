@@ -8,7 +8,7 @@ import { methods } from '@/constants';
 const readsInput = async (
   params: ReadsItemOperationInputParams,
 ): Promise<ReadsItemOperationInputResponse> => {
-  const endpointUrl = `production-order/item-operation/input`;
+  const endpointUrl = `production-order-conf/header-single-unit/${params.userType}`;
   const response = await apiCallReads(methods.GET, endpointUrl, {
     isMarkedForDeletion: params.isMarkedForDeletion,
     isReleased: params.isReleased,

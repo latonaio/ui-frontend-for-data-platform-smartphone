@@ -8,6 +8,8 @@ import deliveryDocumentDetailReducer from './slices/delivery-document/detail';
 import { productionOrderCockpit } from './slices/production-order/cockpit';
 import { productionOrderItemOperationList } from './slices/production-order/item-operation/list';
 import { productionOrderItemOperationInput } from './slices/production-order/item-operation/input';
+import { productStockSingleUnit } from './slices/product-stock/single-unit';
+import { productStockByStorageBinByBatch } from './slices/product-stock/by-storage-bin-by-batch';
 import ordersPaginationReducer from './slices/orders/pagination';
 import deliveryDocumentPaginationReducer from './slices/delivery-document/pagination';
 import productionOrderPaginationReducer from './slices/production-order/pagination';
@@ -29,6 +31,8 @@ export const store = configureStore({
         productionOrderCockpit: productionOrderCockpit.reducer,
         productionOrderItemOperationList: productionOrderItemOperationList.reducer,
         productionOrderItemOperationInput: productionOrderItemOperationInput.reducer,
+        productStockSingleUnit: productStockSingleUnit.reducer,
+        productStockByStorageBinByBatch: productStockByStorageBinByBatch.reducer,
         ordersPagination: ordersPaginationReducer,
         deliveryDocumentPagination: deliveryDocumentPaginationReducer,
         productionOrderPagination: productionOrderPaginationReducer,

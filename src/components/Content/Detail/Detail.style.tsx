@@ -207,7 +207,7 @@ export const QuantityInfo = styled.div`
 
 export const ProductDetailSection = styled.section`
   margin: ${rem(0)} ${rem(20)};
-  font-size: ${rem(14)};
+  font-size: ${rem(16)};
   
   &.spacePadding {
     margin: 0 !important;
@@ -258,10 +258,18 @@ export  const ProductDetailSectionContentQRCodeBox = styled.div`
   justify-content: center;
   align-items: center;
   
-  .column-left,
-  .column-right {
+  .column-center {
     width: 40%;
+    
+    img {
+      margin: auto;
+    }
   }
+  
+  //.column-left,
+  //.column-right {
+  //  width: 40%;
+  //}
 
   .column-left {
     padding-right: ${rem( 10)};
@@ -315,4 +323,16 @@ export const ProductDetailSectionContentTwoColumn = styled.div`
 `;
 
 export const ProductDetailSectionContentThreeColumn = styled(ProductDetailSectionContentTwoColumn)`
+`;
+
+export const BluePanel = styled.div`
+  text-align: center;
+  border-radius: ${rem(4)};
+  color: #c4c4c4;
+  background-color: #ababab;
+
+  &.active {
+    background-color: #0fa0dd;
+    color: #c4c4c4;
+  }
 `;
