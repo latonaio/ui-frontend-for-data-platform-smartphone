@@ -18,6 +18,7 @@ export enum OrdersTablesEnum {
   ordersDetailList = 'ordersDetailList',
   ordersDetailHeader = 'ordersDetailHeader',
   ordersDetail = 'ordersDetail',
+  ordersSingleUnit = 'ordersSingleUnit',
 }
 
 export enum DeliveryDocumentTablesEnum {
@@ -57,6 +58,7 @@ export enum ProductStockTablesEnum {
 }
 
 export enum ProductTablesEnum {
+  productSingleUnit = 'productSingleUnit',
   productListBusinessPartnerItem = 'productListBusinessPartnerItem',
   productDetailExconfList = 'productDetailExconfList',
   productDetailExconfListHeader = 'productDetailExconfListHeader',
@@ -123,3 +125,4 @@ export enum QuotationsTablesEnum{
 	quotationsListDetailListItem = 'quotationsListDetailListItem',
 	quotationsListDetailListHeader = 'quotationsListDetailListHeader',
 }
+

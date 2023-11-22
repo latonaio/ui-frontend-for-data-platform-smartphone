@@ -249,6 +249,26 @@ export const ProductDetailSectionInfo = styled.div`
 export const ProductDetailSectionContent = styled.div`
 `;
 
+export const ProductDetailSectionContentProductMenuListWrapper = styled.div`
+  .menuButton {
+    text-align: center;
+    width: 30%;
+    color: #fff;
+    border-radius: ${rem(3)};
+    margin: 0 ${rem(2)};
+    font-family: 'AgencyB', serif;
+    font-weight: normal;
+    
+    &.general { background-color: #ef578d; }
+    &.bp { background-color: #6a6a69; }
+    &.bpPlant { background-color: #988443; }
+
+    &.production { background-color: #577693; }
+    &.mrp { background-color: #c78150; }
+    &.quality { background-color: #6a7b57; }
+  }
+`;
+
 export const ProductDetailSectionContentQRCodeBoxWrapper = styled.div`
   padding: ${rem(20)} ${rem(20)} ${rem(0)};
 `;

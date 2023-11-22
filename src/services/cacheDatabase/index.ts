@@ -55,6 +55,7 @@ export class CacheDatabase extends Tables {
       [ProductStockTablesEnum.productStockSingleUnit]: '[Product+BusinessPartner+Plant]',
       [ProductStockTablesEnum.productStockByStorageBinByBatch]: '[Product+BusinessPartner+Plant]',
 
+      [ProductTablesEnum.productSingleUnit]: 'Product',
       [ProductTablesEnum.productListBusinessPartnerItem]: 'Product, ProductDescription, ProductGroup, BaseUnit, ValidityStartDate',
       [ProductTablesEnum.productDetailExconfListHeader]: 'Product',
       [ProductTablesEnum.productDetailExconfList]: 'Product',
@@ -101,6 +102,7 @@ export class CacheDatabase extends Tables {
       [QuotationsTablesEnum.quotationsListBuyerItem]: '++id',
       [QuotationsTablesEnum.quotationsListSellerItem]: '++id',
 
+      [OrdersTablesEnum.ordersSingleUnit]: 'OrderID',
     });
   }
 

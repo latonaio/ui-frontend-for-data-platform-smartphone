@@ -6,6 +6,7 @@ import {
   OrdersDetailListItem,
   OrdersDetailHeader,
   OrdersProductDetailProps,
+  OrdersSingleUnitProps,
   OrdersTablesEnum,
 
   // Delivery Document
@@ -109,6 +110,7 @@ export class Tables extends Dexie {
   [OrdersTablesEnum.ordersDetailListSellerItem]!: Table<OrdersDetailListItem>;
   [OrdersTablesEnum.ordersDetailHeader]!: Table<OrdersDetailHeader>;
   [OrdersTablesEnum.ordersDetail]!: Table<OrdersProductDetailProps>;
+  [OrdersTablesEnum.ordersSingleUnit]!: Table<any>;
 
   [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverToPartyItem]!: Table<DeliveryDocumentListEditForCache>;
   [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverFromPartyItem]!: Table<DeliveryDocumentListEditForCache>;
@@ -137,6 +139,7 @@ export class Tables extends Dexie {
   [ProductStockTablesEnum.productStockSingleUnit]!: Table<any>;
   [ProductStockTablesEnum.productStockByStorageBinByBatch]!: Table<any>;
 
+  [ProductTablesEnum.productSingleUnit]!: Table<any>;
   [ProductTablesEnum.productListBusinessPartnerItem]!: Table<ProductItem>;
   [ProductTablesEnum.productDetailExconfListHeader]!: Table<ProductDetailExconfListHeader>;
   [ProductTablesEnum.productDetailExconfList]!: Table<ProductDetailExconfList>;

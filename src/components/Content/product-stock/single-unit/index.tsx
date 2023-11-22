@@ -189,7 +189,7 @@ export const ProductStockSingleUnit = ({
                     );
                   }}
                 >
-                  {`3,000`}
+                  {'3,000'}
                 </div>
               </div>
             </ProductDetailSectionContentThreeColumn>

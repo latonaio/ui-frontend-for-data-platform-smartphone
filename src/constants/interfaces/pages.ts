@@ -8,6 +8,12 @@ import {
 } from '@/constants';
 import { AuthedUser } from '@/constants';
 
+interface OrdersSingleUnitProps extends ProductDetail {
+  OrderID: string;
+  OrderItem: string;
+  Product: string;
+}
+
 interface OrdersProductDetailProps extends ProductDetail {
   OrderID: string;
   OrderItem: string;
@@ -155,6 +161,7 @@ interface ProductionOrderItemOperationInputProps extends ProductionOrderDetailHe
     Barcode: BarcodeImage;
     QRCode: QRCodeImage;
   };
+  UserType: string;
 }
 
 interface ProductStockSingleUnitProps {
@@ -170,6 +177,37 @@ interface ProductStockSingleUnitProps {
     Product: ProductImage;
     QRCode: QRCodeImage;
   };
+}
+
+interface ProductSingleUnitProps {
+  Product: string;
+  ProductName: string;
+  ProductType: string;
+  GrossWeight: number;
+  NetWeight: number;
+  WeightUnit: number;
+  InternalCapacityQuantity: number;
+  InternalCapacityQuantityUnit: string;
+  SizeOrDimensionText: string;
+  ProductStandardID: string;
+  IndustryStandardName: string;
+  MarkingOfMaterial: string; // 材質
+  ItemCategory: string;
+  CountryOfOrigin: string;
+  CountryOfOriginLanguage: string;
+  LocalRegionOfOrigin: string; // 原産ローカル地域
+  LocalSubRegionOfOrigin: string;// 原産サブローカル地域
+  BarcodeType: string;
+  ProductAccountAssignmentGroup: string;
+  ValidityEndDate: string;
+  CreationDate: string;
+  LastChangeDate: string;
+  IsMarkedForDeletion: boolean;
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+  };
+  UserType: string;
 }
 
 interface ProductStockByStorageBinByBatchProps {
@@ -318,6 +356,7 @@ interface BillOfMaterialDetailProps extends ProductDetail {
 }
 
 export type {
+  OrdersSingleUnitProps,
   OrdersProductDetailProps,
   BusinessPartnerDetailProps,
   DeliveryDocumentDetailProps,
@@ -328,6 +367,7 @@ export type {
   PriceMasterDetailProps,
   BillOfMaterialDetailProps,
   OperationsDetailProps,
+  ProductSingleUnitProps,
   ProductStockSingleUnitProps,
   ProductStockByStorageBinByBatchProps,
 }

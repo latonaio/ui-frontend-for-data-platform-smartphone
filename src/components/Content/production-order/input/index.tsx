@@ -6,7 +6,7 @@ import {
   ProductDetailSectionHeader,
   ProductDetailSectionInfo,
 } from '../../Detail/Detail.style';
-import { ProductionOrderTablesEnum } from '@/constants';
+import { ProductionOrderTablesEnum, ProductStockTablesEnum } from '@/constants';
 import { Detail } from '@/components/Content/Detail/Detail';
 import { QuantityPostCancelButton } from '@/components/Button';
 import React from 'react';
@@ -17,6 +17,7 @@ import { ProductionOrderItemOperationInputProps } from '@/store/slices/productio
 import { TextField } from '@/components/Form';
 import { checkInvalid, editItemAsync } from '@/store/slices/production-order/item-operation/input';
 import { generateImageProductUrl, generateQRCodeImageUrl } from '@/helpers/common';
+import { useRouter } from 'next/router';
 
 export const ProductionOrderInput = ({
                                        className,
@@ -29,6 +30,8 @@ export const ProductionOrderInput = ({
   };
 
   if (!detail[ProductionOrderTablesEnum.productionOrderItemOperationInput]) { return <div></div> }
+
+  const router = useRouter();
 
   return (
     <Detail className={clsx(
@@ -71,7 +74,16 @@ export const ProductionOrderInput = ({
           >
             <div>
               <span className={'itemName'}>品目: </span>
-              <span className={'itemText'}>
+              <span
+                className={'itemText'}
+                onClick={async () => {
+                  await router.push(`/DPFM_API_PRODUCT_MASTER_SRV/reads/` +
+                    `doc/` +
+                    `${detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].Product}/` +
+                    `${detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].UserType}/`
+                  );
+                }}
+              >
                 {detail[ProductionOrderTablesEnum.productionOrderItemOperationInput].Product}
               </span>
             </div>

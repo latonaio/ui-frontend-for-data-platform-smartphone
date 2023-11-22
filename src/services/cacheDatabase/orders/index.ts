@@ -2,9 +2,13 @@ import { CacheDatabase } from '..';
 import {
   AuthedUser,
   OrdersDetailListItem,
+  ProductSingleUnitProps,
+  OrdersSingleUnitProps,
 } from '@/constants';
 import { List } from './list';
 import { Detail } from './detail';
+import { SingleUnit } from './single-unit';
+import { ProductUserType } from '@/services/cacheDatabase/product';
 
 export interface OrdersUserType {
   buyer: string;
@@ -14,11 +18,13 @@ export interface OrdersUserType {
 class OrdersCache extends CacheDatabase implements List, Detail {
   private list: List;
   private detail: Detail;
+  private singleUnit: SingleUnit;
 
   constructor() {
     super();
     this.list = new List();
     this.detail = new Detail();
+    this.singleUnit = new SingleUnit();
   }
 
   async getOrdersDetailList(
@@ -72,6 +78,24 @@ class OrdersCache extends CacheDatabase implements List, Detail {
       }
   ): Promise<void> {
     return await this.list.updateOrdersList(params);
+  }
+
+  async getOrdersSingleUnit(
+    orderId: string,
+  ): Promise<OrdersSingleUnitProps | null> {
+    return await this.singleUnit.getOrdersSingleUnit(orderId);
+  }
+
+  async updateOrdersSingleUnit(
+    params: {
+      orderId: string;
+      userType: ProductUserType[keyof ProductUserType];
+      language: AuthedUser['language'];
+      businessPartner: AuthedUser['businessPartner'];
+      emailAddress: AuthedUser['emailAddress'];
+    },
+  ): Promise<void> {
+    return await this.singleUnit.updateOrdersSingleUnit(params);
   }
 }
 
