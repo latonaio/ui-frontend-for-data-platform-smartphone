@@ -28,6 +28,7 @@ export class CacheDatabase extends Tables {
       [OrdersTablesEnum.ordersDetailListSellerItem]: '[OrderID+OrderItem]',
       [OrdersTablesEnum.ordersDetailHeader]: 'OrderID',
       [OrdersTablesEnum.ordersDetail]: '[OrderID+OrderItem+Product]',
+      [OrdersTablesEnum.ordersSingleUnit]: '[OrderID+OrderItem]',
 
       [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverToPartyItem]: 'SupplyChainRelationshipID',
       [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverFromPartyItem]: 'SupplyChainRelationshipID',
@@ -101,8 +102,6 @@ export class CacheDatabase extends Tables {
 
       [QuotationsTablesEnum.quotationsListBuyerItem]: '++id',
       [QuotationsTablesEnum.quotationsListSellerItem]: '++id',
-
-      [OrdersTablesEnum.ordersSingleUnit]: 'OrderID',
     });
   }
 

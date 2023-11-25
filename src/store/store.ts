@@ -14,8 +14,9 @@ import { productSingleUnit } from './slices/product/single-unit';
 import ordersPaginationReducer from './slices/orders/pagination';
 import deliveryDocumentPaginationReducer from './slices/delivery-document/pagination';
 import productionOrderPaginationReducer from './slices/production-order/pagination';
-import { ordersList, } from './slices/orders/list';
-import { ordersDetailList, } from './slices/orders/detail-list';
+import { ordersList } from './slices/orders/list';
+import { ordersDetailList } from './slices/orders/detail-list';
+import { ordersSingleUnit } from './slices/orders/single-unit';
 import { billOfMaterialList, } from './slices/bill-of-material/list';
 import { billOfMaterialDetailList, } from './slices/bill-of-material/detail-list';
 
@@ -27,6 +28,7 @@ export const store = configureStore({
         ordersList: ordersList.reducer,
         ordersDetailList: ordersDetailList.reducer,
         ordersDetail: ordersDetailReducer,
+        ordersSingleUnit: ordersSingleUnit.reducer,
         snackbar: snackbarReducer,
         deliveryDocumentDetail: deliveryDocumentDetailReducer,
         productionOrderCockpit: productionOrderCockpit.reducer,

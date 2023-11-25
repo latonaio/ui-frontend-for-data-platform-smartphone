@@ -24,6 +24,14 @@ export const HeaderContent = styled.div`
   &.gray {
     background-color: ${style.header.gray};
   }
+
+  &.purple {
+    background-color: ${style.header.purple};
+  }
+
+  &.pink {
+    background-color: ${style.header.pink};
+  }
 `;
 
 export const HeaderContentCenter = styled(HeaderContentDefault)`

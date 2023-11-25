@@ -8,10 +8,12 @@ import { reads } from '@/api/orders/singleUnit';
 
 export class SingleUnit extends CacheDatabase {
   async getOrdersSingleUnit(
-    orderId: string,
+    orderId: number,
+    orderItem: number,
   ): Promise<OrdersSingleUnitProps | null> {
     const response = await this.ordersSingleUnit.get({
-      Orders: orderId,
+      OrderID: orderId,
+      OrderItem: orderItem,
     });
 
     if (response) {
@@ -25,7 +27,8 @@ export class SingleUnit extends CacheDatabase {
 
   async updateOrdersSingleUnit(
     params: {
-      orderId: string;
+      orderId: number;
+      orderItem: number;
       userType: OrdersUserType[keyof OrdersUserType],
       language: AuthedUser['language'];
       businessPartner: AuthedUser['businessPartner'];
@@ -34,6 +37,7 @@ export class SingleUnit extends CacheDatabase {
   ): Promise<any> {
     const response = await reads({
       orderId: params.orderId,
+      orderItem: params.orderItem,
       language: params.language,
       businessPartner: params.businessPartner,
       userId: params.emailAddress,
@@ -53,6 +57,7 @@ export class SingleUnit extends CacheDatabase {
 
     return {
       orderId: params.orderId,
+      orderItem: params.orderItem,
       BusinessPartner: params.businessPartner,
     }
   }

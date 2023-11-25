@@ -1,7 +1,8 @@
 import { OrdersSingleUnitProps, UIKeyGeneral } from '@/constants';
 
 export interface ReadsParams extends UIKeyGeneral {
-  orderId: string;
+  orderId: number;
+  orderItem: number;
   userType: string;
 }
 

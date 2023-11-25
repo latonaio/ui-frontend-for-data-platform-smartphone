@@ -13,6 +13,8 @@ import iconDelivery from '@public/icon-delivery.png';
 import yieldQuantity from '@public/yield-quantity.png';
 import defectiveQuantity from '@public/defective-quantity.png';
 import factory from '@public/factory.png';
+import iconWing2 from '@public/icon-wing-2.png';
+import clock from '@public/clock.png';
 
 import globalMenuQrcode from '@public/global-menu-qrcode.png';
 import globalMenuCallFunction from '@public/global-menu-call-function.png';
@@ -40,6 +42,9 @@ import scheduler from '@public/global-menu/scheduler.png';
 import scrList from '@public/global-menu/scr-list.png';
 import orderList from '@public/global-menu/order-list.png';
 import underConstruction from '@public/global-menu/under-construction.png';
+import estimate from '@public/global-menu/estimate.png';
+import lot from '@public/global-menu/lot.png';
+import price from '@public/global-menu/price.png';
 
 // demo
 import imageSample01 from '@public/demo/image-sample01.png';
@@ -81,6 +86,8 @@ const publicImageMap = {
   yieldQuantity,
   defectiveQuantity,
   factory,
+  iconWing2,
+  clock,
 
   globalMenuQrcode,
   globalMenuCallFunction,
@@ -108,6 +115,10 @@ const publicImageMap = {
   orderList,
   underConstruction,
   headerGirlSteering,
+  estimate,
+  lot,
+  price,
+
 } as PublicImageMap;
 
 const handleImageName = (imageName: string) => {

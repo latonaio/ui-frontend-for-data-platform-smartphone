@@ -8,10 +8,26 @@ import {
 } from '@/constants';
 import { AuthedUser } from '@/constants';
 
-interface OrdersSingleUnitProps extends ProductDetail {
+interface OrdersSingleUnitProps {
   OrderID: string;
   OrderItem: string;
   Product: string;
+  OrderItemTextByBuyer: string;
+  OrderItemTextBySeller: string;
+  Buyer: number;
+  BuyerName: string;
+  Seller: number;
+  SellerName: string;
+  NetAmount: number;
+  OrderType: string;
+  TransactionCurrency: string;
+  RequestedDeliveryDate: string;
+  RequestedDeliveryTime: string;
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+  };
+  UserType: string;
 }
 
 interface OrdersProductDetailProps extends ProductDetail {

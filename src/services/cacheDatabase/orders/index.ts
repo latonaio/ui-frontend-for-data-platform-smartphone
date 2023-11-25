@@ -81,14 +81,16 @@ class OrdersCache extends CacheDatabase implements List, Detail {
   }
 
   async getOrdersSingleUnit(
-    orderId: string,
+    orderId: number,
+    orderItem: number,
   ): Promise<OrdersSingleUnitProps | null> {
-    return await this.singleUnit.getOrdersSingleUnit(orderId);
+    return await this.singleUnit.getOrdersSingleUnit(orderId, orderItem);
   }
 
   async updateOrdersSingleUnit(
     params: {
-      orderId: string;
+      orderId: number;
+      orderItem: number;
       userType: ProductUserType[keyof ProductUserType];
       language: AuthedUser['language'];
       businessPartner: AuthedUser['businessPartner'];

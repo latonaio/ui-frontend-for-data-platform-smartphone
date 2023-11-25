@@ -16,7 +16,8 @@ import { useAppDispatch } from '@/store/hooks';
 import { initializeUpdate } from '@/store/slices/orders/single-unit';
 
 interface PageProps {
-  orderId: string;
+  orderId: number;
+  orderItem: number;
   userType: string;
 }
 
@@ -34,10 +35,12 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
   const appDispatch = useAppDispatch();
 
   const setFormDataForPage = async (
-    orderId: string,
+    orderId: number,
+    orderItem: number,
   ) => {
     const detail = await ordersCache.getOrdersSingleUnit(
       orderId,
+      orderItem,
     );
 
     if (detail) {
@@ -48,7 +51,8 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
   }
 
   const initLoadTabData = async (
-    orderId: string,
+    orderId: number,
+    orderItem: number,
     userType: string,
   ) => {
     const {
@@ -61,10 +65,12 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
 
     await setFormDataForPage(
       orderId,
+      orderItem,
     );
 
     await ordersCache.updateOrdersSingleUnit({
       orderId,
+      orderItem,
       userType,
       language,
       businessPartner,
@@ -73,6 +79,7 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
 
     await setFormDataForPage(
       orderId,
+      orderItem,
     );
 
     dispatch(setLoading({ isOpen: false }));
@@ -81,6 +88,7 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
   useEffect(() => {
     initLoadTabData(
       data.orderId,
+      data.orderItem,
       data.userType,
     );
   }, [data]);
@@ -89,10 +97,10 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
     <Wrapper className={'Wrapper'}>
       <Header
         backName={'トップ'}
-        category={`${data.userType === 'seller' ? '受注' : '発注'}`}
-        pageName={''}
+        category={`${data.userType === 'buyer' ? '受注' : '発注'}`}
+        pageName={'Cockpit'}
         className={'text-2xl'}
-        color={'gray'}
+        color={`${data.userType === 'buyer' ? 'purple' : 'pink'}`}
         headerContentNext={`/DPFM_API_ORDERS_SRV/reads/` +
           `doc/` +
           `${data.orderId}/` +
@@ -109,12 +117,14 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const {
     orderId,
+    orderItem,
     userType
   } = context.query;
 
   return {
     props: {
-      orderId: orderId,
+      orderId: Number(orderId),
+      orderItem: Number(orderItem),
       userType,
     }
   }
