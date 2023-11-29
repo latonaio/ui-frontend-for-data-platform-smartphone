@@ -17,6 +17,8 @@ import productionOrderPaginationReducer from './slices/production-order/paginati
 import { ordersList } from './slices/orders/list';
 import { ordersDetailList } from './slices/orders/detail-list';
 import { ordersSingleUnit } from './slices/orders/single-unit';
+import { ordersItemScheduleLine } from './slices/orders/item-schedule-line';
+import { ordersItemPricingElement } from './slices/orders/item-pricing-element';
 import { billOfMaterialList, } from './slices/bill-of-material/list';
 import { billOfMaterialDetailList, } from './slices/bill-of-material/detail-list';
 
@@ -29,6 +31,8 @@ export const store = configureStore({
         ordersDetailList: ordersDetailList.reducer,
         ordersDetail: ordersDetailReducer,
         ordersSingleUnit: ordersSingleUnit.reducer,
+        ordersItemScheduleLine: ordersItemScheduleLine.reducer,
+        ordersItemPricingElement: ordersItemPricingElement.reducer,
         snackbar: snackbarReducer,
         deliveryDocumentDetail: deliveryDocumentDetailReducer,
         productionOrderCockpit: productionOrderCockpit.reducer,

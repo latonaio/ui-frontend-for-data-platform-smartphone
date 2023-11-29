@@ -81,7 +81,12 @@ export const generateBarcodeImageUrl = (barcode: BarcodeImage) => {
     `${env.nest.port}/barcode/${barcode.BarcodeType}/${barcode.Id}.${fileExtension}`;
 };
 
-export const generateQRCodeImageUrl = (qrcode: QRCodeImage) => {
+export const generateQRCodeImageUrl = (qrcode: QRCodeImage, option: any = {}) => {
+  if (option.suffix) {
+    return `${env.nest.host}:` +
+      `${env.nest.port}/qr-code/${qrcode.DocID}${option.suffix}.${qrcode.FileExtension}`;
+  }
+
   return `${env.nest.host}:` +
     `${env.nest.port}/qr-code/${qrcode.DocID}.${qrcode.FileExtension}`;
 };

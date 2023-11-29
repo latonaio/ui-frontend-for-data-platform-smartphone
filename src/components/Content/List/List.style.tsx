@@ -162,6 +162,10 @@ export const ListHeaderInfo = styled.div`
   .columnRight {}
 `;
 
+export const ListHeaderInfoFlexStart = styled(ListHeaderInfo)`
+  justify-content: flex-start;
+`;
+
 const EditMenu = styled.div`
   .editMenu {
     cursor: pointer;

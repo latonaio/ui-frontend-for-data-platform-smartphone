@@ -16,6 +16,41 @@ interface OrdersItem {
   IsMarkedForDeletion: boolean;
 }
 
+interface OrdersItemScheduleLineItemHeader extends OrdersItem {
+}
+
+interface OrdersItemPricingElementItemHeader extends OrdersItem {
+}
+
+interface OrdersItemScheduleLineItem {
+  OrderID: number;
+  ScheduleLine: number;
+  SellerName: string;
+  Seller: number;
+  BuyerName: string;
+  Buyer: number;
+  StockConfirmationBusinessPartner: number;
+  StockConfirmationBusinessPartnerName: string;
+  StockConfirmationPlant: string;
+  StockConfirmationPlantName: string;
+  RequestedDeliveryDate: string;
+  RequestedDeliveryTime: string;
+  DeliveredQuantityInBaseUnit: number;
+  UndeliveredQuantityInBaseUnit: number;
+}
+
+interface OrdersItemPricingElementItem {
+  OrderID: number;
+  PricingProcedureCounter: number;
+  ConditionRateValue: number;
+  ConditionRateValueUnit: number;
+  ConditionScaleQuantity: number;
+  ConditionCurrency: string;
+  ConditionQuantity: number;
+  ConditionAmount: number;
+  ConditionType: string;
+}
+
 interface BuyerItem extends OrdersItem {
 }
 
@@ -84,6 +119,10 @@ interface QuantityUnit {
 
 export type {
   OrdersItem,
+  OrdersItemScheduleLineItemHeader,
+  OrdersItemScheduleLineItem,
+  OrdersItemPricingElementItemHeader,
+  OrdersItemPricingElementItem,
   BuyerItem,
   SellerItem,
   OrdersDetailListItem,

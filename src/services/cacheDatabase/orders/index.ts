@@ -1,13 +1,15 @@
 import { CacheDatabase } from '..';
 import {
   AuthedUser,
-  OrdersDetailListItem,
-  ProductSingleUnitProps,
   OrdersSingleUnitProps,
+  OrdersItemScheduleLineProps,
+  OrdersItemPricingElementProps,
 } from '@/constants';
 import { List } from './list';
 import { Detail } from './detail';
 import { SingleUnit } from './single-unit';
+import { ItemScheduleLine } from './item-schedule-line';
+import { ItemPricingElement } from './item-pricing-element';
 import { ProductUserType } from '@/services/cacheDatabase/product';
 
 export interface OrdersUserType {
@@ -19,12 +21,16 @@ class OrdersCache extends CacheDatabase implements List, Detail {
   private list: List;
   private detail: Detail;
   private singleUnit: SingleUnit;
+  private itemScheduleLine: ItemScheduleLine;
+  private itemPricingElement: ItemPricingElement;
 
   constructor() {
     super();
     this.list = new List();
     this.detail = new Detail();
     this.singleUnit = new SingleUnit();
+    this.itemScheduleLine = new ItemScheduleLine();
+    this.itemPricingElement = new ItemPricingElement();
   }
 
   async getOrdersDetailList(
@@ -98,6 +104,46 @@ class OrdersCache extends CacheDatabase implements List, Detail {
     },
   ): Promise<void> {
     return await this.singleUnit.updateOrdersSingleUnit(params);
+  }
+
+  async getOrdersItemScheduleLine(
+    orderId: number,
+    orderItem: number,
+  ): Promise<OrdersItemScheduleLineProps | null> {
+    return await this.itemScheduleLine.getOrdersItemScheduleLine(orderId, orderItem);
+  }
+
+  async updateOrdersItemScheduleLine(
+    params: {
+      orderId: number;
+      orderItem: number;
+      userType: ProductUserType[keyof ProductUserType];
+      language: AuthedUser['language'];
+      businessPartner: AuthedUser['businessPartner'];
+      emailAddress: AuthedUser['emailAddress'];
+    },
+  ): Promise<void> {
+    return await this.itemScheduleLine.updateOrdersItemScheduleLine(params);
+  }
+
+  async getOrdersItemPricingElement(
+    orderId: number,
+    orderItem: number,
+  ): Promise<OrdersItemPricingElementProps | null> {
+    return await this.itemPricingElement.getOrdersItemPricingElement(orderId, orderItem);
+  }
+
+  async updateOrdersItemPricingElement(
+    params: {
+      orderId: number;
+      orderItem: number;
+      userType: ProductUserType[keyof ProductUserType];
+      language: AuthedUser['language'];
+      businessPartner: AuthedUser['businessPartner'];
+      emailAddress: AuthedUser['emailAddress'];
+    },
+  ): Promise<void> {
+    return await this.itemPricingElement.updateOrdersItemPricingElement(params);
   }
 }
 

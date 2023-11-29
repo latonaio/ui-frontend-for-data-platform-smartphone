@@ -29,6 +29,8 @@ export class CacheDatabase extends Tables {
       [OrdersTablesEnum.ordersDetailHeader]: 'OrderID',
       [OrdersTablesEnum.ordersDetail]: '[OrderID+OrderItem+Product]',
       [OrdersTablesEnum.ordersSingleUnit]: '[OrderID+OrderItem]',
+      [OrdersTablesEnum.ordersItemScheduleLine]: '[OrderID+OrderItem]',
+      [OrdersTablesEnum.ordersItemPricingElement]: '[OrderID+OrderItem]',
 
       [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverToPartyItem]: 'SupplyChainRelationshipID',
       [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverFromPartyItem]: 'SupplyChainRelationshipID',

@@ -1,14 +1,29 @@
+import { rem } from 'polished';
 
-export const summaryHead = (summary: string[]) => {
+interface Options {
+  trStyleList: [];
+}
+
+export const summaryHead = (summary: string[], options?: Options) => {
   return (
     <tr className={'head'}>
       {summary.map((item, index) => {
+        const trStyle: any = {};
+
+        if (
+          options &&
+          options.trStyleList &&
+          options.trStyleList[index] !== undefined
+        ) {
+          trStyle['width'] = options.trStyleList[index]
+        } else {
+          trStyle['width'] = `${rem(100 / summary.length)}%`
+        }
+
         return (
           <td
             key={index}
-            style={{
-              width: `${100 / summary.length}%`
-            }}
+            style={trStyle}
             dangerouslySetInnerHTML={{ __html: item }}
           />
         );

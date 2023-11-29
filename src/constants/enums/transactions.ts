@@ -19,6 +19,8 @@ export enum OrdersTablesEnum {
   ordersDetailHeader = 'ordersDetailHeader',
   ordersDetail = 'ordersDetail',
   ordersSingleUnit = 'ordersSingleUnit',
+  ordersItemScheduleLine = 'ordersItemScheduleLine',
+  ordersItemPricingElement = 'ordersItemPricingElement',
 }
 
 export enum DeliveryDocumentTablesEnum {

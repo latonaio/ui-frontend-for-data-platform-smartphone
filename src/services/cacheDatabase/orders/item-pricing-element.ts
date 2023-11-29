@@ -1,17 +1,17 @@
 import { CacheDatabase } from '..';
 import {
   AuthedUser,
-  OrdersSingleUnitProps,
+  OrdersItemPricingElementProps,
 } from '@/constants';
 import { OrdersUserType } from './index';
-import { reads } from 'api/orders/single-unit';
+import { reads } from '@/api/orders/item-pricing-element';
 
-export class SingleUnit extends CacheDatabase {
-  async getOrdersSingleUnit(
+export class ItemPricingElement extends CacheDatabase {
+  async getOrdersItemPricingElement(
     orderId: number,
     orderItem: number,
-  ): Promise<OrdersSingleUnitProps | null> {
-    const response = await this.ordersSingleUnit.get({
+  ): Promise<OrdersItemPricingElementProps | null> {
+    const response = await this.ordersItemPricingElement.get({
       OrderID: orderId,
       OrderItem: orderItem,
     });
@@ -25,7 +25,7 @@ export class SingleUnit extends CacheDatabase {
     return null;
   }
 
-  async updateOrdersSingleUnit(
+  async updateOrdersItemPricingElement(
     params: {
       orderId: number;
       orderItem: number;
@@ -44,13 +44,16 @@ export class SingleUnit extends CacheDatabase {
       userType: params.userType,
     });
 
-    const OrdersSingleUnit =
-      response.SingleUnit ?
-        response.SingleUnit.length >= 1 ?
-          response.SingleUnit[0] : {} : {};
+    const OrdersItemPricingElementItemHeader =
+      response.Item ?
+        response.Item.length >= 1 ?
+          response.Item[0] : {} : {};
 
-    this.ordersSingleUnit.put({
-      ...OrdersSingleUnit,
+    this.ordersItemPricingElement.put({
+      ...OrdersItemPricingElementItemHeader,
+      ItemPricingElement: response.ItemPricingElement || [],
+      OrderID: params.orderId,
+      OrderItem: params.orderItem,
       BusinessPartner: params.businessPartner,
       UserType: params.userType,
     });
@@ -58,7 +61,7 @@ export class SingleUnit extends CacheDatabase {
     return {
       orderId: params.orderId,
       orderItem: params.orderItem,
-      BusinessPartner: params.businessPartner,
+      businessPartner: params.businessPartner,
     }
   }
 }

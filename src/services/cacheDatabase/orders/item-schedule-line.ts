@@ -1,17 +1,17 @@
 import { CacheDatabase } from '..';
 import {
   AuthedUser,
-  OrdersSingleUnitProps,
+  OrdersItemScheduleLineProps,
 } from '@/constants';
 import { OrdersUserType } from './index';
-import { reads } from 'api/orders/single-unit';
+import { reads } from '@/api/orders/item-schedule-line';
 
-export class SingleUnit extends CacheDatabase {
-  async getOrdersSingleUnit(
+export class ItemScheduleLine extends CacheDatabase {
+  async getOrdersItemScheduleLine(
     orderId: number,
     orderItem: number,
-  ): Promise<OrdersSingleUnitProps | null> {
-    const response = await this.ordersSingleUnit.get({
+  ): Promise<OrdersItemScheduleLineProps | null> {
+    const response = await this.ordersItemScheduleLine.get({
       OrderID: orderId,
       OrderItem: orderItem,
     });
@@ -25,7 +25,7 @@ export class SingleUnit extends CacheDatabase {
     return null;
   }
 
-  async updateOrdersSingleUnit(
+  async updateOrdersItemScheduleLine(
     params: {
       orderId: number;
       orderItem: number;
@@ -44,13 +44,16 @@ export class SingleUnit extends CacheDatabase {
       userType: params.userType,
     });
 
-    const OrdersSingleUnit =
-      response.SingleUnit ?
-        response.SingleUnit.length >= 1 ?
-          response.SingleUnit[0] : {} : {};
+    const OrdersItemScheduleLineItemHeader =
+      response.Item ?
+        response.Item.length >= 1 ?
+          response.Item[0] : {} : {};
 
-    this.ordersSingleUnit.put({
-      ...OrdersSingleUnit,
+    this.ordersItemScheduleLine.put({
+      ...OrdersItemScheduleLineItemHeader,
+      ItemScheduleLine: response.ItemScheduleLine || [],
+      OrderID: params.orderId,
+      OrderItem: params.orderItem,
       BusinessPartner: params.businessPartner,
       UserType: params.userType,
     });
@@ -58,7 +61,7 @@ export class SingleUnit extends CacheDatabase {
     return {
       orderId: params.orderId,
       orderItem: params.orderItem,
-      BusinessPartner: params.businessPartner,
+      businessPartner: params.businessPartner,
     }
   }
 }

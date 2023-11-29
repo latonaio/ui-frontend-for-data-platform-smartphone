@@ -15,6 +15,7 @@ import defectiveQuantity from '@public/defective-quantity.png';
 import factory from '@public/factory.png';
 import iconWing2 from '@public/icon-wing-2.png';
 import clock from '@public/clock.png';
+import ordersItemImage001 from '@public/orders-item-image-001.png';
 
 import globalMenuQrcode from '@public/global-menu-qrcode.png';
 import globalMenuCallFunction from '@public/global-menu-call-function.png';
@@ -88,6 +89,7 @@ const publicImageMap = {
   factory,
   iconWing2,
   clock,
+  ordersItemImage001,
 
   globalMenuQrcode,
   globalMenuCallFunction,

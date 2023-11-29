@@ -4,7 +4,13 @@ import {
   Stock,
   ProductImage,
   BarcodeImage,
-  ProductDetail, Quantity, ProductionOrderDetailHeader, ProductionOrderItemOperationItem, QRCodeImage,
+  ProductDetail,
+  Quantity,
+  ProductionOrderDetailHeader,
+  ProductionOrderItemOperationItem,
+  QRCodeImage,
+  OrdersItemScheduleLineItem,
+  OrdersItemPricingElementItem,
 } from '@/constants';
 import { AuthedUser } from '@/constants';
 
@@ -18,11 +24,55 @@ interface OrdersSingleUnitProps {
   BuyerName: string;
   Seller: number;
   SellerName: string;
-  NetAmount: number;
+  GrossAmount: number;
   OrderType: string;
-  TransactionCurrency: string;
+  ConditionCurrency: string;
   RequestedDeliveryDate: string;
   RequestedDeliveryTime: string;
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+  };
+  UserType: string;
+}
+
+interface OrdersItemScheduleLineProps {
+  ItemScheduleLine: OrdersItemScheduleLineItem[];
+  OrderID: string;
+  OrderItem: string;
+  Product: string;
+  Buyer: number;
+  BuyerName: string;
+  Seller: number;
+  SellerName: string;
+  RequestedDeliveryDate: string;
+  RequestedDeliveryTime: string;
+  OrderItemTextByBuyer: string;
+  OrderItemTextBySeller: string;
+  DeliveryUnit: string;
+  OrderQuantityInDeliveryUnit: number;
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+  };
+  UserType: string;
+}
+
+interface OrdersItemPricingElementProps {
+  ItemPricingElement: OrdersItemPricingElementItem[];
+  OrderID: string;
+  OrderItem: string;
+  Product: string;
+  Buyer: number;
+  BuyerName: string;
+  Seller: number;
+  SellerName: string;
+  RequestedDeliveryDate: string;
+  RequestedDeliveryTime: string;
+  OrderItemTextByBuyer: string;
+  OrderItemTextBySeller: string;
+  DeliveryUnit: string;
+  OrderQuantityInDeliveryUnit: number;
   Images: {
     Product: ProductImage;
     QRCode: QRCodeImage;
@@ -373,6 +423,8 @@ interface BillOfMaterialDetailProps extends ProductDetail {
 
 export type {
   OrdersSingleUnitProps,
+  OrdersItemScheduleLineProps,
+  OrdersItemPricingElementProps,
   OrdersProductDetailProps,
   BusinessPartnerDetailProps,
   DeliveryDocumentDetailProps,

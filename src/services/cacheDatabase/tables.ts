@@ -111,6 +111,8 @@ export class Tables extends Dexie {
   [OrdersTablesEnum.ordersDetailHeader]!: Table<OrdersDetailHeader>;
   [OrdersTablesEnum.ordersDetail]!: Table<OrdersProductDetailProps>;
   [OrdersTablesEnum.ordersSingleUnit]!: Table<any>;
+  [OrdersTablesEnum.ordersItemScheduleLine]!: Table<any>;
+  [OrdersTablesEnum.ordersItemPricingElement]!: Table<any>;
 
   [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverToPartyItem]!: Table<DeliveryDocumentListEditForCache>;
   [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverFromPartyItem]!: Table<DeliveryDocumentListEditForCache>;

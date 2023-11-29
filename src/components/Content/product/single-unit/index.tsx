@@ -116,19 +116,19 @@ export const ProductSingleUnit = ({
               fontSize: rem(14),
             }}
           >
-            <div>{detail[OrdersTablesEnum.ordersSingleUnit].UserType === 'buyer' ? '買い手' : '売り手'}:
+            <div>{detail[OrdersTablesEnum.ordersSingleUnit].UserType === 'buyer' ? '売り手' : '買い手'}:
                {detail[OrdersTablesEnum.ordersSingleUnit].UserType === 'buyer'
-                 ? detail[OrdersTablesEnum.ordersSingleUnit].BuyerName : detail[OrdersTablesEnum.ordersSingleUnit].SellerName}
+                 ? detail[OrdersTablesEnum.ordersSingleUnit].SellerName : detail[OrdersTablesEnum.ordersSingleUnit].BuyerName}
               <span style={{ marginLeft: rem(20) }}></span>
               オーダー金額: <span
                 style={{
                   fontSize: rem(23),
                 }}
-              >{detail[OrdersTablesEnum.ordersSingleUnit].NetAmount.toLocaleString()}</span>
+              >{detail[OrdersTablesEnum.ordersSingleUnit].GrossAmount.toLocaleString()}</span>
             </div>
             <div>
               オーダータイプ: {detail[OrdersTablesEnum.ordersSingleUnit].OrderType}<span style={{ marginLeft: rem(20) }}></span>
-              通貨: {detail[OrdersTablesEnum.ordersSingleUnit].TransactionCurrency}
+              通貨: {detail[OrdersTablesEnum.ordersSingleUnit].ConditionCurrency}
             </div>
             <div
               className={'flex justify-start items-baseline'}
@@ -185,7 +185,8 @@ export const ProductSingleUnit = ({
                   src={
                     detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode?.DocID &&
                     generateQRCodeImageUrl(
-                      detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode
+                      detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode,
+                      { suffix: `-${detail[OrdersTablesEnum.ordersSingleUnit].UserType}` }
                     ) || ''}
                   alt={``}
                   width={132}
@@ -256,7 +257,8 @@ export const ProductSingleUnit = ({
                   src={
                     detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode?.DocID &&
                     generateQRCodeImageUrl(
-                      detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode
+                      detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode,
+                      { suffix: `-${detail[OrdersTablesEnum.ordersSingleUnit].UserType}` }
                     ) || ''}
                   alt={``}
                   width={132}

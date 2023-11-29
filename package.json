@@ -6,6 +6,7 @@
     "dev": "next dev",
     "dev:local": "APP_ENV=local next dev --port 3001",
     "dev:aws": "APP_ENV=aws next dev --port 3001",
+    "dev:aws-half": "APP_ENV=aws-half next dev --port 3001",
     "dev:demo": "APP_ENV=demo next dev --port 3001",
     "dev:mock": "APP_ENV=mock next dev --port 3001",
     "build:local": "APP_ENV=local next build",

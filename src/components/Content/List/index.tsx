@@ -15,3 +15,5 @@ export * from './BillOfMaterialList';
 export * from './OperationsList';
 export * from './WorkCenterList';
 export * from './QuotationsList';
+export * from './OrdersItemScheduleLine';
+export * from './OrdersItemPricingElement';
