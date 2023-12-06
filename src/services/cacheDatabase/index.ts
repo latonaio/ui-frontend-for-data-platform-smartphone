@@ -40,6 +40,7 @@ export class CacheDatabase extends Tables {
       [DeliveryDocumentTablesEnum.deliveryDocumentDetailListDeliverFromPartyItem]: '[DeliveryDocument+DeliveryDocumentItem]',
       [DeliveryDocumentTablesEnum.deliveryDocumentDetailHeader]: 'DeliveryDocument',
       [DeliveryDocumentTablesEnum.deliveryDocumentDetail]: '[DeliveryDocument+DeliveryDocumentItem+Product]',
+      [DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit]: '[DeliveryDocument+DeliveryDocumentItem]',
 
       [InvoiceDocumentTablesEnum.invoiceDocumentListBillToPartyItem]: '++id, InvoiceDocument, BillToParty, BillFromParty, HeaderPaymentBlockStatus',
       [InvoiceDocumentTablesEnum.invoiceDocumentListBillFromPartyItem]: '++id, InvoiceDocument, BillToParty, BillFromParty, HeaderPaymentBlockStatus',

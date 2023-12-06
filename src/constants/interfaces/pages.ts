@@ -110,6 +110,26 @@ interface OrdersProductDetailProps extends ProductDetail {
   BusinessPartner: AuthedUser['businessPartner'];
 }
 
+interface DeliveryDocumentSingleUnitProps {
+  DeliveryDocument: string;
+  DeliveryDocumentItem: string;
+  Product: string;
+  PlannedGoodsIssueDate: string;
+  PlannedGoodsIssueTime: string;
+  PlannedGoodsReceiptDate: string;
+  PlannedGoodsReceiptTime: string;
+  DeliverToPartyName: string;
+  DeliverToPlantName: string;
+  DeliverFromPartyName: string;
+  DeliverFromPlantName: string;
+
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+  };
+  UserType: string;
+}
+
 interface DeliveryDocumentDetailProps extends ProductDetail {
   DeliveryDocument: string;
   DeliveryDocumentItem: string;
@@ -427,6 +447,7 @@ export type {
   OrdersItemPricingElementProps,
   OrdersProductDetailProps,
   BusinessPartnerDetailProps,
+  DeliveryDocumentSingleUnitProps,
   DeliveryDocumentDetailProps,
   ProductionOrderCockpitProps,
   ProductionOrderItemOperationInputProps,

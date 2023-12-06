@@ -33,6 +33,7 @@ export enum DeliveryDocumentTablesEnum {
   deliveryDocumentDetailList = 'deliveryDocumentDetailList',
   deliveryDocumentDetailHeader = 'deliveryDocumentDetailHeader',
   deliveryDocumentDetail = 'deliveryDocumentDetail',
+  deliveryDocumentSingleUnit = 'deliveryDocumentSingleUnit',
 }
 
 export enum InvoiceDocumentTablesEnum {

@@ -32,6 +32,14 @@ export const HeaderContent = styled.div`
   &.pink {
     background-color: ${style.header.pink};
   }
+
+  &.deliveryFromParty {
+    background-color: ${style.header.deliveryFromParty};
+  }
+
+  &.deliveryToParty {
+    background-color: ${style.header.deliveryToParty};
+  }
 `;
 
 export const HeaderContentCenter = styled(HeaderContentDefault)`

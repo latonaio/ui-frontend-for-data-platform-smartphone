@@ -3,6 +3,8 @@ export const style = {
     gray: '#2f2f2f',
     purple: '#6F30A0',
     pink: '#FF7C80',
+    deliveryFromParty: '#B79230',
+    deliveryToParty: '#5E813F',
   },
   theme: {
     lightBlue400: '#38bdf8',

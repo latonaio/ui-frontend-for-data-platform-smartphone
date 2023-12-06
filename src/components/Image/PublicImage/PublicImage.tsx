@@ -44,6 +44,8 @@ import scrList from '@public/global-menu/scr-list.png';
 import orderList from '@public/global-menu/order-list.png';
 import underConstruction from '@public/global-menu/under-construction.png';
 import estimate from '@public/global-menu/estimate.png';
+import picking from '@public/global-menu/picking.png';
+import order from '@public/global-menu/order.png';
 import lot from '@public/global-menu/lot.png';
 import price from '@public/global-menu/price.png';
 
@@ -90,6 +92,8 @@ const publicImageMap = {
   iconWing2,
   clock,
   ordersItemImage001,
+  picking,
+  order,
 
   globalMenuQrcode,
   globalMenuCallFunction,

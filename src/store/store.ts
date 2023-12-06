@@ -12,6 +12,7 @@ import { productStockSingleUnit } from './slices/product-stock/single-unit';
 import { productStockByStorageBinByBatch } from './slices/product-stock/by-storage-bin-by-batch';
 import { productSingleUnit } from './slices/product/single-unit';
 import ordersPaginationReducer from './slices/orders/pagination';
+import { deliveryDocumentSingleUnit } from './slices/delivery-document/single-unit';
 import deliveryDocumentPaginationReducer from './slices/delivery-document/pagination';
 import productionOrderPaginationReducer from './slices/production-order/pagination';
 import { ordersList } from './slices/orders/list';
@@ -34,6 +35,7 @@ export const store = configureStore({
         ordersItemScheduleLine: ordersItemScheduleLine.reducer,
         ordersItemPricingElement: ordersItemPricingElement.reducer,
         snackbar: snackbarReducer,
+        deliveryDocumentSingleUnit: deliveryDocumentSingleUnit.reducer,
         deliveryDocumentDetail: deliveryDocumentDetailReducer,
         productionOrderCockpit: productionOrderCockpit.reducer,
         productionOrderItemOperationList: productionOrderItemOperationList.reducer,

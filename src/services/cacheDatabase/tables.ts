@@ -122,6 +122,7 @@ export class Tables extends Dexie {
   [DeliveryDocumentTablesEnum.deliveryDocumentDetailListDeliverFromPartyItem]!: Table<DeliveryDocumentDetailListItem>;
   [DeliveryDocumentTablesEnum.deliveryDocumentDetailHeader]!: Table<DeliveryDocumentDetailHeader>;
   [DeliveryDocumentTablesEnum.deliveryDocumentDetail]!: Table<DeliveryDocumentDetailProps>;
+  [DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit]!: Table<any>;
 
   [InvoiceDocumentTablesEnum.invoiceDocumentListBillToPartyItem]!: Table<InvoiceDocumentListItem>;
   [InvoiceDocumentTablesEnum.invoiceDocumentListBillFromPartyItem]!: Table<InvoiceDocumentListItem>;
