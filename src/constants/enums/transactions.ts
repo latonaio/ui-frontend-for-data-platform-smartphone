@@ -21,6 +21,7 @@ export enum OrdersTablesEnum {
   ordersSingleUnit = 'ordersSingleUnit',
   ordersItemScheduleLine = 'ordersItemScheduleLine',
   ordersItemPricingElement = 'ordersItemPricingElement',
+  ordersItem = 'ordersItem',
 }
 
 export enum DeliveryDocumentTablesEnum {
@@ -34,6 +35,7 @@ export enum DeliveryDocumentTablesEnum {
   deliveryDocumentDetailHeader = 'deliveryDocumentDetailHeader',
   deliveryDocumentDetail = 'deliveryDocumentDetail',
   deliveryDocumentSingleUnit = 'deliveryDocumentSingleUnit',
+  deliveryDocumentItem = 'deliveryDocumentItem',
 }
 
 export enum InvoiceDocumentTablesEnum {

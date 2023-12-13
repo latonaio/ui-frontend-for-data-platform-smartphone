@@ -13,6 +13,7 @@ import { productStockByStorageBinByBatch } from './slices/product-stock/by-stora
 import { productSingleUnit } from './slices/product/single-unit';
 import ordersPaginationReducer from './slices/orders/pagination';
 import { deliveryDocumentSingleUnit } from './slices/delivery-document/single-unit';
+import { deliveryDocumentItem } from './slices/delivery-document/item';
 import deliveryDocumentPaginationReducer from './slices/delivery-document/pagination';
 import productionOrderPaginationReducer from './slices/production-order/pagination';
 import { ordersList } from './slices/orders/list';
@@ -20,6 +21,7 @@ import { ordersDetailList } from './slices/orders/detail-list';
 import { ordersSingleUnit } from './slices/orders/single-unit';
 import { ordersItemScheduleLine } from './slices/orders/item-schedule-line';
 import { ordersItemPricingElement } from './slices/orders/item-pricing-element';
+import { ordersItem } from './slices/orders/item';
 import { billOfMaterialList, } from './slices/bill-of-material/list';
 import { billOfMaterialDetailList, } from './slices/bill-of-material/detail-list';
 
@@ -34,8 +36,10 @@ export const store = configureStore({
         ordersSingleUnit: ordersSingleUnit.reducer,
         ordersItemScheduleLine: ordersItemScheduleLine.reducer,
         ordersItemPricingElement: ordersItemPricingElement.reducer,
+        ordersItem: ordersItem.reducer,
         snackbar: snackbarReducer,
         deliveryDocumentSingleUnit: deliveryDocumentSingleUnit.reducer,
+        deliveryDocumentItem: deliveryDocumentItem.reducer,
         deliveryDocumentDetail: deliveryDocumentDetailReducer,
         productionOrderCockpit: productionOrderCockpit.reducer,
         productionOrderItemOperationList: productionOrderItemOperationList.reducer,

@@ -1,5 +1,10 @@
+import { ProductImage } from '@/constants';
+
 interface OrdersItem {
   OrderID: number;
+  OrderItem: number;
+  Product: string;
+  OrderItemText: string;
   SellerName: string;
   Seller: number;
   BuyerName: string;
@@ -11,9 +16,13 @@ interface OrdersItem {
   PaymentMethod: string;
   PaymentMethodName: string;
   TransactionCurrency: string;
+  DeliveryUnit: string;
   OrderType: string;
   IsCancelled: boolean;
   IsMarkedForDeletion: boolean;
+  Images: {
+    Product: ProductImage;
+  };
 }
 
 interface OrdersItemScheduleLineItemHeader extends OrdersItem {

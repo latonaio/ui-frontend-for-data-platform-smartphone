@@ -7,11 +7,16 @@ import {
   ProductDetailSectionHeader,
   ProductDetailSectionInfo,
   ProductDetailSectionContentQRCodeBox,
-  ProductDetailSectionContentQRCodeBoxWrapper, ProductDetailSectionContentProductMenuListWrapper,
+  ProductDetailSectionContentQRCodeBoxWrapper,
+  ProductDetailSectionContentProductMenuListWrapper,
 } from '@/components/Content/Detail/Detail.style';
 import {
-  ProductSingleUnitProps, ProductStockTablesEnum,
+  OrdersTablesEnum,
+  OrdersSingleUnitProps,
+  ProductSingleUnitProps,
+  ProductStockTablesEnum,
   ProductTablesEnum,
+  ProductionOrderTablesEnum,
 } from '@/constants';
 import { Detail } from '@/components/Content/Detail/Detail';
 import React from 'react';
@@ -23,18 +28,20 @@ import { Carousel } from '@/components/Carousel';
 import { useRouter } from 'next/router';
 import imageSample01 from '@public/demo/image-sample01.png';
 import imageSample01Material01 from '@public/demo/image-sample01-material01.png';
+import estimate from '@public/global-menu/estimate.png';
+import clock from '@public/clock.png';
 
 export const OrdersSingleUnit = ({
-                                       className,
-                                     }: {
+                                    className,
+                                  }: {
   className?: string;
 }) => {
   const appDispatch = useAppDispatch();
-  const detail  = useAppSelector(state => state.productSingleUnit) as {
-    [ProductTablesEnum.productSingleUnit]: ProductSingleUnitProps,
+  const detail  = useAppSelector(state => state.ordersSingleUnit) as {
+    [OrdersTablesEnum.ordersSingleUnit]: OrdersSingleUnitProps,
   };
 
-  if (!detail[ProductTablesEnum.productSingleUnit]) { return <div></div> }
+  if (!detail[OrdersTablesEnum.ordersSingleUnit]) { return <div></div> }
 
   const router = useRouter();
 
@@ -45,31 +52,78 @@ export const OrdersSingleUnit = ({
     )}>
       <ProductDetailSection>
         <div
+          className={'flex justify-between items-center'}
           style={{
+            width: `100%`,
+            fontSize: rem(14),
             marginBottom: rem(20),
           }}
         >
-          <span style={{ color: '#ff1616', }}>品目:</span> {detail[ProductTablesEnum.productSingleUnit].Product} {detail[ProductTablesEnum.productSingleUnit].ProductName}
+          <div
+            style={{
+              width: rem(40),
+            }}
+          >
+            {
+              detail[OrdersTablesEnum.ordersSingleUnit].Pagination?.prevPage &&
+              <div
+                className={'text-left'}
+                onClick={async () => {
+                  await router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                    `singleUnit/` +
+                    `${detail[OrdersTablesEnum.ordersSingleUnit].OrderID}/` +
+                    `${detail[OrdersTablesEnum.ordersSingleUnit].Pagination.prevPage.OrderItem}/` +
+                    `${detail[OrdersTablesEnum.ordersSingleUnit].UserType}/`
+                  );
+                }}
+              >
+                <i className="icon-arrow-back" />
+              </div>
+            }
+          </div>
+
+          <div className={'flex justify-start items-center'}>
+            <span
+              style={{
+                marginRight: rem(5),
+              }}
+            >
+              <PublicImage
+                className={'m-auto'}
+                imageName={'iconWing2'}
+                width={24}
+              />
+            </span>
+            <span>User={detail[OrdersTablesEnum.ordersSingleUnit].UserType.charAt(0).toUpperCase() + detail[OrdersTablesEnum.ordersSingleUnit].UserType.slice(1)}を選択しています</span>
+          </div>
+
+          <div
+            style={{
+              width: rem(40),
+            }}
+          >
+            {
+              detail[OrdersTablesEnum.ordersSingleUnit].Pagination?.nextPage &&
+              <div
+                className={'text-right'}
+                onClick={async () => {
+                  await router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                    `singleUnit/` +
+                    `${detail[OrdersTablesEnum.ordersSingleUnit].OrderID}/` +
+                    `${detail[OrdersTablesEnum.ordersSingleUnit].Pagination.nextPage.OrderItem}/` +
+                    `${detail[OrdersTablesEnum.ordersSingleUnit].UserType}/`
+                  );
+                }}
+              >
+                <i className="icon-arrow-forward" />
+              </div>
+            }
+          </div>
+
         </div>
         <div
           className={'relative'}
         >
-          <div>
-            <img
-              style={{
-                top: `0`,
-                right: `0`,
-              }}
-              className={'inline-block absolute'}
-              src={
-                detail[ProductTablesEnum.productSingleUnit].Images?.QRCode?.DocID &&
-                generateQRCodeImageUrl(
-                  detail[ProductTablesEnum.productSingleUnit].Images?.QRCode
-                ) || ''}
-              alt={``}
-              width={70}
-            />
-          </div>
           <Carousel>
             <img
               className={`imageSlide m-auto`}
@@ -77,10 +131,10 @@ export const OrdersSingleUnit = ({
                 width: `60%`,
               }}
               src={
-                detail[ProductTablesEnum.productSingleUnit].Images?.Product?.BusinessPartnerID &&
+                detail[OrdersTablesEnum.ordersSingleUnit].Images?.Product?.BusinessPartnerID &&
                 generateImageProductUrl(
-                  detail[ProductTablesEnum.productSingleUnit].Images?.Product?.BusinessPartnerID.toString(),
-                  detail[ProductTablesEnum.productSingleUnit].Images?.Product,
+                  detail[OrdersTablesEnum.ordersSingleUnit].Images?.Product?.BusinessPartnerID.toString(),
+                  detail[OrdersTablesEnum.ordersSingleUnit].Images?.Product,
                 ) || ''}
               alt={``}
             />
@@ -95,124 +149,221 @@ export const OrdersSingleUnit = ({
         </div>
       </ProductDetailSection>
 
-      <ProductDetailSection>
-        <ProductDetailSectionInfo
-          style={{
-            marginBottom: rem(20),
-          }}
-        >
-          <ProductDetailSectionHeader
-            style={{
-              marginBottom: rem(10)
-            }}
-          >
-            <div>
-              Maintaining A Product
+      <ProductDetailSection
+        style={{
+          marginBottom: rem(20),
+        }}
+      >
+        <ProductDetailSectionInfo>
+          <ProductDetailSectionHeader>
+            <div
+              onClick={async () => {
+                await router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                  `item/` +
+                  `${detail[OrdersTablesEnum.ordersSingleUnit].OrderID}/` +
+                  `${detail[OrdersTablesEnum.ordersSingleUnit].OrderItem}/` +
+                  `${detail[OrdersTablesEnum.ordersSingleUnit].UserType}/`
+                );
+              }}
+            >
+              オーダー情報
             </div>
           </ProductDetailSectionHeader>
-          <ProductDetailSectionContent>
-            <ProductDetailSectionContentProductMenuListWrapper>
-              <ProductDetailSectionContentThreeColumn
+
+          <ProductDetailSectionContent
+            style={{
+              fontSize: rem(14),
+            }}
+          >
+            <div>{detail[OrdersTablesEnum.ordersSingleUnit].UserType === 'buyer' ? '売り手' : '買い手'}:
+              {detail[OrdersTablesEnum.ordersSingleUnit].UserType === 'buyer'
+                ? detail[OrdersTablesEnum.ordersSingleUnit].SellerName : detail[OrdersTablesEnum.ordersSingleUnit].BuyerName}
+              <span style={{ marginLeft: rem(20) }}></span>
+              オーダー金額: <span
                 style={{
-                  marginBottom: rem(5)
+                  fontSize: rem(23),
                 }}
+              >{detail[OrdersTablesEnum.ordersSingleUnit].GrossAmount.toLocaleString()}</span>
+            </div>
+            <div>
+              オーダータイプ: {detail[OrdersTablesEnum.ordersSingleUnit].OrderType}<span style={{ marginLeft: rem(20) }}></span>
+              通貨: {detail[OrdersTablesEnum.ordersSingleUnit].ConditionCurrency}
+            </div>
+            <div
+              className={'flex justify-start items-baseline'}
+            >
+              <span>納入日付/時刻: </span>
+              <span style={{
+                fontSize: rem(18),
+                marginLeft: rem(10),
+              }}>{detail[OrdersTablesEnum.ordersSingleUnit].RequestedDeliveryDate} {detail[OrdersTablesEnum.ordersSingleUnit].RequestedDeliveryTime}</span>
+              <span style={{
+                marginLeft: rem(10),
+              }}
               >
-                <div className={'menuButton general'}>General</div>
-                <div className={'menuButton bp'}>BP</div>
-                <div className={'menuButton bpPlant'}>BP Plant</div>
-              </ProductDetailSectionContentThreeColumn>
-              <ProductDetailSectionContentThreeColumn
-                style={{
-                  marginBottom: rem(10)
-                }}
-              >
-                <div className={'menuButton production'}>Production</div>
-                <div className={'menuButton mrp'}>MRP</div>
-                <div className={'menuButton quality'}>Quality</div>
-              </ProductDetailSectionContentThreeColumn>
-            </ProductDetailSectionContentProductMenuListWrapper>
+                <PublicImage
+                  className={'m-auto'}
+                  imageName={'clock'}
+                  width={50}
+                />
+              </span>
+            </div>
+            <div>
+              Status: {detail[OrdersTablesEnum.ordersSingleUnit].OrderStatus}
+            </div>
           </ProductDetailSectionContent>
         </ProductDetailSectionInfo>
       </ProductDetailSection>
 
-      <Carousel>
-        <ProductDetailSectionContentTwoColumn
-          className={'items-baseline'}
-          style={{
-            marginBottom: rem(10),
-            padding: `0 ${rem(40)}`,
-            fontSize: rem(12),
-          }}
-        >
-          <div
-            style={{
-              width: '50%'
-            }}
-          >
-            <div><span style={{ color: '#ff1616', }}>品目タイプ:</span> {detail[ProductTablesEnum.productSingleUnit].ProductType}</div>
-            <div><span style={{ color: '#ff1616', }}>総重量:</span> {detail[ProductTablesEnum.productSingleUnit].GrossWeight}</div>
-            <div><span style={{ color: '#ff1616', }}>正味重量:</span> {detail[ProductTablesEnum.productSingleUnit].NetWeight}</div>
-            <div><span style={{ color: '#ff1616', }}>重量単位:</span> {detail[ProductTablesEnum.productSingleUnit].WeightUnit}</div>
-            <div><span style={{ color: '#ff1616', }}>内容量:</span> {detail[ProductTablesEnum.productSingleUnit].InternalCapacityQuantity}</div>
-            <div><span style={{ color: '#ff1616', }}>内容量単位:</span> {detail[ProductTablesEnum.productSingleUnit].InternalCapacityQuantityUnit}</div>
-            <div><span style={{ color: '#ff1616', }}>サイズ/寸法:</span> {detail[ProductTablesEnum.productSingleUnit].SizeOrDimensionText}</div>
-            <div><span style={{ color: '#ff1616', }}>国際商品コード:</span> {detail[ProductTablesEnum.productSingleUnit].ProductStandardID}</div>
-            <div><span style={{ color: '#ff1616', }}>国際商品名称:</span> {detail[ProductTablesEnum.productSingleUnit].IndustryStandardName}</div>
-            <div><span style={{ color: '#ff1616', }}>材質:</span> {detail[ProductTablesEnum.productSingleUnit].MarkingOfMaterial}</div>
-            <div><span style={{ color: '#ff1616', }}>明細カテゴリ:</span> {detail[ProductTablesEnum.productSingleUnit].ItemCategory}</div>
-          </div>
+      <ProductDetailSection className={'m-0'}>
+        <Carousel>
+          {/* scroll 1 */}
+          <ProductDetailSectionContentQRCodeBoxWrapper>
+            <ProductDetailSectionContentQRCodeBox>
+              <div className={'column column-left'}>
+                <div className={'productMenu'}>
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'estimate'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>見積</div>
+                </div>
+                <div className={'productMenu'}>
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'deliveryDocumentList'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>入出荷</div>
+                </div>
+              </div>
+              <div className={'column column-center'}>
+                <img
+                  src={
+                    detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode?.DocID &&
+                    generateQRCodeImageUrl(
+                      detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode,
+                      { suffix: `-${detail[OrdersTablesEnum.ordersSingleUnit].UserType}` }
+                    ) || ''}
+                  alt={``}
+                  width={132}
+                />
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >オーダーID: {detail[OrdersTablesEnum.ordersSingleUnit] && detail[OrdersTablesEnum.ordersSingleUnit].OrderID}</div>
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >明細: {detail[OrdersTablesEnum.ordersSingleUnit] && detail[OrdersTablesEnum.ordersSingleUnit].OrderItem}</div>
+              </div>
+              <div className={'column column-right'}>
+                <div className={'productMenu'}>
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'atp'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>ATP</div>
+                </div>
+                <div className={'productMenu'}>
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'lot'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>ロット</div>
+                </div>
+              </div>
+            </ProductDetailSectionContentQRCodeBox>
+          </ProductDetailSectionContentQRCodeBoxWrapper>
 
-          <div
-            style={{
-              width: '50%'
-            }}
-          >
-            <div><span style={{ color: '#ff1616', }}>原産国:</span> {detail[ProductTablesEnum.productSingleUnit].CountryOfOrigin}</div>
-            <div><span style={{ color: '#ff1616', }}>原産国言語:</span> {detail[ProductTablesEnum.productSingleUnit].CountryOfOriginLanguage}</div>
-            <div><span style={{ color: '#ff1616', }}>原産ローカル地域:</span> {detail[ProductTablesEnum.productSingleUnit].LocalRegionOfOrigin}</div>
-            <div><span style={{ color: '#ff1616', }}>原産サブローカル地域:</span> {detail[ProductTablesEnum.productSingleUnit].LocalSubRegionOfOrigin}</div>
-            <div><span style={{ color: '#ff1616', }}>バーコードタイプ:</span> {detail[ProductTablesEnum.productSingleUnit].BarcodeType}</div>
-            <div><span style={{ color: '#ff1616', }}>品目勘定設定グループ:</span> {detail[ProductTablesEnum.productSingleUnit].ProductAccountAssignmentGroup}</div>
-            <div><span style={{ color: '#ff1616', }}>有効終了日付:</span> {detail[ProductTablesEnum.productSingleUnit].ValidityEndDate}</div>
-            <div><span style={{ color: '#ff1616', }}>登録日付:</span> {detail[ProductTablesEnum.productSingleUnit].CreationDate}</div>
-            <div><span style={{ color: '#ff1616', }}>最終更新日付:</span> {detail[ProductTablesEnum.productSingleUnit].LastChangeDate}</div>
-            <div><span style={{ color: '#ff1616', }}>削除フラグ:</span> {detail[ProductTablesEnum.productSingleUnit].IsMarkedForDeletion.toString()}</div>
-          </div>
-        </ProductDetailSectionContentTwoColumn>
-      </Carousel>
+          {/* scroll 2 */}
+          <ProductDetailSectionContentQRCodeBoxWrapper>
+            <ProductDetailSectionContentQRCodeBox>
+              <div className={'column column-left'}>
+                <div className={'productMenu'}>
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'scrList'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>SCR</div>
+                </div>
+                <div className={'productMenu'}>
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'actualStock'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>実在庫</div>
+                </div>
+              </div>
+              <div className={'column column-center'}>
+                <img
+                  src={
+                    detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode?.DocID &&
+                    generateQRCodeImageUrl(
+                      detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode,
+                      { suffix: `-${detail[OrdersTablesEnum.ordersSingleUnit].UserType}` }
+                    ) || ''}
+                  alt={``}
+                  width={132}
+                />
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >オーダーID: {detail[OrdersTablesEnum.ordersSingleUnit] && detail[OrdersTablesEnum.ordersSingleUnit].OrderID}</div>
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >明細: {detail[OrdersTablesEnum.ordersSingleUnit] && detail[OrdersTablesEnum.ordersSingleUnit].OrderItem}</div>
+              </div>
+              <div className={'column column-right'}>
+                <div className={'productMenu'}>
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'price'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>価格</div>
+                </div>
+                <div className={'productMenu'}>
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'underConstruction'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>Under<br />Construction…</div>
+                </div>
+              </div>
+            </ProductDetailSectionContentQRCodeBox>
+          </ProductDetailSectionContentQRCodeBoxWrapper>
 
-      <ProductDetailSection>
-        <ProductDetailSectionContentTwoColumn
-          className={'justify-end'}
-        >
-          <ProductDetailSectionContentProductMenuListWrapper>
-            <div
-              className={'menuButton general'}
-              style={{
-                width: rem(150),
-                margin: `${rem(30)} ${rem(10)} 0 0`,
-              }}
-            >General</div>
-          </ProductDetailSectionContentProductMenuListWrapper>
-          <div>
-            <img
-              className={'inline-block'}
-              src={
-                detail[ProductTablesEnum.productSingleUnit].Images?.QRCode?.DocID &&
-                generateQRCodeImageUrl(
-                  detail[ProductTablesEnum.productSingleUnit].Images?.QRCode
-                ) || ''}
-              alt={``}
-              width={70}
-            />
-            {/*<PublicImage*/}
-            {/*  imageName={'imageQrcode01'}*/}
-            {/*  width={70}*/}
-            {/*/>*/}
-          </div>
-        </ProductDetailSectionContentTwoColumn>
-
+        </Carousel>
       </ProductDetailSection>
+
     </Detail>
   );
 };

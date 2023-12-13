@@ -1,4 +1,11 @@
+import { ProductImage } from '@/constants';
+
 interface DeliveryDocumentItem {
+  DeliveryDocumentItem: number;
+  Product: string;
+  DeliveryDocumentItemText: string;
+  DeliveryDocumentItemTextByBuyer: string;
+  DeliveryDocumentItemTextBySeller: string;
   DeliverToPlant: string;
   DeliverToPlantName: string;
   DeliverFromPlant: string;
@@ -8,11 +15,18 @@ interface DeliveryDocumentItem {
   DeliveryDocument: number;
   HeaderDeliveryStatus: string;
   HeaderBillingStatus: string;
+  PlannedGoodsIssueDate: string;
+  PlannedGoodsIssueTime: string;
   PlannedGoodsReceiptDate?: string;
   PlannedGoodsReceiptTime?: string;
   IsCancelled: boolean;
   IsMarkedForDeletion: boolean;
   SupplyChainRelationshipID: number;
+  PlannedGoodsIssueQuantity: number;
+  DeliveryUnit: string;
+  Images: {
+    Product: ProductImage;
+  };
 }
 
 type PullDownItem = {
@@ -66,20 +80,21 @@ interface DeliveryDocumentDetailListItem {
 }
 
 interface DeliveryDocumentDetailHeader {
-  DeliverFromParty: number
-  DeliverFromPlantName: string
-  DeliverToParty: number
-  DeliverToPlantName: string
-  DeliveryDocument: number
-  HeaderBillingStatus: string
-  HeaderDeliveryStatus: string
-  PlannedGoodsReceiptDate: string
-  PlannedGoodsReceiptTime: string
+  DeliveryDocument: number;
+  DeliverFromParty: number;
+  DeliverFromPlantName: string;
+  DeliverToParty: number;
+  DeliverToPlantName: string;
+  HeaderBillingStatus: string;
+  HeaderDeliveryStatus: string;
+  PlannedGoodsReceiptDate: string;
+  PlannedGoodsReceiptTime: string;
 }
 
 export type {
   DeliverToPartyItem,
   DeliverFromPartyItem,
+  DeliveryDocumentItem,
   DeliveryDocumentDetailListItem,
   DeliveryDocumentDetailHeader,
   PullDownItem,

@@ -1,20 +1,18 @@
 import { CacheDatabase } from '..';
 import {
   AuthedUser,
-  DeliveryDocumentSingleUnitProps,
+  DeliveryDocumentItemProps,
 } from '@/constants';
 import { DeliveryDocumentUserType } from './index';
-import { reads } from 'api/deliveryDocument/single-unit';
-import { paginationArrow } from '@/helpers/common';
+import { reads } from 'api/deliveryDocument/item';
 
-export class SingleUnit extends CacheDatabase {
-  async getDeliveryDocumentSingleUnit(
+export class Item extends CacheDatabase {
+  async getDeliveryDocumentItem(
     deliveryDocument: number,
     deliveryDocumentItem: number,
-  ): Promise<DeliveryDocumentSingleUnitProps | null> {
-    const response = await this.deliveryDocumentSingleUnit.get({
+  ): Promise<DeliveryDocumentItemProps | null> {
+    const response = await this.deliveryDocumentItem.get({
       DeliveryDocument: deliveryDocument,
-      DeliveryDocumentItem: deliveryDocumentItem,
     });
 
     if (response) {
@@ -26,7 +24,7 @@ export class SingleUnit extends CacheDatabase {
     return null;
   }
 
-  async updateDeliveryDocumentSingleUnit(
+  async updateDeliveryDocumentItem(
     params: {
       deliveryDocument: number,
       deliveryDocumentItem: number,
@@ -45,20 +43,16 @@ export class SingleUnit extends CacheDatabase {
       userType: params.userType,
     });
 
-    let DeliveryDocumentSingleUnit = {};
+    const DeliveryDocumentItem =
+      response.HeaderWithItem ?
+        response.HeaderWithItem.length >= 1 ?
+          response.HeaderWithItem[0] : {} : {};
 
-    if (response.SingleUnit && response.SingleUnit.length >= 1) {
-      const filteredItem = response.SingleUnit.filter(
-        item => Number(item.DeliveryDocumentItem) === params.deliveryDocumentItem,
-      );
-
-      if (filteredItem.length >= 1) {
-        DeliveryDocumentSingleUnit = filteredItem[0];
-      }
-    }
-
-    this.deliveryDocumentSingleUnit.put({
-      ...DeliveryDocumentSingleUnit,
+    this.deliveryDocumentItem.put({
+      ...DeliveryDocumentItem,
+      DeliveryDocument: params.deliveryDocument,
+      DeliveryDocumentItem: params.deliveryDocumentItem,
+      Item: response.Item || [],
       BusinessPartner: params.businessPartner,
       UserType: params.userType,
     });
@@ -66,8 +60,7 @@ export class SingleUnit extends CacheDatabase {
     return {
       deliveryDocument: params.deliveryDocument,
       deliveryDocumentItem: params.deliveryDocumentItem,
-      businessPartner: params.businessPartner,
-      pagination: response.SingleUnit ? paginationArrow(response.SingleUnit, params.deliveryDocumentItem, 'deliveryDocument') : {},
+      BusinessPartner: params.businessPartner,
     }
   }
 }

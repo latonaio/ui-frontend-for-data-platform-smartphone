@@ -4,12 +4,14 @@ import {
   OrdersSingleUnitProps,
   OrdersItemScheduleLineProps,
   OrdersItemPricingElementProps,
+  OrdersItemProps,
 } from '@/constants';
 import { List } from './list';
 import { Detail } from './detail';
 import { SingleUnit } from './single-unit';
 import { ItemScheduleLine } from './item-schedule-line';
 import { ItemPricingElement } from './item-pricing-element';
+import { Item } from './item';
 import { ProductUserType } from '@/services/cacheDatabase/product';
 
 export interface OrdersUserType {
@@ -23,6 +25,7 @@ class OrdersCache extends CacheDatabase implements List, Detail {
   private singleUnit: SingleUnit;
   private itemScheduleLine: ItemScheduleLine;
   private itemPricingElement: ItemPricingElement;
+  private item: Item;
 
   constructor() {
     super();
@@ -31,6 +34,7 @@ class OrdersCache extends CacheDatabase implements List, Detail {
     this.singleUnit = new SingleUnit();
     this.itemScheduleLine = new ItemScheduleLine();
     this.itemPricingElement = new ItemPricingElement();
+    this.item = new Item();
   }
 
   async getOrdersDetailList(
@@ -102,7 +106,7 @@ class OrdersCache extends CacheDatabase implements List, Detail {
       businessPartner: AuthedUser['businessPartner'];
       emailAddress: AuthedUser['emailAddress'];
     },
-  ): Promise<void> {
+  ): Promise<any> {
     return await this.singleUnit.updateOrdersSingleUnit(params);
   }
 
@@ -144,6 +148,26 @@ class OrdersCache extends CacheDatabase implements List, Detail {
     },
   ): Promise<void> {
     return await this.itemPricingElement.updateOrdersItemPricingElement(params);
+  }
+
+  async getOrdersItem(
+    orderId: number,
+    orderItem: number,
+  ): Promise<OrdersItemProps | null> {
+    return await this.item.getOrdersItem(orderId, orderItem);
+  }
+
+  async updateOrdersItem(
+    params: {
+      orderId: number;
+      orderItem: number;
+      userType: ProductUserType[keyof ProductUserType];
+      language: AuthedUser['language'];
+      businessPartner: AuthedUser['businessPartner'];
+      emailAddress: AuthedUser['emailAddress'];
+    },
+  ): Promise<void> {
+    return await this.item.updateOrdersItem(params);
   }
 }
 

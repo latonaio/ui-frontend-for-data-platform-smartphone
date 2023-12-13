@@ -3,21 +3,21 @@ import { GetServerSideProps } from 'next';
 import { Main, Wrapper } from '@/styles/global/globals.style';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { DeliveryDocumentSingleUnit as Content } from '@/components/Content';
+import { OrdersItemList as Content } from '@/components/Content';
 import {
   AuthedUser,
-  DeliveryDocumentTablesEnum,
+  OrdersTablesEnum,
 } from '@/constants';
 import { getLocalStorage } from '@/helpers/common';
-import { deliveryDocumentCache } from '@/services/cacheDatabase/deliveryDocument';
+import { ordersCache } from '@/services/cacheDatabase/orders';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/store/slices/loadging';
 import { useAppDispatch } from '@/store/hooks';
-import { initializeUpdate } from '@/store/slices/delivery-document/single-unit';
+import { initializeUpdate } from '@/store/slices/orders/item';
 
 interface PageProps {
-  deliveryDocument: number;
-  deliveryDocumentItem: number;
+  orderId: number;
+  orderItem: number;
   userType: string;
 }
 
@@ -30,33 +30,29 @@ export type onUpdateItem = (
   apiType?: string,
 ) => void;
 
-const DeliverDocumentSingleUnit: React.FC<PageProps> = (data) => {
+const OrdersItem: React.FC<PageProps> = (data) => {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
 
   const setFormDataForPage = async (
-    deliveryDocument: number,
-    deliveryDocumentItem: number,
-    pagination?: any,
+    orderId: number,
+    orderItem: number,
   ) => {
-    const detail = await deliveryDocumentCache.getDeliveryDocumentSingleUnit(
-      deliveryDocument,
-      deliveryDocumentItem,
+    const detail = await ordersCache.getOrdersItem(
+      orderId,
+      orderItem,
     );
 
     if (detail) {
       appDispatch(initializeUpdate({
-        [DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit]: {
-          ...detail,
-          Pagination: pagination,
-        },
+        [OrdersTablesEnum.ordersItem]: detail,
       }));
     }
   }
 
   const initLoadTabData = async (
-    deliveryDocument: number,
-    deliveryDocumentItem: number,
+    orderId: number,
+    orderItem: number,
     userType: string,
   ) => {
     const {
@@ -68,13 +64,13 @@ const DeliverDocumentSingleUnit: React.FC<PageProps> = (data) => {
     dispatch(setLoading({ isOpen: true }));
 
     await setFormDataForPage(
-      deliveryDocument,
-      deliveryDocumentItem,
+      orderId,
+      orderItem,
     );
 
-    const updateResult = await deliveryDocumentCache.updateDeliveryDocumentSingleUnit({
-      deliveryDocument,
-      deliveryDocumentItem,
+    await ordersCache.updateOrdersItem({
+      orderId,
+      orderItem,
       userType,
       language,
       businessPartner,
@@ -82,9 +78,8 @@ const DeliverDocumentSingleUnit: React.FC<PageProps> = (data) => {
     });
 
     await setFormDataForPage(
-      deliveryDocument,
-      deliveryDocumentItem,
-      updateResult.pagination,
+      orderId,
+      orderItem,
     );
 
     dispatch(setLoading({ isOpen: false }));
@@ -92,8 +87,8 @@ const DeliverDocumentSingleUnit: React.FC<PageProps> = (data) => {
 
   useEffect(() => {
     initLoadTabData(
-      data.deliveryDocument,
-      data.deliveryDocumentItem,
+      data.orderId,
+      data.orderItem,
       data.userType,
     );
   }, [data]);
@@ -102,13 +97,13 @@ const DeliverDocumentSingleUnit: React.FC<PageProps> = (data) => {
     <Wrapper className={'Wrapper'}>
       <Header
         backName={'トップ'}
-        category={`${data.userType === 'deliverFromParty' ? '出荷' : '入荷'}`}
+        category={`${data.userType === 'buyer' ? '受注' : '発注'}`}
         pageName={'Cockpit'}
         className={'text-2xl'}
-        color={`${data.userType === 'deliverFromParty' ? 'deliveryFromParty' : 'deliveryToParty'}`}
-        headerContentNext={`/DPFM_API_DELIVERY_DOCUMENT_SRV/reads/` +
-          `doc/` +
-          `${data.deliveryDocument}/` +
+        color={`${data.userType === 'buyer' ? 'purple' : 'pink'}`}
+        headerContentNext={`/DPFM_API_ORDERS_SRV/reads/` +
+          `singleUnit/` +
+          `${data.orderId}/` +
           `${data.userType}/`}
       />
       <Main className={'Main'}>
@@ -121,18 +116,18 @@ const DeliverDocumentSingleUnit: React.FC<PageProps> = (data) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const {
-    deliveryDocument,
-    deliveryDocumentItem,
+    orderId,
+    orderItem,
     userType
   } = context.query;
 
   return {
     props: {
-      deliveryDocument: Number(deliveryDocument),
-      deliveryDocumentItem: Number(deliveryDocumentItem),
+      orderId: Number(orderId),
+      orderItem: Number(orderItem),
       userType,
     }
   }
 }
 
-export default DeliverDocumentSingleUnit;
+export default OrdersItem;

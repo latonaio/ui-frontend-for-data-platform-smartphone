@@ -31,6 +31,7 @@ export class CacheDatabase extends Tables {
       [OrdersTablesEnum.ordersSingleUnit]: '[OrderID+OrderItem]',
       [OrdersTablesEnum.ordersItemScheduleLine]: '[OrderID+OrderItem]',
       [OrdersTablesEnum.ordersItemPricingElement]: '[OrderID+OrderItem]',
+      [OrdersTablesEnum.ordersItem]: 'OrderID',
 
       [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverToPartyItem]: 'SupplyChainRelationshipID',
       [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverFromPartyItem]: 'SupplyChainRelationshipID',
@@ -41,6 +42,7 @@ export class CacheDatabase extends Tables {
       [DeliveryDocumentTablesEnum.deliveryDocumentDetailHeader]: 'DeliveryDocument',
       [DeliveryDocumentTablesEnum.deliveryDocumentDetail]: '[DeliveryDocument+DeliveryDocumentItem+Product]',
       [DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit]: '[DeliveryDocument+DeliveryDocumentItem]',
+      [DeliveryDocumentTablesEnum.deliveryDocumentItem]: 'DeliveryDocument',
 
       [InvoiceDocumentTablesEnum.invoiceDocumentListBillToPartyItem]: '++id, InvoiceDocument, BillToParty, BillFromParty, HeaderPaymentBlockStatus',
       [InvoiceDocumentTablesEnum.invoiceDocumentListBillFromPartyItem]: '++id, InvoiceDocument, BillToParty, BillFromParty, HeaderPaymentBlockStatus',

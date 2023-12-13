@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import { Main, Wrapper } from '@/styles/global/globals.style';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { DeliveryDocumentSingleUnit as Content } from '@/components/Content';
+import { DeliveryDocumentItemList as Content } from '@/components/Content';
 import {
   AuthedUser,
   DeliveryDocumentTablesEnum,
@@ -13,7 +13,7 @@ import { deliveryDocumentCache } from '@/services/cacheDatabase/deliveryDocument
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/store/slices/loadging';
 import { useAppDispatch } from '@/store/hooks';
-import { initializeUpdate } from '@/store/slices/delivery-document/single-unit';
+import { initializeUpdate } from '@/store/slices/delivery-document/item';
 
 interface PageProps {
   deliveryDocument: number;
@@ -30,26 +30,22 @@ export type onUpdateItem = (
   apiType?: string,
 ) => void;
 
-const DeliverDocumentSingleUnit: React.FC<PageProps> = (data) => {
+const DeliverDocumentItem: React.FC<PageProps> = (data) => {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
 
   const setFormDataForPage = async (
     deliveryDocument: number,
     deliveryDocumentItem: number,
-    pagination?: any,
   ) => {
-    const detail = await deliveryDocumentCache.getDeliveryDocumentSingleUnit(
+    const detail = await deliveryDocumentCache.getDeliveryDocumentItem(
       deliveryDocument,
       deliveryDocumentItem,
     );
 
     if (detail) {
       appDispatch(initializeUpdate({
-        [DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit]: {
-          ...detail,
-          Pagination: pagination,
-        },
+        [DeliveryDocumentTablesEnum.deliveryDocumentItem]: detail,
       }));
     }
   }
@@ -72,7 +68,7 @@ const DeliverDocumentSingleUnit: React.FC<PageProps> = (data) => {
       deliveryDocumentItem,
     );
 
-    const updateResult = await deliveryDocumentCache.updateDeliveryDocumentSingleUnit({
+    await deliveryDocumentCache.updateDeliveryDocumentItem({
       deliveryDocument,
       deliveryDocumentItem,
       userType,
@@ -84,7 +80,6 @@ const DeliverDocumentSingleUnit: React.FC<PageProps> = (data) => {
     await setFormDataForPage(
       deliveryDocument,
       deliveryDocumentItem,
-      updateResult.pagination,
     );
 
     dispatch(setLoading({ isOpen: false }));
@@ -135,4 +130,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-export default DeliverDocumentSingleUnit;
+export default DeliverDocumentItem;

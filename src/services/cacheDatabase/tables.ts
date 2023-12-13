@@ -113,6 +113,7 @@ export class Tables extends Dexie {
   [OrdersTablesEnum.ordersSingleUnit]!: Table<any>;
   [OrdersTablesEnum.ordersItemScheduleLine]!: Table<any>;
   [OrdersTablesEnum.ordersItemPricingElement]!: Table<any>;
+  [OrdersTablesEnum.ordersItem]!: Table<any>;
 
   [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverToPartyItem]!: Table<DeliveryDocumentListEditForCache>;
   [DeliveryDocumentTablesEnum.deliveryDocumentListEditDeliverFromPartyItem]!: Table<DeliveryDocumentListEditForCache>;
@@ -123,6 +124,7 @@ export class Tables extends Dexie {
   [DeliveryDocumentTablesEnum.deliveryDocumentDetailHeader]!: Table<DeliveryDocumentDetailHeader>;
   [DeliveryDocumentTablesEnum.deliveryDocumentDetail]!: Table<DeliveryDocumentDetailProps>;
   [DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit]!: Table<any>;
+  [DeliveryDocumentTablesEnum.deliveryDocumentItem]!: Table<any>;
 
   [InvoiceDocumentTablesEnum.invoiceDocumentListBillToPartyItem]!: Table<InvoiceDocumentListItem>;
   [InvoiceDocumentTablesEnum.invoiceDocumentListBillFromPartyItem]!: Table<InvoiceDocumentListItem>;

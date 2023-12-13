@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import { Main, Wrapper } from '@/styles/global/globals.style';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { ProductSingleUnit as Content } from '@/components/Content';
+import { OrdersSingleUnit as Content } from '@/components/Content';
 import {
   AuthedUser,
   OrdersTablesEnum,
@@ -37,6 +37,7 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
   const setFormDataForPage = async (
     orderId: number,
     orderItem: number,
+    pagination?: any,
   ) => {
     const detail = await ordersCache.getOrdersSingleUnit(
       orderId,
@@ -45,7 +46,10 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
 
     if (detail) {
       appDispatch(initializeUpdate({
-        [OrdersTablesEnum.ordersSingleUnit]: detail,
+        [OrdersTablesEnum.ordersSingleUnit]: {
+          ...detail,
+          Pagination: pagination,
+        },
       }));
     }
   }
@@ -68,7 +72,7 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
       orderItem,
     );
 
-    await ordersCache.updateOrdersSingleUnit({
+    const updateResult = await ordersCache.updateOrdersSingleUnit({
       orderId,
       orderItem,
       userType,
@@ -80,6 +84,7 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
     await setFormDataForPage(
       orderId,
       orderItem,
+      updateResult.pagination,
     );
 
     dispatch(setLoading({ isOpen: false }));

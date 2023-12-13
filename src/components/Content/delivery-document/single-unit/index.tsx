@@ -48,24 +48,77 @@ export const DeliveryDocumentSingleUnit = ({
     )}>
       <ProductDetailSection>
         <div
-          className={'flex justify-start items-center'}
+          className={'flex justify-between items-center'}
           style={{
+            width: `100%`,
             fontSize: rem(14),
             marginBottom: rem(20),
           }}
         >
-          <span
+          <div
             style={{
-              marginRight: rem(5),
+              width: rem(40),
             }}
           >
-            <PublicImage
-              className={'m-auto'}
-              imageName={'iconWing2'}
-              width={24}
-            />
-          </span>
-          <span>User={detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].UserType.charAt(0).toUpperCase() + detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].UserType.slice(1)}を選択しています</span>
+            {
+              detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].Pagination?.prevPage &&
+              <div
+                className={'text-left'}
+                onClick={async () => {
+                  await router.push(`/DPFM_API_DELIVERY_DOCUMENT_SRV/reads/` +
+                    `singleUnit/` +
+                    `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliveryDocument}/` +
+                    `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].Pagination.prevPage.DeliveryDocumentItem}/` +
+                    `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].UserType}/`
+                  );
+                }}
+              >
+                <i className="icon-arrow-back" />
+              </div>
+            }
+          </div>
+
+          <div className={'flex justify-start items-center'}>
+            <span
+              style={{
+                marginRight: rem(5),
+              }}
+            >
+              <PublicImage
+                className={'m-auto'}
+                imageName={'iconWing2'}
+                width={24}
+              />
+            </span>
+            <span
+              style={{
+                fontSize: rem(12),
+              }}
+            >User={detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].UserType.charAt(0).toUpperCase() + detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].UserType.slice(1)}を選択しています</span>
+          </div>
+
+          <div
+            style={{
+              width: rem(40),
+            }}
+          >
+            {
+              detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].Pagination?.nextPage &&
+              <div
+                className={'text-right'}
+                onClick={async () => {
+                  await router.push(`/DPFM_API_DELIVERY_DOCUMENT_SRV/reads/` +
+                    `singleUnit/` +
+                    `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliveryDocument}/` +
+                    `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].Pagination.nextPage.DeliveryDocumentItem}/` +
+                    `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].UserType}/`
+                  );
+                }}
+              >
+                <i className="icon-arrow-forward" />
+              </div>
+            }
+          </div>
         </div>
         <div
           className={'relative'}

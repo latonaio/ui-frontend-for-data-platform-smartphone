@@ -11,12 +11,14 @@ import {
   QRCodeImage,
   OrdersItemScheduleLineItem,
   OrdersItemPricingElementItem,
+  DeliveryDocumentItem, OrdersItem,
 } from '@/constants';
 import { AuthedUser } from '@/constants';
 
 interface OrdersSingleUnitProps {
   OrderID: string;
   OrderItem: string;
+  OrderStatus: string;
   Product: string;
   OrderItemTextByBuyer: string;
   OrderItemTextBySeller: string;
@@ -34,6 +36,7 @@ interface OrdersSingleUnitProps {
     QRCode: QRCodeImage;
   };
   UserType: string;
+  Pagination: any;
 }
 
 interface OrdersItemScheduleLineProps {
@@ -77,6 +80,21 @@ interface OrdersItemPricingElementProps {
     Product: ProductImage;
     QRCode: QRCodeImage;
   };
+  UserType: string;
+}
+
+interface OrdersItemProps {
+  Item: OrdersItem[];
+  OrderID: string;
+  OrderItem: string;
+  Product: string;
+  Buyer: number;
+  BuyerName: string;
+  Seller: number;
+  SellerName: string;
+  RequestedDeliveryDate: string;
+  RequestedDeliveryTime: string;
+  TotalGrossAmount: number;
   UserType: string;
 }
 
@@ -126,6 +144,28 @@ interface DeliveryDocumentSingleUnitProps {
   Images: {
     Product: ProductImage;
     QRCode: QRCodeImage;
+  };
+  UserType: string;
+  Pagination: any;
+}
+
+interface DeliveryDocumentItemProps {
+  Item: DeliveryDocumentItem[];
+  DeliveryDocument: string;
+  DeliveryDocumentItem: string;
+  DeliverToPartyName: string;
+  DeliverToPlantName: string;
+  DeliverFromPartyName: string;
+  DeliverFromPlantName: string;
+  PlannedGoodsIssueDate: string;
+  PlannedGoodsIssueTime: string;
+  PlannedGoodsReceiptDate: string;
+  PlannedGoodsReceiptTime: string;
+  HeaderGrossWeight: number;
+  HeaderNetWeight: number;
+  HeaderWeightUnit: string;
+  Images: {
+    Product: ProductImage;
   };
   UserType: string;
 }
@@ -446,8 +486,10 @@ export type {
   OrdersItemScheduleLineProps,
   OrdersItemPricingElementProps,
   OrdersProductDetailProps,
+  OrdersItemProps,
   BusinessPartnerDetailProps,
   DeliveryDocumentSingleUnitProps,
+  DeliveryDocumentItemProps,
   DeliveryDocumentDetailProps,
   ProductionOrderCockpitProps,
   ProductionOrderItemOperationInputProps,

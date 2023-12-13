@@ -1,20 +1,18 @@
 import { CacheDatabase } from '..';
 import {
   AuthedUser,
-  OrdersSingleUnitProps,
+  OrdersItemProps,
 } from '@/constants';
 import { OrdersUserType } from './index';
-import { reads } from 'api/orders/single-unit';
-import { paginationArrow } from '@/helpers/common';
+import { reads } from 'api/orders/item';
 
-export class SingleUnit extends CacheDatabase {
-  async getOrdersSingleUnit(
+export class Item extends CacheDatabase {
+  async getOrdersItem(
     orderId: number,
     orderItem: number,
-  ): Promise<OrdersSingleUnitProps | null> {
-    const response = await this.ordersSingleUnit.get({
+  ): Promise<OrdersItemProps | null> {
+    const response = await this.ordersItem.get({
       OrderID: orderId,
-      OrderItem: orderItem,
     });
 
     if (response) {
@@ -26,7 +24,7 @@ export class SingleUnit extends CacheDatabase {
     return null;
   }
 
-  async updateOrdersSingleUnit(
+  async updateOrdersItem(
     params: {
       orderId: number;
       orderItem: number;
@@ -45,20 +43,16 @@ export class SingleUnit extends CacheDatabase {
       userType: params.userType,
     });
 
-    let OrdersSingleUnit = {};
+    const OrdersItem =
+      response.HeaderWithItem ?
+        response.HeaderWithItem.length >= 1 ?
+          response.HeaderWithItem[0] : {} : {};
 
-    if (response.SingleUnit && response.SingleUnit.length >= 1) {
-      const filteredItem = response.SingleUnit.filter(
-        item => Number(item.OrderItem) === params.orderItem,
-      );
-
-      if (filteredItem.length >= 1) {
-        OrdersSingleUnit = filteredItem[0];
-      }
-    }
-
-    this.ordersSingleUnit.put({
-      ...OrdersSingleUnit,
+    this.ordersItem.put({
+      ...OrdersItem,
+      OrderID: params.orderId,
+      OrderItem: params.orderItem,
+      Item: response.Item || [],
       BusinessPartner: params.businessPartner,
       UserType: params.userType,
     });
@@ -66,8 +60,7 @@ export class SingleUnit extends CacheDatabase {
     return {
       orderId: params.orderId,
       orderItem: params.orderItem,
-      businessPartner: params.businessPartner,
-      pagination: response.SingleUnit ? paginationArrow(response.SingleUnit, params.orderItem, 'orders') : {},
+      BusinessPartner: params.businessPartner,
     }
   }
 }

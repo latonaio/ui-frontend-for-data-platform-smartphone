@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?k7ah9t');
-  src:  url('fonts/icomoon.eot?k7ah9t#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?k7ah9t') format('truetype'),
-    url('fonts/icomoon.woff?k7ah9t') format('woff'),
-    url('fonts/icomoon.svg?k7ah9t#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?l486hw');
+  src:  url('fonts/icomoon.eot?l486hw#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?l486hw') format('truetype'),
+    url('fonts/icomoon.woff?l486hw') format('woff'),
+    url('fonts/icomoon.svg?l486hw#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -37,6 +37,12 @@
 .icon-keyboard_arrow_down:before {
   content: "\e90c";
 }
+.icon-arrow-forward:before {
+  content: "\e90d";
+}
+.icon-arrow-back:before {
+  content: "\e90e";
+}
 .icon-refresh:before {
   content: "\e907";
 }
@@ -51,15 +57,6 @@
 }
 .icon-invoice:before {
   content: "\e903";
-}
-.icon-documents:before {
-  content: "\e904";
-}
-.icon-inbox-download:before {
-  content: "\e906";
-}
-.icon-retweet:before {
-  content: "\e908";
 }
 .icon-clipboard-list:before {
   content: "\e905";

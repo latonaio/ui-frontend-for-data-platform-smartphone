@@ -5,6 +5,7 @@ import {
 import { List } from './list';
 import { Detail } from './detail';
 import { SingleUnit } from './single-unit';
+import { Item } from './item';
 
 export interface DeliveryDocumentUserType {
   deliverToParty: string;
@@ -15,12 +16,14 @@ class DeliveryDocumentCache extends CacheDatabase implements List, Detail {
   private list: List;
   private detail: Detail;
   private singleUnit: SingleUnit;
+  private item: Item;
 
   constructor() {
     super();
     this.list = new List();
     this.detail = new Detail();
     this.singleUnit = new SingleUnit();
+    this.item = new Item();
   }
 
   async getDeliveryDocumentList() {
@@ -100,6 +103,29 @@ class DeliveryDocumentCache extends CacheDatabase implements List, Detail {
     },
   ) {
     return this.singleUnit.updateDeliveryDocumentSingleUnit(params);
+  }
+
+  async getDeliveryDocumentItem(
+    deliveryDocument: number,
+    deliveryDocumentItem: number,
+  ) {
+    return this.item.getDeliveryDocumentItem(
+      deliveryDocument,
+      deliveryDocumentItem,
+    );
+  }
+
+  async updateDeliveryDocumentItem(
+    params: {
+      userType: string;
+      deliveryDocument: number;
+      deliveryDocumentItem: number;
+      language: AuthedUser['language'];
+      businessPartner: AuthedUser['businessPartner'];
+      emailAddress: AuthedUser['emailAddress'];
+    },
+  ) {
+    return this.item.updateDeliveryDocumentItem(params);
   }
 }
 
