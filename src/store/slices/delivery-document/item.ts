@@ -224,15 +224,15 @@ export const checkInvalid = ({
       }));
     }
 
-    if (isFloat(checkValue)) {
-      return appDispatch(setErrorItem({
-        index: index,
-        item: item,
-        key: 'PlannedGoodsIssueQuantity',
-        isError: true,
-        message: '小数点は無効です',
-      }));
-    }
+    // if (isFloat(checkValue)) {
+    //   return appDispatch(setErrorItem({
+    //     index: index,
+    //     item: item,
+    //     key: 'PlannedGoodsIssueQuantity',
+    //     isError: true,
+    //     message: '小数点は無効です',
+    //   }));
+    // }
 
     if (checkValue === '') {
       return appDispatch(setErrorItem({

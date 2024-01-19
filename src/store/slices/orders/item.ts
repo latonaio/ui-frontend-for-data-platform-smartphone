@@ -232,15 +232,15 @@ export const checkInvalid = ({
       }));
     }
 
-    if (isFloat(checkValue)) {
-      return appDispatch(setErrorItem({
-        index: index,
-        item: item,
-        key: 'OrderQuantityInDeliveryUnit',
-        isError: true,
-        message: '小数点は無効です',
-      }));
-    }
+    // if (isFloat(checkValue)) {
+    //   return appDispatch(setErrorItem({
+    //     index: index,
+    //     item: item,
+    //     key: 'OrderQuantityInDeliveryUnit',
+    //     isError: true,
+    //     message: '小数点は無効です',
+    //   }));
+    // }
 
     if (checkValue === '') {
       return appDispatch(setErrorItem({
@@ -317,8 +317,6 @@ export const editItemAsync = async (
               OrderItem: params.Orders.Item.OrderItem,
               RequestedDeliveryDate: params.Orders.Item.RequestedDeliveryDate,
               RequestedDeliveryTime: params.Orders.Item.RequestedDeliveryTime,
-              OrderStatus: params.Orders.Item.OrderStatus,
-              OrderItemCategory: params.Orders.Item.OrderItemCategory,
             },
           ],
         },
@@ -351,8 +349,6 @@ export const editItemAsync = async (
               OrderID: params.Orders.OrderID,
               OrderItem: params.Orders.Item.OrderItem,
               OrderQuantityInDeliveryUnit: params.Orders.Item.OrderQuantityInDeliveryUnit,
-              OrderStatus: params.Orders.Item.OrderStatus,
-              OrderItemCategory: params.Orders.Item.OrderItemCategory,
             },
           ],
         },

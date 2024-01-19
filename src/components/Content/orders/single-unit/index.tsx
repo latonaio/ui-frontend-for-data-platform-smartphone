@@ -197,7 +197,7 @@ export const OrdersSingleUnit = ({
             </div>
             <div>
               オーダータイプ: {detail[OrdersTablesEnum.ordersSingleUnit].OrderType}<span style={{ marginLeft: rem(20) }}></span>
-              通貨: {detail[OrdersTablesEnum.ordersSingleUnit].ConditionCurrency}
+              通貨: {detail[OrdersTablesEnum.ordersSingleUnit].TransactionCurrency}
             </div>
             <div
               className={'flex justify-start items-baseline'}

@@ -29,7 +29,7 @@ interface OrdersSingleUnitProps {
   SellerName: string;
   GrossAmount: number;
   OrderType: string;
-  ConditionCurrency: string;
+  TransactionCurrency: string;
   RequestedDeliveryDate: string;
   RequestedDeliveryTime: string;
   Images: {
