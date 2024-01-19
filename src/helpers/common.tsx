@@ -6,6 +6,7 @@ import {
   form,
   ProductImage,
   UserTypeEnum,
+  DocumentImage,
 } from '@/constants';
 import { IncomingMessage } from 'http';
 import { NextApiRequestCookies } from 'next/dist/server/api-utils';
@@ -72,6 +73,11 @@ export const removeLocalStorage = (key: string) => {
   if (process.browser) {
     localStorage.removeItem(key);
   }
+};
+
+export const generateDocumentImageUrl = (documentImage: DocumentImage) => {
+  return `${env.nest.host}:` +
+    `${env.nest.port}/mill-sheet-pdf/${documentImage.DocID}.${documentImage.FileExtension}`;
 };
 
 export const generateBarcodeImageUrl = (barcode: BarcodeImage) => {

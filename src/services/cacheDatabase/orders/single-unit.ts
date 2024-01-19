@@ -70,4 +70,46 @@ export class SingleUnit extends CacheDatabase {
       pagination: response.SingleUnit ? paginationArrow(response.SingleUnit, params.orderItem, 'orders') : {},
     }
   }
+
+  async updateCacheOrdersSingleUnit(
+    params: {
+      orderId: number;
+      orderItem: number;
+      userType: OrdersUserType[keyof OrdersUserType],
+      language: AuthedUser['language'];
+      businessPartner: AuthedUser['businessPartner'];
+      emailAddress: AuthedUser['emailAddress'];
+      updateKey: string;
+      updateValue: any;
+      pagination: any;
+    },
+  ): Promise<any> {
+    const response = await this.ordersSingleUnit.get({
+      OrderID: params.orderId,
+      OrderItem: params.orderItem,
+    });
+
+    console.log(params)
+
+    console.log({
+      ...response,
+      [params.updateKey]: params.updateValue,
+      BusinessPartner: params.businessPartner,
+      UserType: params.userType,
+    })
+
+    this.ordersSingleUnit.put({
+      ...response,
+      [params.updateKey]: params.updateValue,
+      BusinessPartner: params.businessPartner,
+      UserType: params.userType,
+    });
+
+    return {
+      orderId: params.orderId,
+      orderItem: params.orderItem,
+      businessPartner: params.businessPartner,
+      pagination: params.pagination,
+    }
+  }
 }

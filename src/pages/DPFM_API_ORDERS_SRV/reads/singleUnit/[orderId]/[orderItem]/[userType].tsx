@@ -34,6 +34,9 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
 
+  const [orderStatusSelectEditingFlag, setOrderStatusSelectEditingFlag] =
+    useState(false);
+
   const setFormDataForPage = async (
     orderId: number,
     orderItem: number,
@@ -107,12 +110,16 @@ const OrdersSingleUnit: React.FC<PageProps> = (data) => {
         className={'text-2xl'}
         color={`${data.userType === 'buyer' ? 'purple' : 'pink'}`}
         headerContentNext={`/DPFM_API_ORDERS_SRV/reads/` +
-          `doc/` +
+          `singleUnit/` +
           `${data.orderId}/` +
+          `${data.orderItem}/` +
           `${data.userType}/`}
       />
       <Main className={'Main'}>
-        <Content />
+        <Content
+          orderStatusSelectEditingFlag={orderStatusSelectEditingFlag}
+          setOrderStatusSelectEditingFlag={setOrderStatusSelectEditingFlag}
+        />
       </Main>
       <Footer></Footer>
     </Wrapper>

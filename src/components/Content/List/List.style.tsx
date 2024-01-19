@@ -8,6 +8,10 @@ export const List = styled.div`
 export const ListSection = styled.section`
   margin: ${rem(20)} ${rem(20)} 0;
   font-size: ${rem(14)};
+  
+  &.hidden {
+    display: none;
+  }
 `;
 
 export const HeadTab = styled.ul`

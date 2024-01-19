@@ -9,6 +9,7 @@ import {
   ProductionOrderDetailHeader,
   ProductionOrderItemOperationItem,
   QRCodeImage,
+  DocumentImage,
   OrdersItemScheduleLineItem,
   OrdersItemPricingElementItem,
   DeliveryDocumentItem, OrdersItem,
@@ -95,7 +96,17 @@ interface OrdersItemProps {
   RequestedDeliveryDate: string;
   RequestedDeliveryTime: string;
   TotalGrossAmount: number;
+  OrderItemTextByBuyer: string;
+  OrderItemTextBySeller: string;
+  OrderItemText: string;
+  DeliveryUnit: string;
+  OrderQuantityInDeliveryUnit: number;
   UserType: string;
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+    DocumentImage: DocumentImage;
+  };
 }
 
 interface OrdersProductDetailProps extends ProductDetail {

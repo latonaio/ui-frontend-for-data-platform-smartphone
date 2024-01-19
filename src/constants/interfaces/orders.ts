@@ -1,10 +1,11 @@
-import { ProductImage } from '@/constants';
+import { ProductImage, DocumentImage } from '@/constants';
 
 interface OrdersItem {
   OrderID: number;
   OrderItem: number;
   Product: string;
   OrderItemText: string;
+  OrderQuantityInDeliveryUnit: number;
   SellerName: string;
   Seller: number;
   BuyerName: string;
@@ -16,12 +17,15 @@ interface OrdersItem {
   PaymentMethod: string;
   PaymentMethodName: string;
   TransactionCurrency: string;
+  RequestedDeliveryDate: string;
+  RequestedDeliveryTime: string;
   DeliveryUnit: string;
   OrderType: string;
   IsCancelled: boolean;
   IsMarkedForDeletion: boolean;
   Images: {
     Product: ProductImage;
+    DocumentImage: DocumentImage;
   };
 }
 

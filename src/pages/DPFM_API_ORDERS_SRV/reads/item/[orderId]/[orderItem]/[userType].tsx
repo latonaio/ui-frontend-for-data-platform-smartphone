@@ -34,6 +34,8 @@ const OrdersItem: React.FC<PageProps> = (data) => {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
 
+
+
   const setFormDataForPage = async (
     orderId: number,
     orderItem: number,
@@ -98,16 +100,25 @@ const OrdersItem: React.FC<PageProps> = (data) => {
       <Header
         backName={'トップ'}
         category={`${data.userType === 'buyer' ? '受注' : '発注'}`}
-        pageName={'Cockpit'}
+        pageName={'明細一覧'}
         className={'text-2xl'}
         color={`${data.userType === 'buyer' ? 'purple' : 'pink'}`}
         headerContentNext={`/DPFM_API_ORDERS_SRV/reads/` +
           `singleUnit/` +
           `${data.orderId}/` +
+          `${data.orderItem}/` +
           `${data.userType}/`}
       />
       <Main className={'Main'}>
-        <Content />
+        <Content
+          refresh={() => {
+            initLoadTabData(
+              data.orderId,
+              data.orderItem,
+              data.userType,
+            );
+          }}
+        />
       </Main>
       <Footer></Footer>
     </Wrapper>

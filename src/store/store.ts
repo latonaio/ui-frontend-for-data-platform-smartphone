@@ -21,7 +21,8 @@ import { ordersDetailList } from './slices/orders/detail-list';
 import { ordersSingleUnit } from './slices/orders/single-unit';
 import { ordersItemScheduleLine } from './slices/orders/item-schedule-line';
 import { ordersItemPricingElement } from './slices/orders/item-pricing-element';
-import { ordersItem } from './slices/orders/item';
+// import { ordersItem } from './slices/orders/item';
+import ordersItemReducer from './slices/orders/item';
 import { billOfMaterialList, } from './slices/bill-of-material/list';
 import { billOfMaterialDetailList, } from './slices/bill-of-material/detail-list';
 
@@ -36,7 +37,8 @@ export const store = configureStore({
         ordersSingleUnit: ordersSingleUnit.reducer,
         ordersItemScheduleLine: ordersItemScheduleLine.reducer,
         ordersItemPricingElement: ordersItemPricingElement.reducer,
-        ordersItem: ordersItem.reducer,
+        // ordersItem: ordersItem.reducer,
+        ordersItem: ordersItemReducer,
         snackbar: snackbarReducer,
         deliveryDocumentSingleUnit: deliveryDocumentSingleUnit.reducer,
         deliveryDocumentItem: deliveryDocumentItem.reducer,

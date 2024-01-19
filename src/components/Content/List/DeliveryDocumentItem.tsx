@@ -13,38 +13,55 @@ import {
   OrdersItemScheduleLineProps,
   DeliveryDocumentTablesEnum,
   DeliveryDocumentItem,
-  DeliveryDocumentItemProps,
+  DeliveryDocumentItemProps, DocumentImage,
 } from '@/constants';
 import { clickHandler, summaryHead } from './List';
 import { BackButton } from '@/components/Button';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { rem } from 'polished';
-import { useAppSelector } from '@/store/hooks';
-import {
-  generateImageProductUrl,
-} from '@/helpers/common';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { generateDocumentImageUrl, generateImageProductUrl } from '@/helpers/common';
 import { PublicImage } from '@/components/Image';
-import ordersItemImage001 from '@public/orders-item-image-001.png';
+import {
+  editItemAsync,
+  pushItemToEdit,
+} from '@/store/slices/delivery-document/item';
+import { DateTimePicker, TextField } from '@/components/Form';
+import { checkInvalid, closeItem } from '@/store/slices/delivery-document/item';
+import { PopupTranslucent } from '@/components/Popup';
+import { Refresh } from '@/components/Refresh';
 
 export interface DeliveryDocumentItemListProps {
   className?: string;
+  refresh?: () => void;
 }
 
 interface DetailListTableElementProps {
   summary: string[];
+  deliveryDocument: number;
   list: DeliveryDocumentItem[];
   userType: string;
+  closedPopup: boolean;
+  setClosedPopup: (closedPopup: boolean) => void;
+  setDocumentImageInfo: any;
 }
 
 const DetailListTableElement = ({
                                   summary,
                                   list,
-  userType,
+                                  deliveryDocument,
+                                  userType,
+                                  closedPopup,
+                                  setClosedPopup,
+                                  setDocumentImageInfo,
                                 }: DetailListTableElementProps) => {
   const router = useRouter();
   const listType = DeliveryDocumentTablesEnum.deliveryDocumentItem;
-  const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
+  const listState  = useAppSelector(state => state.deliveryDocumentItem) as {
+    [DeliveryDocumentTablesEnum.deliveryDocumentItem]: any,
+  };
 
   const trStyleList: any = [
     rem(10),
@@ -57,9 +74,10 @@ const DetailListTableElement = ({
     null,
     `5%`,
     `5%`,
+    `15%`,
   ];
 
-  const renderList = (list: DeliveryDocumentItem[]) => {
+  const renderList = (list: any[]) => {
     if (list && list.length > 0) {
       return list.map((item, index) => {
         return (
@@ -67,20 +85,14 @@ const DetailListTableElement = ({
             key={index}
             className={`record`}
             onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            clickHandler(
-              // `/DPFM_API_PRODUCTION_ORDER_SRV/reads/itemOperation/input/${item.ProductionOrder}/${item.ProductionOrderItem}/${item.Operations}/${item.OperationsItem}/userType`,
-              ``,
-              router
-            );
-          }}>
+              e.preventDefault();
+              e.stopPropagation();
+            }}>
             <td>{item.DeliveryDocumentItem}</td>
             <td>
               <img
                 className={`imageSlide m-auto`}
-                style={{
-                }}
+                style={{}}
                 src={
                   item.Images?.Product?.BusinessPartnerID &&
                   generateImageProductUrl(
@@ -93,15 +105,171 @@ const DetailListTableElement = ({
             <td>{item.Product}</td>
             <td>{item.DeliveryDocumentItemText}</td>
             <td
+              className={item.errors['PlannedGoodsIssueQuantity'].isError ? 'invalid' : ''}
               style={{
                 fontSize: rem(24),
               }}
-            >{item.PlannedGoodsIssueQuantity}</td>
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                if (item.isEditing['PlannedGoodsIssueQuantity']) {
+                  return;
+                }
+
+                appDispatch(pushItemToEdit({
+                  index,
+                  item,
+                  key: 'PlannedGoodsIssueQuantity',
+                }));
+              }}
+            >
+              <span>
+                <TextField
+                  isEditing={item.isEditing['PlannedGoodsIssueQuantity']}
+                  currentValue={item.PlannedGoodsIssueQuantity}
+                  type={'number'}
+                  checkInvalid={(value) => {
+                    checkInvalid({
+                      index,
+                      item,
+                      key: 'PlannedGoodsIssueQuantity',
+                      checkValue: value,
+                    }, appDispatch);
+                  }}
+                  onChange={async (value: number) => {
+                    await editItemAsync({
+                        params: {
+                          DeliveryDocument: {
+                            DeliveryDocument: deliveryDocument,
+                            Item: {
+                              DeliveryDocument: deliveryDocument,
+                              DeliveryDocumentItem: item.DeliveryDocumentItem,
+                              PlannedGoodsIssueQuantity: value,
+                            },
+                          },
+                          api_type: 'updates',
+                          accepter: ['Item'],
+                        },
+                        index,
+                        key: 'PlannedGoodsIssueQuantity',
+                      },
+                      appDispatch, listState);
+                  }}
+                  onClose={() => appDispatch(closeItem({
+                    index,
+                    item,
+                    key: 'PlannedGoodsIssueQuantity',
+                  }))}
+                />
+              </span>
+            </td>
             <td>{item.DeliveryUnit}</td>
-            <td>{item.PlannedGoodsIssueDate} / {item.PlannedGoodsIssueTime}</td>
-            <td>{item.PlannedGoodsReceiptDate} / {item.PlannedGoodsReceiptTime}</td>
+            <td
+              onClick={(e: any) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                if (item.isEditing['PlannedGoodsIssueDateTime']) {
+                  return;
+                }
+
+                appDispatch(pushItemToEdit({
+                  index,
+                  item,
+                  key: 'PlannedGoodsIssueDateTime',
+                }));
+              }}
+            >
+              <DateTimePicker
+                isEditing={item.isEditing['PlannedGoodsIssueDateTime']}
+                currentValue={item.PlannedGoodsIssueDate + ` ` + item.PlannedGoodsIssueTime}
+                onChange={async (value: { date: string, time: string }) => {
+                  await editItemAsync({
+                      params: {
+                        DeliveryDocument: {
+                          DeliveryDocument: deliveryDocument,
+                          Item: {
+                            DeliveryDocument: deliveryDocument,
+                            DeliveryDocumentItem: item.DeliveryDocumentItem,
+                            PlannedGoodsIssueDate: value.date,
+                            PlannedGoodsIssueTime: `${value.time}:00`,
+                          },
+                        },
+                        api_type: 'updates',
+                        accepter: ['Item'],
+                      },
+                      index,
+                      key: 'PlannedGoodsIssueDateTime',
+                    },
+                    appDispatch, listState);
+                }}
+              />
+            </td>
+            <td
+              onClick={(e: any) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                if (item.isEditing['PlannedGoodsReceiptDateTime']) {
+                  return;
+                }
+
+                appDispatch(pushItemToEdit({
+                  index,
+                  item,
+                  key: 'PlannedGoodsReceiptDateTime',
+                }));
+              }}
+            >
+              <DateTimePicker
+                isEditing={item.isEditing['PlannedGoodsReceiptDateTime']}
+                currentValue={item.PlannedGoodsReceiptDate + ` ` + item.PlannedGoodsReceiptTime}
+                onChange={async (value: { date: string, time: string }) => {
+                  await editItemAsync({
+                      params: {
+                        DeliveryDocument: {
+                          DeliveryDocument: deliveryDocument,
+                          Item: {
+                            DeliveryDocument: deliveryDocument,
+                            DeliveryDocumentItem: item.DeliveryDocumentItem,
+                            PlannedGoodsReceiptDate: value.date,
+                            PlannedGoodsReceiptTime: `${value.time}:00`,
+                          },
+                        },
+                        api_type: 'updates',
+                        accepter: ['Item'],
+                      },
+                      index,
+                      key: 'PlannedGoodsReceiptDateTime',
+                    },
+                    appDispatch, listState);
+                }}
+              />
+            </td>
             <td></td>
             <td></td>
+            <td
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                setClosedPopup && setClosedPopup(!closedPopup);
+                setDocumentImageInfo(item.Images?.DocumentImageDeliveryDocument || null);
+              }}
+            >
+              <img
+                className={`imageSlide m-auto`}
+                style={{
+                  padding: rem(10),
+                }}
+                src={
+                  item.Images?.DocumentImageDeliveryDocument &&
+                  generateDocumentImageUrl(item.Images?.DocumentImageDeliveryDocument) || ''
+                }
+                alt={``}
+              />
+            </td>
           </tr>
         );
       });
@@ -129,8 +297,9 @@ const DetailListTableElement = ({
 };
 
 export const DeliveryDocumentItemList = ({
-                                                   className,
-                                                 }: DeliveryDocumentItemListProps) => {
+                                           className,
+                                           refresh,
+                                         }: DeliveryDocumentItemListProps) => {
   const summary = [
     '#',
     '画像',
@@ -142,10 +311,14 @@ export const DeliveryDocumentItemList = ({
     '入荷予定日 / 時刻',
     'ピッキング',
     '出荷',
+    '文書',
   ];
 
+  const [closedPopup, setClosedPopup] = useState(true);
+  const [documentImageInfo, setDocumentImageInfo] = useState({} as any);
+
   const list  = useAppSelector(state => state.deliveryDocumentItem) as {
-    [DeliveryDocumentTablesEnum.deliveryDocumentItem]: DeliveryDocumentItemProps,
+    [DeliveryDocumentTablesEnum.deliveryDocumentItem]: any,
   };
 
   if (!list[DeliveryDocumentTablesEnum.deliveryDocumentItem]) { return <div></div> }
@@ -203,14 +376,14 @@ export const DeliveryDocumentItemList = ({
                   <div>
                     <span>総重量: </span><span style={{
                     fontSize: rem(24),
-                  }}>{list[DeliveryDocumentTablesEnum.deliveryDocumentItem].HeaderGrossWeight.toLocaleString()}</span>
+                  }}>{list[DeliveryDocumentTablesEnum.deliveryDocumentItem].HeaderGrossWeight?.toLocaleString}</span>
                   </div>
                   <div style={{
                     marginLeft: rem(10),
                   }}>
                     <span>正味重量: </span><span style={{
                     fontSize: rem(24),
-                  }}>{list[DeliveryDocumentTablesEnum.deliveryDocumentItem].HeaderNetWeight.toLocaleString()}</span>
+                  }}>{list[DeliveryDocumentTablesEnum.deliveryDocumentItem].HeaderNetWeight?.toLocaleString}</span>
                   </div>
                   <div style={{
                     marginLeft: rem(10),
@@ -222,6 +395,16 @@ export const DeliveryDocumentItemList = ({
                 </div>
               </div>
               <div className={'flex justify-start items-center'}>
+                <div>
+                  <Refresh
+                    style={{
+                      marginRight: rem(10),
+                    }}
+                    onClick={() => {
+                      refresh && refresh();
+                    }}
+                  ></Refresh>
+                </div>
                 <div>
                   <BackButton
                     className={'whiteInfo'}
@@ -246,11 +429,34 @@ export const DeliveryDocumentItemList = ({
         </ListHeaderInfoFlexStart>
       </ListSection>
 
+      <PopupTranslucent
+        title={`${documentImageInfo ? `入出荷ID: ` + documentImageInfo['OrdersID'] + ` 明細: ` + documentImageInfo['OrdersItem'] : ``}`}
+        closedPopup={closedPopup}
+        setClosedPopup={setClosedPopup}
+        isHeightFull={true}
+      >
+        <div>
+          {
+            documentImageInfo &&
+            <img
+              src={
+                generateDocumentImageUrl(documentImageInfo as DocumentImage) || ''
+              }
+              alt={``}
+            />
+          }
+        </div>
+      </PopupTranslucent>
+
       <ListSection>
         <DetailListTableElement
           summary={summary}
+          deliveryDocument={list[DeliveryDocumentTablesEnum.deliveryDocumentItem].DeliveryDocument}
           list={list[DeliveryDocumentTablesEnum.deliveryDocumentItem].Item}
           userType={list[DeliveryDocumentTablesEnum.deliveryDocumentItem].UserType}
+          setClosedPopup={setClosedPopup}
+          closedPopup={closedPopup}
+          setDocumentImageInfo={setDocumentImageInfo}
         />
       </ListSection>
     </ListElement>

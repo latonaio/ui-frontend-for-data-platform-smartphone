@@ -107,8 +107,9 @@ const DeliverDocumentSingleUnit: React.FC<PageProps> = (data) => {
         className={'text-2xl'}
         color={`${data.userType === 'deliverFromParty' ? 'deliveryFromParty' : 'deliveryToParty'}`}
         headerContentNext={`/DPFM_API_DELIVERY_DOCUMENT_SRV/reads/` +
-          `doc/` +
+          `singleUnit/` +
           `${data.deliveryDocument}/` +
+          `${data.deliveryDocumentItem}/` +
           `${data.userType}/`}
       />
       <Main className={'Main'}>

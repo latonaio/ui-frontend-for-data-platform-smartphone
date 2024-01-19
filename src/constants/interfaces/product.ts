@@ -42,6 +42,13 @@ interface QRCodeImage {
   FileExtension: string;
 }
 
+interface DocumentImage {
+  OrdersID: number;
+  OrdersItem: number;
+  DocID: string;
+  FileExtension: string;
+}
+
 interface Accepter {
   accepter: string[];
   api_type: string;
@@ -106,6 +113,7 @@ export type {
   ProductImage,
   QRCodeImage,
   BarcodeImage,
+  DocumentImage,
   Quantity,
   ProductDetail,
   ProductDetailExconfListItem,

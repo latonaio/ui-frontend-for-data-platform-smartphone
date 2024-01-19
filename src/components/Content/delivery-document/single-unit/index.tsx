@@ -281,6 +281,88 @@ export const DeliveryDocumentSingleUnit = ({
                       <div>
                         <PublicImage
                           className={'m-auto'}
+                          imageName={'scrList'}
+                          width={70}
+                        />
+                      </div>
+                      <div className={'productMenuTitle'}>SCR</div>
+                    </div>
+                    <div className={'productMenu'}>
+                      <div>
+                        <PublicImage
+                          className={'m-auto'}
+                          imageName={'actualStock'}
+                          width={70}
+                        />
+                      </div>
+                      <div className={'productMenuTitle'}>実在庫</div>
+                    </div>
+                  </div>
+                  <div className={'column column-center'}>
+                    <img
+                      src={
+                        detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].Images?.QRCode?.DocID &&
+                        generateQRCodeImageUrl(
+                          detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].Images?.QRCode,
+                          { suffix: `-${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].UserType}` }
+                        ) || ''}
+                      alt={``}
+                      width={132}
+                    />
+                    <div
+                      style={{
+                        padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                      }}
+                    >入出荷伝票: {detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit] && detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliveryDocument}</div>
+                    <div
+                      style={{
+                        padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                      }}
+                    >明細: {detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit] && detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliveryDocumentItem}</div>
+                  </div>
+                  <div className={'column column-right'}>
+                    <div
+                      className={'productMenu'}
+                      onClick={async () => {
+                        await router.push(`/DPFM_API_DELIVERY_DOCUMENT_SRV/reads/` +
+                          `item/` +
+                          `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliveryDocument}/` +
+                          `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliveryDocumentItem}/` +
+                          `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].UserType}/`
+                        );
+                      }}
+                    >
+                      <div>
+                        <PublicImage
+                          className={'m-auto'}
+                          imageName={'underConstruction'}
+                          width={70}
+                        />
+                      </div>
+                      <div className={'productMenuTitle'}>明細一覧</div>
+                    </div>
+                    <div className={'productMenu'}>
+                      <div>
+                        <PublicImage
+                          className={'m-auto'}
+                          imageName={'underConstruction'}
+                          width={70}
+                        />
+                      </div>
+                      <div className={'productMenuTitle'}>Under<br />Construction…</div>
+                    </div>
+                  </div>
+                </ProductDetailSectionContentQRCodeBox>
+              </ProductDetailSectionContentQRCodeBoxWrapper>
+
+              {/* scroll 2 */}
+              <ProductDetailSectionContentQRCodeBoxWrapper>
+                <ProductDetailSectionContentQRCodeBox>
+                  <div className={'column column-left'}>
+                    <div className={'productMenu'}>
+                    <div>
+                        <PublicImage
+                          className={'m-auto'}
                           imageName={'picking'}
                           width={70}
                         />
@@ -340,78 +422,6 @@ export const DeliveryDocumentSingleUnit = ({
                         />
                       </div>
                       <div className={'productMenuTitle'}>ロット</div>
-                    </div>
-                  </div>
-                </ProductDetailSectionContentQRCodeBox>
-              </ProductDetailSectionContentQRCodeBoxWrapper>
-
-              {/* scroll 2 */}
-              <ProductDetailSectionContentQRCodeBoxWrapper>
-                <ProductDetailSectionContentQRCodeBox>
-                  <div className={'column column-left'}>
-                    <div className={'productMenu'}>
-                      <div>
-                        <PublicImage
-                          className={'m-auto'}
-                          imageName={'scrList'}
-                          width={70}
-                        />
-                      </div>
-                      <div className={'productMenuTitle'}>SCR</div>
-                    </div>
-                    <div className={'productMenu'}>
-                      <div>
-                        <PublicImage
-                          className={'m-auto'}
-                          imageName={'actualStock'}
-                          width={70}
-                        />
-                      </div>
-                      <div className={'productMenuTitle'}>実在庫</div>
-                    </div>
-                  </div>
-                  <div className={'column column-center'}>
-                    <img
-                      src={
-                        detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].Images?.QRCode?.DocID &&
-                        generateQRCodeImageUrl(
-                          detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].Images?.QRCode,
-                          { suffix: `-${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].UserType}` }
-                        ) || ''}
-                      alt={``}
-                      width={132}
-                    />
-                    <div
-                      style={{
-                        padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
-                      }}
-                    >入出荷伝票: {detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit] && detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliveryDocument}</div>
-                    <div
-                      style={{
-                        padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
-                      }}
-                    >明細: {detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit] && detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliveryDocumentItem}</div>
-                  </div>
-                  <div className={'column column-right'}>
-                    <div className={'productMenu'}>
-                      <div>
-                        <PublicImage
-                          className={'m-auto'}
-                          imageName={'underConstruction'}
-                          width={70}
-                        />
-                      </div>
-                      <div className={'productMenuTitle'}>Under<br />Construction…</div>
-                    </div>
-                    <div className={'productMenu'}>
-                      <div>
-                        <PublicImage
-                          className={'m-auto'}
-                          imageName={'underConstruction'}
-                          width={70}
-                        />
-                      </div>
-                      <div className={'productMenuTitle'}>Under<br />Construction…</div>
                     </div>
                   </div>
                 </ProductDetailSectionContentQRCodeBox>

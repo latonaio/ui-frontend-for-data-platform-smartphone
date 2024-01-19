@@ -23,9 +23,11 @@ import {
 } from '@/helpers/common';
 import { PublicImage } from '@/components/Image';
 import ordersItemImage001 from '@public/orders-item-image-001.png';
+import { Refresh } from '@/components/Refresh';
 
 export interface OrdersItemPricingElementListProps {
   className?: string;
+  refresh?: () => void;
 }
 
 interface DetailListTableElementProps {
@@ -103,8 +105,9 @@ const DetailListTableElement = ({
 };
 
 export const OrdersItemPricingElement = ({
-                                                   className,
-                                                 }: OrdersItemPricingElementListProps) => {
+                                           className,
+                                           refresh,
+                                         }: OrdersItemPricingElementListProps) => {
   const summary = [
     '#',
     '条件レート値',
@@ -210,6 +213,16 @@ export const OrdersItemPricingElement = ({
               width: `20%`,
             }}
           >
+            <div>
+              <Refresh
+                style={{
+                  marginRight: rem(10),
+                }}
+                onClick={() => {
+                  refresh && refresh();
+                }}
+              ></Refresh>
+            </div>
             <div>
               <BackButton
                 className={'whiteInfo'}

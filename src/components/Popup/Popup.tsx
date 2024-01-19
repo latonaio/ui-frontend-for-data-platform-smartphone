@@ -13,6 +13,7 @@ interface PopupTranslucentProps {
   title?: string;
   closedPopup: boolean;
   setClosedPopup: (closedPopup: boolean) => void;
+  isHeightFull?: boolean;
 }
 
 export const PopupTranslucent = ({
@@ -21,12 +22,13 @@ export const PopupTranslucent = ({
                                    title,
                                    closedPopup,
                                    setClosedPopup,
+                                   isHeightFull,
                                  }: PopupTranslucentProps) => {
 
   return (
     <PopupTranslucentStyle
       className={clsx(
-        `${closedPopup ? 'hidden' : ''}`,
+        `${closedPopup ? 'hidden' : ''} ${isHeightFull ? 'heightFull' : ''}`,
         className='z-10'
       )}>
       <div>

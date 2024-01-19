@@ -12,7 +12,7 @@ import { getLocalStorage } from '@/helpers/common';
 import { deliveryDocumentCache } from '@/services/cacheDatabase/deliveryDocument';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '@/store/slices/loadging';
-import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { initializeUpdate } from '@/store/slices/delivery-document/item';
 
 interface PageProps {
@@ -102,12 +102,21 @@ const DeliverDocumentItem: React.FC<PageProps> = (data) => {
         className={'text-2xl'}
         color={`${data.userType === 'deliverFromParty' ? 'deliveryFromParty' : 'deliveryToParty'}`}
         headerContentNext={`/DPFM_API_DELIVERY_DOCUMENT_SRV/reads/` +
-          `doc/` +
+          `singleUnit/` +
           `${data.deliveryDocument}/` +
+          `${data.deliveryDocumentItem}/` +
           `${data.userType}/`}
       />
       <Main className={'Main'}>
-        <Content />
+        <Content
+          refresh={() => {
+            initLoadTabData(
+              data.deliveryDocument,
+              data.deliveryDocumentItem,
+              data.userType,
+            );
+          }}
+        />
       </Main>
       <Footer></Footer>
     </Wrapper>

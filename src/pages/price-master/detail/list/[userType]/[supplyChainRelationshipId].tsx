@@ -142,9 +142,9 @@ const PriceMasterDetailList: React.FC<PageProps> = (data) => {
 			businessPartner,
 			emailAddress,
 		  }: AuthedUser = getLocalStorage('auth');
-	  
+
 		  dispatch(setLoading({ isOpen: true }));
-	  
+
 		  const accepter = (params: any) => {
 			if (!params.hasOwnProperty('accepter')) {
 			  return {
@@ -152,7 +152,7 @@ const PriceMasterDetailList: React.FC<PageProps> = (data) => {
 				accepter: ['Header'],
 			  };
 			}
-	  
+
 			return params;
 		  }
 
@@ -399,7 +399,7 @@ const PriceMasterDetailList: React.FC<PageProps> = (data) => {
             キャッシュの更新の実行
           </div>
           <div
-            className={'inline- justify-end items-center'}
+            className={'inline-flex justify-end items-center'}
             style={{
               fontSize: rem(13),
               cursor: 'pointer',

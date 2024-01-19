@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   DeliveryDocumentItemProps as DefaultDeliveryDocumentItemProps,
-  DeliveryDocumentTablesEnum,
+  DeliveryDocumentTablesEnum, OrdersTablesEnum,
 } from '@/constants';
 import { setLoading } from '@/store/slices/loadging';
 import { Dispatch } from 'redux';
 import { setGlobalSnackbar } from '@/store/slices/snackbar';
 import { isFloat } from '@/helpers/form';
+import { updates } from '@/api/deliveryDocument/item';
 
 interface errors {
   [key: string]: {
@@ -31,13 +32,16 @@ const initialState: InitialState = {
 };
 
 const isEditingObject = {
+  PlannedGoodsIssueQuantity: false,
+  PlannedGoodsIssueDateTime: false,
+  PlannedGoodsReceiptDateTime: false,
 }
 
 interface editItemParam {
   params: {
-    product: {
-      product: number;
-      Item: DeliveryDocumentItemProps;
+    DeliveryDocument: {
+      DeliveryDocument: number;
+      Item: any;
     };
     accepter: string[];
     api_type: string;
@@ -47,6 +51,7 @@ interface editItemParam {
 }
 
 interface pushEditItem {
+  index: number;
   item: DeliveryDocumentItemProps;
   key: string;
 }
@@ -69,13 +74,24 @@ export const deliveryDocumentItem = createSlice({
         }, {} as { [key: string]: { isError: boolean, message: string | null } });
       };
 
-      if (!action.payload[DeliveryDocumentTablesEnum.deliveryDocumentItem]) { return; }
-
       state[DeliveryDocumentTablesEnum.deliveryDocumentItem] = {
         isEditing: isEditingObject,
         errors: errors(),
         ...action.payload[DeliveryDocumentTablesEnum.deliveryDocumentItem],
       }
+
+      if (!action.payload[DeliveryDocumentTablesEnum.deliveryDocumentItem]) { return; }
+      if (!action.payload[DeliveryDocumentTablesEnum.deliveryDocumentItem].Item) { return; }
+      if (action.payload[DeliveryDocumentTablesEnum.deliveryDocumentItem].Item.length == 0) { return; }
+
+      state[DeliveryDocumentTablesEnum.deliveryDocumentItem].Item = action.payload[DeliveryDocumentTablesEnum.deliveryDocumentItem].Item
+        .map((item) => {
+          return {
+            ...item,
+            isEditing: isEditingObject,
+            errors: errors(),
+          }
+        });
     },
     pushItemToEdit: (state: InitialState, action: PayloadAction<pushEditItem>) => {
       const targetState = state[DeliveryDocumentTablesEnum.deliveryDocumentItem];
@@ -90,28 +106,54 @@ export const deliveryDocumentItem = createSlice({
 
       actionData.item.isEditing[actionData.key] = !targetState.isEditing[actionData.key];
 
-      state[DeliveryDocumentTablesEnum.deliveryDocumentItem] = {
+      if (!state[DeliveryDocumentTablesEnum.deliveryDocumentItem]) { return; }
+
+      state[DeliveryDocumentTablesEnum.deliveryDocumentItem].Item[actionData.index] = {
         ...actionData.item,
       }
     },
     editedItem: (state, action: PayloadAction<{
-      index: number;
-      item: DeliveryDocumentItemProps;
-      key: string;
+      listState: any,
+      updateInfoObject: {
+        index: number;
+        editKey: string;
+        values: {
+          value: string;
+          key: string;
+        }[]
+      }
     }>) => {
-      const targetState = state[DeliveryDocumentTablesEnum.deliveryDocumentItem];
-
-      if (!targetState) { return; }
-
       const payload = JSON.stringify(action.payload);
       const parsedDetail = JSON.parse(payload);
-      const actionData = {
+      const actionData: {
+        listState: any,
+        updateInfoObject: {
+          index: number;
+          editKey: string;
+          values: {
+            value: string;
+            key: string;
+          }[]
+        }
+      } = {
         ...parsedDetail,
       };
 
-      actionData.item.isEditing[actionData.key] = !targetState.isEditing[actionData.key];
-      state[DeliveryDocumentTablesEnum.deliveryDocumentItem] = {
-        ...actionData.item,
+      const targetState = actionData.listState[DeliveryDocumentTablesEnum.deliveryDocumentItem]
+        .Item[actionData.updateInfoObject.index];
+
+      if (!targetState) { return; }
+
+      targetState.isEditing[actionData.updateInfoObject.editKey] = !targetState.isEditing[actionData.updateInfoObject.editKey];
+
+      actionData.updateInfoObject.values.map((value: any) => {
+        targetState[value.key] = value.value;
+      });
+
+      if (!state[DeliveryDocumentTablesEnum.deliveryDocumentItem]) { return; }
+
+      state[DeliveryDocumentTablesEnum.deliveryDocumentItem].Item[actionData.updateInfoObject.index] = {
+        ...targetState,
       }
     },
     closeItem: (state, action: PayloadAction<{
@@ -126,7 +168,10 @@ export const deliveryDocumentItem = createSlice({
       };
 
       actionData.item.isEditing[actionData.key] = false;
-      state[DeliveryDocumentTablesEnum.deliveryDocumentItem] = {
+
+      if (!state[DeliveryDocumentTablesEnum.deliveryDocumentItem]) { return; }
+
+      state[DeliveryDocumentTablesEnum.deliveryDocumentItem].Item[actionData.index] = {
         ...actionData.item,
       }
     },
@@ -146,7 +191,9 @@ export const deliveryDocumentItem = createSlice({
       actionData.item.errors[actionData.key].isError = actionData.isError;
       actionData.item.errors[actionData.key].message = actionData.message;
 
-      state[DeliveryDocumentTablesEnum.deliveryDocumentItem] = {
+      if (!state[DeliveryDocumentTablesEnum.deliveryDocumentItem]) { return; }
+
+      state[DeliveryDocumentTablesEnum.deliveryDocumentItem].Item[actionData.index] = {
         ...actionData.item,
       }
     },
@@ -166,21 +213,41 @@ export const checkInvalid = ({
                              },
                              appDispatch: Dispatch,
 ) => {
-  if (key === 'ComponentProductStandardQuantityInBaseUnit') {
-    if (!isFloat(checkValue)) {
+  if (key === 'PlannedGoodsIssueQuantity') {
+    if (checkValue < 0 || checkValue.includes('-')) {
       return appDispatch(setErrorItem({
         index: index,
         item: item,
-        key: 'ComponentProductStandardQuantityInBaseUnit',
+        key: 'PlannedGoodsIssueQuantity',
         isError: true,
-        message: '小数点以外は無効です',
+        message: 'マイナスの値は無効です',
+      }));
+    }
+
+    if (isFloat(checkValue)) {
+      return appDispatch(setErrorItem({
+        index: index,
+        item: item,
+        key: 'PlannedGoodsIssueQuantity',
+        isError: true,
+        message: '小数点は無効です',
+      }));
+    }
+
+    if (checkValue === '') {
+      return appDispatch(setErrorItem({
+        index: index,
+        item: item,
+        key: 'PlannedGoodsIssueQuantity',
+        isError: true,
+        message: '空白は無効です',
       }));
     }
 
     return appDispatch(setErrorItem({
       index: index,
       item: item,
-      key: 'ComponentProductStandardQuantityInBaseUnit',
+      key: 'PlannedGoodsIssueQuantity',
       isError: false,
       message: '',
     }));
@@ -188,23 +255,21 @@ export const checkInvalid = ({
 };
 
 const isError = (index: number, detailState: {
-  [DeliveryDocumentTablesEnum.deliveryDocumentItem]: DeliveryDocumentItemProps,
+  [DeliveryDocumentTablesEnum.deliveryDocumentItem]: any,
 }) => {
-  const detail  = detailState[DeliveryDocumentTablesEnum.deliveryDocumentItem];
+  const list  = detailState[DeliveryDocumentTablesEnum.deliveryDocumentItem].Item;
 
   return Object.keys(
-    detail.errors,
+    list[index].errors,
   ).some((key) => {
-    return detail.errors[key].isError
+    return list[index].errors[key].isError
   })
 }
 
 export const editItemAsync = async (
   editItemParam: editItemParam,
   appDispatch: Dispatch,
-  listState: {
-    [DeliveryDocumentTablesEnum.deliveryDocumentItem]: DeliveryDocumentItemProps,
-  },
+  listState: any,
 ) => {
   appDispatch(setLoading({ isOpen: true }))
 
@@ -220,33 +285,120 @@ export const editItemAsync = async (
       throw new Error();
     }
 
-    // await updates({
-    //   product: {
-    //     product: params.product.product,
-    //     Item: [
-    //       {
-    //         // product: params.product.product,
-    //         // ProductItem: params.product.Item[0].ProductItem,
-    //         // ComponentProduct: params.product.Item[0].ComponentProduct,
-    //         // ProductItemText: params.product.Item[0].ProductItemText,
-    //         // StockConfirmationPlantName: params.product.Item[0].StockConfirmationPlantName,
-    //         // StockConfirmationPlant: params.product.Item[0].StockConfirmationPlant,
-    //         // ComponentProductStandardQuantityInBaseUnit: params.product.Item[0].ComponentProductStandardQuantityInBaseUnit,
-    //         // ComponentProductBaseUnit: params.product.Item[0].ComponentProductBaseUnit,
-    //         // ValidityStartDate: params.product.Item[0].ValidityStartDate,
-    //         // IsMarkedForDeletion: params.product.Item[0].IsMarkedForDeletion,
-    //       },
-    //     ],
-    //   },
-    //   accepter: params.accepter,
-    //   api_type: params.api_type,
-    // }, 'item');
+    let updateObject: any = {};
+    let updateInfoObject: {
+      index: number;
+      editKey: string;
+      values: {
+        value: string;
+        key: string;
+      }[]
+    } = {
+      index: index,
+      editKey: key,
+      values: [],
+    };
+
+    if (editItemParam.key === 'PlannedGoodsIssueQuantity') {
+      updateObject = {
+        DeliveryDocument: {
+          DeliveryDocument: params.DeliveryDocument.DeliveryDocument,
+          Item: [
+            {
+              DeliveryDocument: params.DeliveryDocument.DeliveryDocument,
+              DeliveryDocumentItem: params.DeliveryDocument.Item.DeliveryDocumentItem,
+              PlannedGoodsIssueQuantity: params.DeliveryDocument.Item.PlannedGoodsIssueQuantity,
+            }
+          ],
+        },
+        api_type: 'updates',
+        accepter: ['Item'],
+      }
+
+      updateInfoObject = {
+        index,
+        editKey: key,
+        values: [
+          {
+            value: params.DeliveryDocument.Item.PlannedGoodsIssueQuantity,
+            key: 'PlannedGoodsIssueQuantity',
+          },
+        ],
+      }
+    }
+
+    if (editItemParam.key === 'PlannedGoodsIssueDateTime') {
+      updateObject = {
+        DeliveryDocument: {
+          DeliveryDocument: params.DeliveryDocument.DeliveryDocument,
+          Item: [
+            {
+              DeliveryDocument: params.DeliveryDocument.DeliveryDocument,
+              DeliveryDocumentItem: params.DeliveryDocument.Item.DeliveryDocumentItem,
+              PlannedGoodsIssueDate: params.DeliveryDocument.Item.PlannedGoodsIssueDate,
+              PlannedGoodsIssueTime: params.DeliveryDocument.Item.PlannedGoodsIssueTime,
+            },
+          ],
+        },
+        api_type: 'updates',
+        accepter: ['Item'],
+      }
+
+      updateInfoObject = {
+        index,
+        editKey: key,
+        values: [
+          {
+            value: params.DeliveryDocument.Item.PlannedGoodsIssueDate,
+            key: 'PlannedGoodsIssueDate',
+          },
+          {
+            value: params.DeliveryDocument.Item.PlannedGoodsIssueTime,
+            key: 'PlannedGoodsIssueTime',
+          },
+        ],
+      }
+    }
+
+    if (editItemParam.key === 'PlannedGoodsReceiptDateTime') {
+      updateObject = {
+        DeliveryDocument: {
+          DeliveryDocument: params.DeliveryDocument.DeliveryDocument,
+          Item: [
+            {
+              DeliveryDocument: params.DeliveryDocument.DeliveryDocument,
+              DeliveryDocumentItem: params.DeliveryDocument.Item.DeliveryDocumentItem,
+              PlannedGoodsReceiptDate: params.DeliveryDocument.Item.PlannedGoodsReceiptDate,
+              PlannedGoodsReceiptTime: params.DeliveryDocument.Item.PlannedGoodsReceiptTime,
+            },
+          ],
+        },
+        api_type: 'updates',
+        accepter: ['Item'],
+      }
+
+      updateInfoObject = {
+        index,
+        editKey: key,
+        values: [
+          {
+            value: params.DeliveryDocument.Item.PlannedGoodsReceiptDate,
+            key: 'PlannedGoodsReceiptDate',
+          },
+          {
+            value: params.DeliveryDocument.Item.PlannedGoodsReceiptTime,
+            key: 'PlannedGoodsReceiptTime',
+          },
+        ],
+      }
+    }
+
+    await updates(updateObject, 'item');
 
     appDispatch(deliveryDocumentItem.actions.editedItem(
       {
-        index: index,
-        item: params.product.Item,
-        key: key,
+        listState: listState,
+        updateInfoObject: updateInfoObject,
       },
     ));
   } catch (error) {

@@ -1,12 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
+  BillOfMaterialTablesEnum, DeliveryDocumentTablesEnum,
   OrdersItemProps as DefaultOrdersItemProps,
-  OrdersTablesEnum,
+  OrdersTablesEnum, ProductionOrderTablesEnum,
 } from '@/constants';
 import { setLoading } from '@/store/slices/loadging';
+import { updates } from '@/api/orders/item';
 import { Dispatch } from 'redux';
 import { setGlobalSnackbar } from '@/store/slices/snackbar';
 import { isFloat } from '@/helpers/form';
+import { useAppSelector } from '@/store/hooks';
+import { paginationSlice } from '@/store/slices/production-order/pagination';
 
 interface errors {
   [key: string]: {
@@ -31,13 +35,15 @@ const initialState: InitialState = {
 };
 
 const isEditingObject = {
+  OrderQuantityInDeliveryUnit: false,
+  RequestedDeliveryDateTime: false,
 }
 
 interface editItemParam {
   params: {
-    product: {
-      product: number;
-      Item: OrdersItemProps;
+    Orders: {
+      OrderID: number;
+      Item: any;
     };
     accepter: string[];
     api_type: string;
@@ -47,6 +53,7 @@ interface editItemParam {
 }
 
 interface pushEditItem {
+  index: number;
   item: OrdersItemProps;
   key: string;
 }
@@ -76,6 +83,23 @@ export const ordersItem = createSlice({
         errors: errors(),
         ...action.payload[OrdersTablesEnum.ordersItem],
       }
+
+      if (!state[OrdersTablesEnum.ordersItem]) { return; }
+      if (!action.payload[OrdersTablesEnum.ordersItem].Item) { return; }
+      if (action.payload[OrdersTablesEnum.ordersItem].Item.length == 0) { return; }
+
+      // item に対して isEditing と errors を追加
+      state[OrdersTablesEnum.ordersItem].Item = action.payload[OrdersTablesEnum.ordersItem].Item
+        .map((item) => {
+          return {
+            ...item,
+            isEditing: isEditingObject,
+            errors: errors(),
+          }
+        });
+    },
+    getState: (state: any) => {
+      return state[OrdersTablesEnum.ordersItem];
     },
     pushItemToEdit: (state: InitialState, action: PayloadAction<pushEditItem>) => {
       const targetState = state[OrdersTablesEnum.ordersItem];
@@ -90,28 +114,54 @@ export const ordersItem = createSlice({
 
       actionData.item.isEditing[actionData.key] = !targetState.isEditing[actionData.key];
 
-      state[OrdersTablesEnum.ordersItem] = {
+      if (!state[OrdersTablesEnum.ordersItem]) { return; }
+
+      state[OrdersTablesEnum.ordersItem].Item[actionData.index] = {
         ...actionData.item,
       }
     },
     editedItem: (state, action: PayloadAction<{
-      index: number;
-      item: OrdersItemProps;
-      key: string;
+      listState: any,
+      updateInfoObject: {
+        index: number;
+        editKey: string;
+        values: {
+          value: string;
+          key: string;
+        }[]
+      }
     }>) => {
-      const targetState = state[OrdersTablesEnum.ordersItem];
-
-      if (!targetState) { return; }
-
       const payload = JSON.stringify(action.payload);
       const parsedDetail = JSON.parse(payload);
-      const actionData = {
+      const actionData: {
+        listState: any,
+        updateInfoObject: {
+          index: number;
+          editKey: string;
+          values: {
+            value: string;
+            key: string;
+          }[]
+        }
+      } = {
         ...parsedDetail,
       };
 
-      actionData.item.isEditing[actionData.key] = !targetState.isEditing[actionData.key];
-      state[OrdersTablesEnum.ordersItem] = {
-        ...actionData.item,
+      const targetState = actionData.listState[OrdersTablesEnum.ordersItem]
+        .Item[actionData.updateInfoObject.index];
+
+      if (!targetState) { return; }
+
+      targetState.isEditing[actionData.updateInfoObject.editKey] = !targetState.isEditing[actionData.updateInfoObject.editKey];
+
+      actionData.updateInfoObject.values.map((value: any) => {
+        targetState[value.key] = value.value;
+      });
+
+      if (!state[OrdersTablesEnum.ordersItem]) { return; }
+
+      state[OrdersTablesEnum.ordersItem].Item[actionData.updateInfoObject.index] = {
+        ...targetState,
       }
     },
     closeItem: (state, action: PayloadAction<{
@@ -126,7 +176,10 @@ export const ordersItem = createSlice({
       };
 
       actionData.item.isEditing[actionData.key] = false;
-      state[OrdersTablesEnum.ordersItem] = {
+
+      if (!state[OrdersTablesEnum.ordersItem]) { return; }
+
+      state[OrdersTablesEnum.ordersItem].Item[actionData.index] = {
         ...actionData.item,
       }
     },
@@ -146,7 +199,9 @@ export const ordersItem = createSlice({
       actionData.item.errors[actionData.key].isError = actionData.isError;
       actionData.item.errors[actionData.key].message = actionData.message;
 
-      state[OrdersTablesEnum.ordersItem] = {
+      if (!state[OrdersTablesEnum.ordersItem]) { return; }
+
+      state[OrdersTablesEnum.ordersItem].Item[actionData.index] = {
         ...actionData.item,
       }
     },
@@ -166,21 +221,41 @@ export const checkInvalid = ({
                              },
                              appDispatch: Dispatch,
 ) => {
-  if (key === 'ComponentProductStandardQuantityInBaseUnit') {
-    if (!isFloat(checkValue)) {
+  if (key === 'OrderQuantityInDeliveryUnit') {
+    if (checkValue < 0 || checkValue.includes('-')) {
       return appDispatch(setErrorItem({
         index: index,
         item: item,
-        key: 'ComponentProductStandardQuantityInBaseUnit',
+        key: 'OrderQuantityInDeliveryUnit',
         isError: true,
-        message: '小数点以外は無効です',
+        message: 'マイナスの値は無効です',
+      }));
+    }
+
+    if (isFloat(checkValue)) {
+      return appDispatch(setErrorItem({
+        index: index,
+        item: item,
+        key: 'OrderQuantityInDeliveryUnit',
+        isError: true,
+        message: '小数点は無効です',
+      }));
+    }
+
+    if (checkValue === '') {
+      return appDispatch(setErrorItem({
+        index: index,
+        item: item,
+        key: 'OrderQuantityInDeliveryUnit',
+        isError: true,
+        message: '空白は無効です',
       }));
     }
 
     return appDispatch(setErrorItem({
       index: index,
       item: item,
-      key: 'ComponentProductStandardQuantityInBaseUnit',
+      key: 'OrderQuantityInDeliveryUnit',
       isError: false,
       message: '',
     }));
@@ -188,25 +263,23 @@ export const checkInvalid = ({
 };
 
 const isError = (index: number, detailState: {
-  [OrdersTablesEnum.ordersItem]: OrdersItemProps,
+  [OrdersTablesEnum.ordersItem]: any,
 }) => {
-  const detail  = detailState[OrdersTablesEnum.ordersItem];
+  const list  = detailState[OrdersTablesEnum.ordersItem].Item;
 
   return Object.keys(
-    detail.errors,
+    list[index].errors,
   ).some((key) => {
-    return detail.errors[key].isError
+    return list[index].errors[key].isError
   })
 }
 
 export const editItemAsync = async (
   editItemParam: editItemParam,
   appDispatch: Dispatch,
-  listState: {
-    [OrdersTablesEnum.ordersItem]: OrdersItemProps,
-  },
+  listState: any,
 ) => {
-  appDispatch(setLoading({ isOpen: true }))
+  appDispatch(setLoading({ isOpen: true }));
 
   const params = editItemParam.params;
   const index = editItemParam.index;
@@ -220,33 +293,91 @@ export const editItemAsync = async (
       throw new Error();
     }
 
-    // await updates({
-    //   product: {
-    //     product: params.product.product,
-    //     Item: [
-    //       {
-    //         // product: params.product.product,
-    //         // ProductItem: params.product.Item[0].ProductItem,
-    //         // ComponentProduct: params.product.Item[0].ComponentProduct,
-    //         // ProductItemText: params.product.Item[0].ProductItemText,
-    //         // StockConfirmationPlantName: params.product.Item[0].StockConfirmationPlantName,
-    //         // StockConfirmationPlant: params.product.Item[0].StockConfirmationPlant,
-    //         // ComponentProductStandardQuantityInBaseUnit: params.product.Item[0].ComponentProductStandardQuantityInBaseUnit,
-    //         // ComponentProductBaseUnit: params.product.Item[0].ComponentProductBaseUnit,
-    //         // ValidityStartDate: params.product.Item[0].ValidityStartDate,
-    //         // IsMarkedForDeletion: params.product.Item[0].IsMarkedForDeletion,
-    //       },
-    //     ],
-    //   },
-    //   accepter: params.accepter,
-    //   api_type: params.api_type,
-    // }, 'item');
+    let updateObject: any = {};
+    let updateInfoObject: {
+      index: number;
+      editKey: string;
+      values: {
+        value: string;
+        key: string;
+      }[]
+    } = {
+      index: index,
+      editKey: key,
+      values: [],
+    };
+
+    if (editItemParam.key === 'RequestedDeliveryDateTime') {
+      updateObject = {
+        Orders: {
+          OrderID: params.Orders.OrderID,
+          Item: [
+            {
+              OrderID: params.Orders.OrderID,
+              OrderItem: params.Orders.Item.OrderItem,
+              RequestedDeliveryDate: params.Orders.Item.RequestedDeliveryDate,
+              RequestedDeliveryTime: params.Orders.Item.RequestedDeliveryTime,
+              OrderStatus: params.Orders.Item.OrderStatus,
+              OrderItemCategory: params.Orders.Item.OrderItemCategory,
+            },
+          ],
+        },
+        accepter: params.accepter,
+        api_type: params.api_type,
+      };
+
+      updateInfoObject = {
+        index,
+        editKey: key,
+        values: [
+          {
+            value: params.Orders.Item.RequestedDeliveryDate,
+            key: 'RequestedDeliveryDate',
+          },
+          {
+            value: params.Orders.Item.RequestedDeliveryTime,
+            key: 'RequestedDeliveryTime',
+          },
+        ],
+      }
+    }
+
+    if (editItemParam.key === 'OrderQuantityInDeliveryUnit') {
+      updateObject = {
+        Orders: {
+          OrderID: params.Orders.OrderID,
+          Item: [
+            {
+              OrderID: params.Orders.OrderID,
+              OrderItem: params.Orders.Item.OrderItem,
+              OrderQuantityInDeliveryUnit: params.Orders.Item.OrderQuantityInDeliveryUnit,
+              OrderStatus: params.Orders.Item.OrderStatus,
+              OrderItemCategory: params.Orders.Item.OrderItemCategory,
+            },
+          ],
+        },
+        accepter: params.accepter,
+        api_type: params.api_type,
+      };
+
+      updateInfoObject = {
+        index,
+        editKey: key,
+        values: [
+          {
+            value: params.Orders.Item.OrderQuantityInDeliveryUnit,
+            key: 'OrderQuantityInDeliveryUnit',
+          },
+        ],
+      }
+    }
+
+    await updates(updateObject, 'item');
 
     appDispatch(ordersItem.actions.editedItem(
       {
-        index: index,
-        item: params.product.Item,
-        key: key,
+        listState: listState,
+        updateInfoObject: updateInfoObject,
       },
     ));
   } catch (error) {
@@ -262,3 +393,5 @@ export const {
   closeItem,
   setErrorItem,
 } = ordersItem.actions;
+
+export default ordersItem.reducer

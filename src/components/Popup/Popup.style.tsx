@@ -15,6 +15,12 @@ export const PopupTranslucentStyle = styled.div`
   right: 0;
   max-width: 1200px;
   margin: auto;
+  &.heightFull {
+    top: 0;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+  
   .content {
     li {
       margin-bottom: ${rem(3)};

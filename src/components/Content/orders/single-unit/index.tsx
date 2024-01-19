@@ -16,13 +16,13 @@ import {
   ProductSingleUnitProps,
   ProductStockTablesEnum,
   ProductTablesEnum,
-  ProductionOrderTablesEnum,
+  ProductionOrderTablesEnum, AuthedUser,
 } from '@/constants';
 import { Detail } from '@/components/Content/Detail/Detail';
 import React from 'react';
 import { rem } from 'polished';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { generateImageProductUrl, generateQRCodeImageUrl } from '@/helpers/common';
+import { generateImageProductUrl, generateQRCodeImageUrl, getLocalStorage } from '@/helpers/common';
 import { PublicImage } from '@/components/Image';
 import { Carousel } from '@/components/Carousel';
 import { useRouter } from 'next/router';
@@ -30,11 +30,21 @@ import imageSample01 from '@public/demo/image-sample01.png';
 import imageSample01Material01 from '@public/demo/image-sample01-material01.png';
 import estimate from '@public/global-menu/estimate.png';
 import clock from '@public/clock.png';
+import { Select } from '@/components/Form';
+import { updates } from '@/api/orders/item';
+import { setLoading } from '@/store/slices/loadging';
+import { setGlobalSnackbar } from '@/store/slices/snackbar';
+import { ordersCache } from '@/services/cacheDatabase/orders';
+import { initializeUpdate } from '@/store/slices/orders/single-unit';
 
 export const OrdersSingleUnit = ({
-                                    className,
-                                  }: {
+                                   className,
+                                   orderStatusSelectEditingFlag,
+                                   setOrderStatusSelectEditingFlag,
+                                 }: {
   className?: string;
+  orderStatusSelectEditingFlag: boolean;
+  setOrderStatusSelectEditingFlag: (value: boolean) => void;
 }) => {
   const appDispatch = useAppDispatch();
   const detail  = useAppSelector(state => state.ordersSingleUnit) as {
@@ -208,8 +218,111 @@ export const OrdersSingleUnit = ({
                 />
               </span>
             </div>
-            <div>
-              Status: {detail[OrdersTablesEnum.ordersSingleUnit].OrderStatus}
+            <div
+              className={'flex justify-start items-baseline'}
+            >
+              <div>Status: </div>
+              <div
+                style={{
+                  marginLeft: rem(10),
+                }}
+              >
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setOrderStatusSelectEditingFlag(!orderStatusSelectEditingFlag);
+                  }}
+                >
+                  <Select
+                    className={'isBlock'}
+                    isEditing={orderStatusSelectEditingFlag}
+                    isNoLabel={true}
+                    currentValue={detail[OrdersTablesEnum.ordersSingleUnit].OrderStatus}
+                    select={{
+                      data: [
+                        {
+                          label: 'DFT',
+                          value: 'DFT',
+                        },
+                        {
+                          label: 'FIX',
+                          value: 'FIX',
+                        },
+                      ],
+                      label: 'label',
+                      value: 'value',
+                    }}
+                    onChange={async (value) => {
+                      appDispatch(setLoading({ isOpen: true }))
+
+                      await updates({
+                        Orders: {
+                          OrderID: detail[OrdersTablesEnum.ordersSingleUnit].OrderID,
+                          OrderItem: detail[OrdersTablesEnum.ordersSingleUnit].OrderItem,
+                          Item: [
+                            {
+                              OrderID: detail[OrdersTablesEnum.ordersSingleUnit].OrderID,
+                              OrderItem: detail[OrdersTablesEnum.ordersSingleUnit].OrderItem,
+                              OrderStatus: value,
+                            },
+                          ],
+                        },
+                        accepter: ['Item'],
+                        api_type: 'updates',
+                      }, 'item');
+
+                      const {
+                        language,
+                        businessPartner,
+                        emailAddress,
+                      }: AuthedUser = getLocalStorage('auth');
+
+                     const response = await ordersCache.updateOrdersSingleUnit({
+                        orderId: Number(detail[OrdersTablesEnum.ordersSingleUnit].OrderID),
+                        orderItem:  Number(detail[OrdersTablesEnum.ordersSingleUnit].OrderItem.toString()),
+                        userType: detail[OrdersTablesEnum.ordersSingleUnit].UserType,
+                        language,
+                        businessPartner,
+                        emailAddress,
+                      });
+
+                      await ordersCache.updateCacheOrdersSingleUnit({
+                        orderId: Number(detail[OrdersTablesEnum.ordersSingleUnit].OrderID),
+                        orderItem:  Number(detail[OrdersTablesEnum.ordersSingleUnit].OrderItem.toString()),
+                        userType: detail[OrdersTablesEnum.ordersSingleUnit].UserType,
+                        language,
+                        businessPartner,
+                        emailAddress,
+                        updateKey: 'OrderStatus',
+                        updateValue: value,
+                        pagination: response.pagination,
+                      });
+
+                      const cacheDetail = await ordersCache.getOrdersSingleUnit(
+                        Number(detail[OrdersTablesEnum.ordersSingleUnit].OrderID),
+                        Number(detail[OrdersTablesEnum.ordersSingleUnit].OrderItem),
+                      );
+
+                      if (!cacheDetail) { return }
+
+                      appDispatch(initializeUpdate({
+                        [OrdersTablesEnum.ordersSingleUnit]: {
+                          ...cacheDetail,
+                          Pagination: response.pagination,
+                        },
+                      }));
+
+                      appDispatch(setGlobalSnackbar({
+                        message: `登録が完了しました`,
+                        variant: 'success',
+                      }));
+
+                      appDispatch(setLoading({ isOpen: false }))
+                    }}
+                  ></Select>
+                </span>
+              </div>
             </div>
           </ProductDetailSectionContent>
         </ProductDetailSectionInfo>
@@ -218,6 +331,108 @@ export const OrdersSingleUnit = ({
       <ProductDetailSection className={'m-0'}>
         <Carousel>
           {/* scroll 1 */}
+          <ProductDetailSectionContentQRCodeBoxWrapper>
+            <ProductDetailSectionContentQRCodeBox>
+              <div className={'column column-left'}>
+                <div
+                  className={'productMenu'}
+                  onClick={async () => {
+                    await router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                      `item/` +
+                      `${detail[OrdersTablesEnum.ordersSingleUnit].OrderID}/` +
+                      `${detail[OrdersTablesEnum.ordersSingleUnit].OrderItem}/` +
+                      `${detail[OrdersTablesEnum.ordersSingleUnit].UserType}/`
+                    );
+                  }}
+                >
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'underConstruction'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>明細一覧</div>
+                </div>
+                <div
+                  className={'productMenu'}
+                  onClick={async () => {
+                    await router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                      `itemScheduleLine/` +
+                      `${detail[OrdersTablesEnum.ordersSingleUnit].OrderID}/` +
+                      `${detail[OrdersTablesEnum.ordersSingleUnit].OrderItem}/` +
+                      `${detail[OrdersTablesEnum.ordersSingleUnit].UserType}/`
+                    );
+                  }}
+                >
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'underConstruction'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>納入日程行</div>
+                </div>
+              </div>
+              <div className={'column column-center'}>
+                <img
+                  src={
+                    detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode?.DocID &&
+                    generateQRCodeImageUrl(
+                      detail[OrdersTablesEnum.ordersSingleUnit].Images?.QRCode,
+                      { suffix: `-${detail[OrdersTablesEnum.ordersSingleUnit].UserType}` },
+                    ) || ''}
+                  alt={``}
+                  width={132}
+                />
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >オーダーID: {detail[OrdersTablesEnum.ordersSingleUnit] && detail[OrdersTablesEnum.ordersSingleUnit].OrderID}</div>
+                <div
+                  style={{
+                    padding: `${rem(4)} ${rem(4)} ${rem(1)}`,
+                  }}
+                >明細: {detail[OrdersTablesEnum.ordersSingleUnit] && detail[OrdersTablesEnum.ordersSingleUnit].OrderItem}</div>
+              </div>
+              <div className={'column column-right'}>
+                <div
+                  className={'productMenu'}
+                  onClick={async () => {
+                    await router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                      `itemPricingElement/` +
+                      `${detail[OrdersTablesEnum.ordersSingleUnit].OrderID}/` +
+                      `${detail[OrdersTablesEnum.ordersSingleUnit].OrderItem}/` +
+                      `${detail[OrdersTablesEnum.ordersSingleUnit].UserType}/`
+                    );
+                  }}
+                >
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'underConstruction'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>価格決定</div>
+                </div>
+                <div className={'productMenu'}>
+                  <div>
+                    <PublicImage
+                      className={'m-auto'}
+                      imageName={'underConstruction'}
+                      width={70}
+                    />
+                  </div>
+                  <div className={'productMenuTitle'}>Under<br />Construction…</div>
+                </div>
+              </div>
+            </ProductDetailSectionContentQRCodeBox>
+          </ProductDetailSectionContentQRCodeBoxWrapper>
+
+          {/* scroll 2 */}
           <ProductDetailSectionContentQRCodeBoxWrapper>
             <ProductDetailSectionContentQRCodeBox>
               <div className={'column column-left'}>
@@ -289,7 +504,7 @@ export const OrdersSingleUnit = ({
             </ProductDetailSectionContentQRCodeBox>
           </ProductDetailSectionContentQRCodeBoxWrapper>
 
-          {/* scroll 2 */}
+          {/* scroll 3 */}
           <ProductDetailSectionContentQRCodeBoxWrapper>
             <ProductDetailSectionContentQRCodeBox>
               <div className={'column column-left'}>

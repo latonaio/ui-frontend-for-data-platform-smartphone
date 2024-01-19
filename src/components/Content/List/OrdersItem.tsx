@@ -11,51 +11,72 @@ import {
   OrdersTablesEnum,
   OrdersItemProps,
   OrdersItem,
-
-  ProductTablesEnum,
-  ProductionOrderTablesEnum,
+  DocumentImage,
 } from '@/constants';
 import { clickHandler, summaryHead } from './List';
 import { BackButton } from '@/components/Button';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { rem } from 'polished';
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
-  generateImageProductUrl,
+  generateImageProductUrl, generateDocumentImageUrl,
 } from '@/helpers/common';
 import { PublicImage } from '@/components/Image';
-import ordersItemImage001 from '@public/orders-item-image-001.png';
+import { PopupTranslucent } from '@/components/Popup/Popup';
+import { DateTimePicker, TextField } from '@/components/Form';
+import { editItemAsync } from '@/store/slices/orders/item';
+
+import {
+  OrdersItemProps as StoreOrdersItemProps,
+  pushItemToEdit,
+  checkInvalid,
+  closeItem,
+} from '@/store/slices/orders/item';
+import { Refresh } from '@/components/Refresh';
 
 export interface OrdersItemListProps {
   className?: string;
+  refresh?: () => void;
 }
 
 interface DetailListTableElementProps {
   summary: string[];
-  list: OrdersItem[];
+  orderId: number;
+  list: any[];
+  closedPopup: boolean;
+  setClosedPopup: (closedPopup: boolean) => void;
+  setDocumentImageInfo: any;
 }
 
 const DetailListTableElement = ({
                                   summary,
                                   list,
+                                  orderId,
+                                  closedPopup,
+                                  setClosedPopup,
+                                  setDocumentImageInfo,
                                 }: DetailListTableElementProps) => {
   const router = useRouter();
   const listType = OrdersTablesEnum.ordersItem;
   const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
+  const listState  = useAppSelector(state => state.ordersItem) as {
+    [OrdersTablesEnum.ordersItem]: any,
+  };
 
   const trStyleList: any = [
     rem(10),
     `15%`,
-    `15%`,
+    `10%`,
     null,
     `10%`,
     `10%`,
-    `15%`,
+    `22%`,
     `15%`,
   ];
 
-  const renderList = (list: OrdersItem[]) => {
+  const renderList = (list: any[]) => {
     if (list && list.length > 0) {
       return list.map((item, index) => {
         return (
@@ -65,18 +86,11 @@ const DetailListTableElement = ({
             onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            clickHandler(
-              // `/DPFM_API_PRODUCTION_ORDER_SRV/reads/itemOperation/input/${item.ProductionOrder}/${item.ProductionOrderItem}/${item.Operations}/${item.OperationsItem}/userType`,
-              ``,
-              router
-            );
           }}>
             <td>{item.OrderItem}</td>
             <td>
               <img
                 className={`imageSlide m-auto`}
-                style={{
-                }}
                 src={
                   item.Images?.Product?.BusinessPartnerID &&
                   generateImageProductUrl(
@@ -88,10 +102,131 @@ const DetailListTableElement = ({
             </td>
             <td>{item.Product}</td>
             <td>{item.OrderItemText}</td>
-            <td></td>
+            <td
+              className={item.errors['OrderQuantityInDeliveryUnit'].isError ? 'invalid' : ''}
+              onClick={(e: any) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                if (item.isEditing['OrderQuantityInDeliveryUnit']) {
+                  return;
+                }
+
+                appDispatch(pushItemToEdit({
+                  index,
+                  item,
+                  key: 'OrderQuantityInDeliveryUnit',
+                }));
+              }}
+            >
+              <span>
+                <TextField
+                  isEditing={item.isEditing['OrderQuantityInDeliveryUnit']}
+                  currentValue={item.OrderQuantityInDeliveryUnit}
+                  type={'number'}
+                  checkInvalid={(value) => {
+                    checkInvalid({
+                      index,
+                      item,
+                      key: 'OrderQuantityInDeliveryUnit',
+                      checkValue: value,
+                    }, appDispatch);
+                  }}
+                  onChange={async (value: number) => {
+                    await editItemAsync({
+                        params: {
+                          Orders: {
+                            OrderID: orderId,
+                            Item: {
+                              OrderID: orderId,
+                              OrderItem: item.OrderItem,
+                              OrderQuantityInDeliveryUnit: value,
+                              OrderStatus: item.OrderStatus,
+                              OrderItemCategory: item.OrderItemCategory,
+                            },
+                          },
+                          api_type: 'updates',
+                          accepter: ['Item'],
+                        },
+                        index,
+                        key: 'OrderQuantityInDeliveryUnit',
+                      },
+                      appDispatch, listState);
+                  }}
+                  onClose={() => appDispatch(closeItem({
+                    index,
+                    item,
+                    key: 'OrderQuantityInDeliveryUnit',
+                  }))}
+                />
+              </span>
+            </td>
             <td>{item.DeliveryUnit}</td>
-            <td></td>
-            <td></td>
+            <td
+              onClick={(e: any) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                if (item.isEditing['RequestedDeliveryDateTime']) {
+                  return;
+                }
+
+                appDispatch(pushItemToEdit({
+                  index,
+                  item,
+                  key: 'RequestedDeliveryDateTime',
+                }));
+              }}
+            >
+            <DateTimePicker
+                className={'orderDateDataPicker'}
+                isEditing={item.isEditing['RequestedDeliveryDateTime']}
+                currentValue={item.RequestedDeliveryDate + ` ` + item.RequestedDeliveryTime}
+                onChange={async (value: { date: string, time: string }) => {
+                  await editItemAsync({
+                      params: {
+                        Orders: {
+                          OrderID: orderId,
+                          Item: {
+                            OrderID: orderId,
+                            OrderItem: item.OrderItem,
+                            RequestedDeliveryDate: value.date,
+                            RequestedDeliveryTime: `${value.time}:00`,
+                            OrderStatus: item.OrderStatus,
+                            OrderItemCategory: item.OrderItemCategory,
+                          },
+                        },
+                        api_type: 'updates',
+                        accepter: ['Item'],
+                      },
+                      index,
+                      key: 'RequestedDeliveryDateTime',
+                    },
+                    appDispatch, listState);
+                }}
+              />
+            </td>
+            <td
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                setClosedPopup && setClosedPopup(!closedPopup);
+                setDocumentImageInfo(item.Images?.DocumentImageOrders || null)
+              }}
+            >
+              <img
+                className={`imageSlide m-auto`}
+                style={{
+                  padding: rem(10),
+                }}
+                src={
+                  item.Images?.DocumentImageOrders &&
+                  generateDocumentImageUrl(item.Images?.DocumentImageOrders) || ""
+                }
+                alt={``}
+              />
+            </td>
           </tr>
         );
       });
@@ -99,7 +234,7 @@ const DetailListTableElement = ({
 
     return (
       <tr className={'record'}>
-        <td colSpan={8}>テーブルに対象のレコードが存在しません。</td>
+        <td colSpan={9}>テーブルに対象のレコードが存在しません。</td>
       </tr>
     );
   };
@@ -119,21 +254,25 @@ const DetailListTableElement = ({
 };
 
 export const OrdersItemList = ({
-                                                   className,
-                                                 }: OrdersItemListProps) => {
+                                 className,
+                                 refresh,
+                               }: OrdersItemListProps) => {
   const summary = [
     '#',
     '画像',
     '品目',
     '明細テキスト',
-    '予定数量',
+    'オーダー数量',
     '入出荷数量単位',
-    '出荷予定日 / 時刻',
-    '入荷予定日 / 時刻',
+    '入出荷予定日 / 時刻',
+    '文書',
   ];
 
+  const [closedPopup, setClosedPopup] = useState(true);
+  const [documentImageInfo, setDocumentImageInfo] = useState({} as any);
+
   const list  = useAppSelector(state => state.ordersItem) as {
-    [OrdersTablesEnum.ordersItem]: OrdersItemProps,
+    [OrdersTablesEnum.ordersItem]: any,
   };
 
   if (!list[OrdersTablesEnum.ordersItem]) { return <div></div> }
@@ -175,6 +314,16 @@ export const OrdersItemList = ({
 
           <div className={'ml-auto flex justify-between items-center'}>
             <div>
+              <Refresh
+                style={{
+                  marginRight: rem(10),
+                }}
+                onClick={() => {
+                  refresh && refresh();
+                }}
+              ></Refresh>
+            </div>
+            <div>
               <BackButton
                 className={'whiteInfo'}
                 style={{
@@ -195,10 +344,37 @@ export const OrdersItemList = ({
         </ListHeaderInfoFlexStart>
       </ListSection>
 
-      <ListSection>
+      <PopupTranslucent
+        title={`${documentImageInfo ? `オーダーID: ` + documentImageInfo['OrdersID'] + ` 明細: ` + documentImageInfo['OrdersItem'] : ``}`}
+        closedPopup={closedPopup}
+        setClosedPopup={setClosedPopup}
+        isHeightFull={true}
+      >
+        <div>
+          {
+            documentImageInfo &&
+            <img
+              src={
+                generateDocumentImageUrl(documentImageInfo as DocumentImage) || ''
+              }
+              alt={``}
+            />
+          }
+        </div>
+      </PopupTranslucent>
+
+      <ListSection
+        className={clsx(
+          `${closedPopup ? '' : 'hidden'}`,
+        )}
+      >
         <DetailListTableElement
           summary={summary}
+          orderId={list[OrdersTablesEnum.ordersItem].OrderID}
           list={list[OrdersTablesEnum.ordersItem].Item}
+          setClosedPopup={setClosedPopup}
+          closedPopup={closedPopup}
+          setDocumentImageInfo={setDocumentImageInfo}
         />
       </ListSection>
     </ListElement>

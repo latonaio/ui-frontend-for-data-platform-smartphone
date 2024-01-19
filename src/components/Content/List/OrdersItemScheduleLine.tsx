@@ -23,9 +23,11 @@ import {
 } from '@/helpers/common';
 import { PublicImage } from '@/components/Image';
 import ordersItemImage001 from '@public/orders-item-image-001.png';
+import { Refresh } from '@/components/Refresh';
 
 export interface OrdersItemScheduleLineListProps {
   className?: string;
+  refresh?: () => void;
 }
 
 interface DetailListTableElementProps {
@@ -103,8 +105,9 @@ const DetailListTableElement = ({
 };
 
 export const OrdersItemScheduleLine = ({
-                                                   className,
-                                                 }: OrdersItemScheduleLineListProps) => {
+                                         className,
+                                         refresh,
+                                       }: OrdersItemScheduleLineListProps) => {
   const summary = [
     '#',
     '在庫確認BP / プラント',
@@ -210,6 +213,16 @@ export const OrdersItemScheduleLine = ({
               width: `20%`,
             }}
           >
+            <div>
+              <Refresh
+                style={{
+                  marginRight: rem(10),
+                }}
+                onClick={() => {
+                  refresh && refresh();
+                }}
+              ></Refresh>
+            </div>
             <div>
               <BackButton
                 className={'whiteInfo'}
