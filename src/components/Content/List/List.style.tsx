@@ -168,6 +168,7 @@ export const ListHeaderInfo = styled.div`
 
 export const ListHeaderInfoFlexStart = styled(ListHeaderInfo)`
   justify-content: flex-start;
+  font-size: ${rem(13)};
 `;
 
 const EditMenu = styled.div`

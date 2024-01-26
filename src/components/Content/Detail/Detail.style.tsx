@@ -308,8 +308,18 @@ export  const ProductDetailSectionContentQRCodeBox = styled.div`
     }
   }
 
+  .productMenu {
+    height: ${rem(110)};
+  }
+
   .productMenuTitle {
     font-size: ${rem( 13)};
+  }
+  
+  .column {
+    &.column-center {
+      text-align: center;
+    }
   }
 `;
 

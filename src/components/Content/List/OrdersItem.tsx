@@ -72,7 +72,9 @@ const DetailListTableElement = ({
     null,
     `10%`,
     `10%`,
-    `22%`,
+    `8%`,
+    `8%`,
+    `10%`,
     `15%`,
   ];
 
@@ -84,10 +86,10 @@ const DetailListTableElement = ({
             key={index}
             className={`record`}
             onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}>
-            <td>{item.OrderItem}</td>
+              e.preventDefault();
+              e.stopPropagation();
+            }}>
+            <td className={'text-right'}>{item.OrderItem}</td>
             <td>
               <img
                 className={`imageSlide m-auto`}
@@ -103,7 +105,70 @@ const DetailListTableElement = ({
             <td>{item.Product}</td>
             <td>{item.OrderItemText}</td>
             <td
+              className={item.errors['OrderQuantityInBaseUnit'].isError ? 'invalid' : ''}
+              style={{
+                fontSize: rem(24),
+              }}
+              onClick={(e: any) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                if (item.isEditing['OrderQuantityInBaseUnit']) {
+                  return;
+                }
+
+                appDispatch(pushItemToEdit({
+                  index,
+                  item,
+                  key: 'OrderQuantityInBaseUnit',
+                }));
+              }}
+            >
+              <span>
+                <TextField
+                  isEditing={item.isEditing['OrderQuantityInBaseUnit']}
+                  currentValue={item.OrderQuantityInBaseUnit}
+                  type={'number'}
+                  checkInvalid={(value) => {
+                    checkInvalid({
+                      index,
+                      item,
+                      key: 'OrderQuantityInBaseUnit',
+                      checkValue: value,
+                    }, appDispatch);
+                  }}
+                  onChange={async (value: number) => {
+                    await editItemAsync({
+                        params: {
+                          Orders: {
+                            OrderID: orderId,
+                            Item: {
+                              OrderID: orderId,
+                              OrderItem: item.OrderItem,
+                              OrderQuantityInBaseUnit: value,
+                            },
+                          },
+                          api_type: 'updates',
+                          accepter: ['Item'],
+                        },
+                        index,
+                        key: 'OrderQuantityInBaseUnit',
+                      },
+                      appDispatch, listState);
+                  }}
+                  onClose={() => appDispatch(closeItem({
+                    index,
+                    item,
+                    key: 'OrderQuantityInBaseUnit',
+                  }))}
+                />
+              </span>
+            </td>
+            <td
               className={item.errors['OrderQuantityInDeliveryUnit'].isError ? 'invalid' : ''}
+              style={{
+                fontSize: rem(24),
+              }}
               onClick={(e: any) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -159,6 +224,7 @@ const DetailListTableElement = ({
                 />
               </span>
             </td>
+            <td>{item.BaseUnit}</td>
             <td>{item.DeliveryUnit}</td>
             <td
               onClick={(e: any) => {
@@ -176,7 +242,7 @@ const DetailListTableElement = ({
                 }));
               }}
             >
-            <DateTimePicker
+              <DateTimePicker
                 className={'orderDateDataPicker'}
                 isEditing={item.isEditing['RequestedDeliveryDateTime']}
                 currentValue={item.RequestedDeliveryDate + ` ` + item.RequestedDeliveryTime}
@@ -208,7 +274,7 @@ const DetailListTableElement = ({
                 e.preventDefault();
 
                 setClosedPopup && setClosedPopup(!closedPopup);
-                setDocumentImageInfo(item.Images?.DocumentImageOrders || null)
+                setDocumentImageInfo(item.Images?.DocumentImageOrders || null);
               }}
             >
               <img
@@ -218,7 +284,7 @@ const DetailListTableElement = ({
                 }}
                 src={
                   item.Images?.DocumentImageOrders &&
-                  generateDocumentImageUrl(item.Images?.DocumentImageOrders) || ""
+                  generateDocumentImageUrl(item.Images?.DocumentImageOrders) || ''
                 }
                 alt={``}
               />
@@ -258,8 +324,10 @@ export const OrdersItemList = ({
     '画像',
     '品目',
     '明細テキスト',
-    'オーダー数量',
-    '入出荷数量単位',
+    'オーダー数量(BU)',
+    'オーダー数量(DU)',
+    '数量単位(BU)',
+    '数量単位(DU)',
     '入出荷予定日 / 時刻',
     '文書',
   ];
@@ -267,16 +335,18 @@ export const OrdersItemList = ({
   const [closedPopup, setClosedPopup] = useState(true);
   const [documentImageInfo, setDocumentImageInfo] = useState({} as any);
 
-  const list  = useAppSelector(state => state.ordersItem) as {
+  const list = useAppSelector(state => state.ordersItem) as {
     [OrdersTablesEnum.ordersItem]: any,
   };
 
-  if (!list[OrdersTablesEnum.ordersItem]) { return <div></div> }
+  if (!list[OrdersTablesEnum.ordersItem]) {
+    return <div></div>;
+  }
 
   return (
     <ListElement className={clsx(
       `List`,
-      className
+      className,
     )}>
       <ListSection>
         <ListHeaderInfoFlexStart>
@@ -303,7 +373,8 @@ export const OrdersItemList = ({
             <div>買い手: {list[OrdersTablesEnum.ordersItem].BuyerName}</div>
             <div className={'flex justify-between items-center'}>
               <span>売り手: {list[OrdersTablesEnum.ordersItem].SellerName}</span>
-              <span style={{ marginLeft: rem(20) }}>オーダー金額: {list[OrdersTablesEnum.ordersItem].TotalGrossAmount?.toLocaleString()}</span>
+              <span
+                style={{ marginLeft: rem(20) }}>オーダー金額: {list[OrdersTablesEnum.ordersItem].TotalGrossAmount?.toLocaleString()}</span>
             </div>
             <div>納入日付/時刻: {list[OrdersTablesEnum.ordersItem].RequestedDeliveryDate} {list[OrdersTablesEnum.ordersItem].RequestedDeliveryTime}</div>
           </div>

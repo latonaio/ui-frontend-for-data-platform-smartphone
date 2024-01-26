@@ -46,8 +46,8 @@ const DetailListTableElement = ({
   const trStyleList: any = [
     rem(10),
     `20%`,
-    `20%`,
-    `20%`,
+    `10%`,
+    `10%`,
     null,
     null,
     null,
@@ -62,21 +62,21 @@ const DetailListTableElement = ({
             key={index}
             className={`record`}
             onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            clickHandler(
-              // `/DPFM_API_PRODUCTION_ORDER_SRV/reads/itemOperation/input/${item.ProductionOrder}/${item.ProductionOrderItem}/${item.Operations}/${item.OperationsItem}/userType`,
-              ``,
-              router
-            );
+            // e.preventDefault();
+            // e.stopPropagation();
+            // clickHandler(
+            //   // `/DPFM_API_PRODUCTION_ORDER_SRV/reads/itemOperation/input/${item.ProductionOrder}/${item.ProductionOrderItem}/${item.Operations}/${item.OperationsItem}/userType`,
+            //   ``,
+            //   router
+            // );
           }}>
-            <td>{item.PricingProcedureCounter}</td>
-            <td>{item.ConditionRateValue}</td>
-            <td>{item.ConditionRateValueUnit}</td>
-            <td>{item.ConditionScaleQuantity}</td>
+            <td className={'text-right'}>{item.PricingProcedureCounter}</td>
+            <td className={'text-right'}>{item.ConditionRateValue?.toLocaleString()}</td>
+            <td className={'text-right'}>{item.ConditionRateValueUnit?.toLocaleString()}</td>
+            <td className={'text-right'}>{item.ConditionScaleQuantity?.toLocaleString()}</td>
             <td>{item.ConditionCurrency}</td>
-            <td>{item.ConditionQuantity}</td>
-            <td>{item.ConditionAmount}</td>
+            <td className={'text-right'}>{item.ConditionQuantity?.toLocaleString()}</td>
+            <td className={'text-right'}>{item.ConditionAmount?.toLocaleString()}</td>
             <td>{item.ConditionType}</td>
           </tr>
         );

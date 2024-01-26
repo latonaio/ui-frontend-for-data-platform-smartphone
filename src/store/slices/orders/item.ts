@@ -35,6 +35,7 @@ const initialState: InitialState = {
 };
 
 const isEditingObject = {
+  OrderQuantityInBaseUnit: false,
   OrderQuantityInDeliveryUnit: false,
   RequestedDeliveryDateTime: false,
 }
@@ -335,6 +336,34 @@ export const editItemAsync = async (
           {
             value: params.Orders.Item.RequestedDeliveryTime,
             key: 'RequestedDeliveryTime',
+          },
+        ],
+      }
+    }
+
+    if (editItemParam.key === 'OrderQuantityInBaseUnit') {
+      updateObject = {
+        Orders: {
+          OrderID: params.Orders.OrderID,
+          Item: [
+            {
+              OrderID: params.Orders.OrderID,
+              OrderItem: params.Orders.Item.OrderItem,
+              OrderQuantityInBaseUnit: params.Orders.Item.OrderQuantityInBaseUnit,
+            },
+          ],
+        },
+        accepter: params.accepter,
+        api_type: params.api_type,
+      };
+
+      updateInfoObject = {
+        index,
+        editKey: key,
+        values: [
+          {
+            value: params.Orders.Item.OrderQuantityInBaseUnit,
+            key: 'OrderQuantityInBaseUnit',
           },
         ],
       }

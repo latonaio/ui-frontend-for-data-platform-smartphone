@@ -42,10 +42,13 @@ export const Header = ({
                fontSize: rem(30),
              }}
           />
-          <Link
-              href="/"
-              className={'backButton'}
-          >{backName}</Link>
+          {/*<Link*/}
+          {/*    href="/"*/}
+          {/*    className={'backButton'}*/}
+          {/*>{backName}</Link>*/}
+          <div
+            className={'backButton'}
+          >{backName}</div>
         </HeaderContentBack>
         <HeaderContentCenter>
           <div>

@@ -137,13 +137,13 @@ export const DeliveryDocumentSingleUnit = ({
                 ) || ''}
               alt={``}
             />
-            <PublicImage
-              className={`imageSlide m-auto`}
-              imageName={'imageSample01Material01'}
-              style={{
-                width: `60%`,
-              }}
-            />
+            {/*<PublicImage*/}
+            {/*  className={`imageSlide m-auto`}*/}
+            {/*  imageName={'imageSample01Material01'}*/}
+            {/*  style={{*/}
+            {/*    width: `60%`,*/}
+            {/*  }}*/}
+            {/*/>*/}
           </Carousel>
         </div>
       </ProductDetailSection>

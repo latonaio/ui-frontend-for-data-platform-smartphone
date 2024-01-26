@@ -33,6 +33,7 @@ const initialState: InitialState = {
 
 const isEditingObject = {
   PlannedGoodsIssueQuantity: false,
+  PlannedGoodsIssueQtyInBaseUnit: false,
   PlannedGoodsIssueDateTime: false,
   PlannedGoodsReceiptDateTime: false,
 }
@@ -322,6 +323,34 @@ export const editItemAsync = async (
           {
             value: params.DeliveryDocument.Item.PlannedGoodsIssueQuantity,
             key: 'PlannedGoodsIssueQuantity',
+          },
+        ],
+      }
+    }
+
+    if (editItemParam.key === 'PlannedGoodsIssueQtyInBaseUnit') {
+      updateObject = {
+        DeliveryDocument: {
+          DeliveryDocument: params.DeliveryDocument.DeliveryDocument,
+          Item: [
+            {
+              DeliveryDocument: params.DeliveryDocument.DeliveryDocument,
+              DeliveryDocumentItem: params.DeliveryDocument.Item.DeliveryDocumentItem,
+              PlannedGoodsIssueQtyInBaseUnit: params.DeliveryDocument.Item.PlannedGoodsIssueQtyInBaseUnit,
+            }
+          ],
+        },
+        api_type: 'updates',
+        accepter: ['Item'],
+      }
+
+      updateInfoObject = {
+        index,
+        editKey: key,
+        values: [
+          {
+            value: params.DeliveryDocument.Item.PlannedGoodsIssueQtyInBaseUnit,
+            key: 'PlannedGoodsIssueQtyInBaseUnit',
           },
         ],
       }

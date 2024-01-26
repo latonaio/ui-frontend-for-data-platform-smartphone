@@ -42,6 +42,8 @@ interface OrdersItemScheduleLineItem {
   Seller: number;
   BuyerName: string;
   Buyer: number;
+  ScheduleLineOrderQuantityInBaseUnit: number;
+  ConfirmedOrderQuantityByPDTAvailCheckInBaseUnit: number;
   StockConfirmationBusinessPartner: number;
   StockConfirmationBusinessPartnerName: string;
   StockConfirmationPlant: string;

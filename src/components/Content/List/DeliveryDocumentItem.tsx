@@ -66,8 +66,10 @@ const DetailListTableElement = ({
   const trStyleList: any = [
     rem(10),
     `10%`,
-    `10%`,
-    `20%`,
+    `8%`,
+    `5%`,
+    `5%`,
+    `5%`,
     `5%`,
     `5%`,
     null,
@@ -88,7 +90,7 @@ const DetailListTableElement = ({
               e.preventDefault();
               e.stopPropagation();
             }}>
-            <td>{item.DeliveryDocumentItem}</td>
+            <td className={'text-right'}>{item.DeliveryDocumentItem}</td>
             <td>
               <img
                 className={`imageSlide m-auto`}
@@ -164,7 +166,69 @@ const DetailListTableElement = ({
                 />
               </span>
             </td>
+            <td
+              className={item.errors['PlannedGoodsIssueQtyInBaseUnit'].isError ? 'invalid' : ''}
+              style={{
+                fontSize: rem(24),
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                if (item.isEditing['PlannedGoodsIssueQtyInBaseUnit']) {
+                  return;
+                }
+
+                appDispatch(pushItemToEdit({
+                  index,
+                  item,
+                  key: 'PlannedGoodsIssueQtyInBaseUnit',
+                }));
+              }}
+            >
+              <span>
+                <TextField
+                  isEditing={item.isEditing['PlannedGoodsIssueQtyInBaseUnit']}
+                  currentValue={item.PlannedGoodsIssueQtyInBaseUnit}
+                  type={'number'}
+                  checkInvalid={(value) => {
+                    checkInvalid({
+                      index,
+                      item,
+                      key: 'PlannedGoodsIssueQtyInBaseUnit',
+                      checkValue: value,
+                    }, appDispatch);
+                  }}
+                  onChange={async (value: number) => {
+                    await editItemAsync({
+                        params: {
+                          DeliveryDocument: {
+                            DeliveryDocument: deliveryDocument,
+                            Item: {
+                              DeliveryDocument: deliveryDocument,
+                              DeliveryDocumentItem: item.DeliveryDocumentItem,
+                              PlannedGoodsIssueQtyInBaseUnit: value,
+                            },
+                          },
+                          api_type: 'updates',
+                          accepter: ['Item'],
+                        },
+                        index,
+                        key: 'PlannedGoodsIssueQtyInBaseUnit',
+                      },
+                      appDispatch, listState);
+                  }}
+                  onClose={() => appDispatch(closeItem({
+                    index,
+                    item,
+                    key: 'PlannedGoodsIssueQtyInBaseUnit',
+                  }))}
+                />
+              </span>
+            </td>
+
             <td>{item.DeliveryUnit}</td>
+            <td>{item.BaseUnit}</td>
             <td
               onClick={(e: any) => {
                 e.stopPropagation();
@@ -305,8 +369,10 @@ export const DeliveryDocumentItemList = ({
     '画像',
     '品目',
     '明細テキスト',
-    '予定数量',
-    '入出荷数量単位',
+    '数量(DU)',
+    '数量(BU)',
+    '数量単位(DU)',
+    '数量単位(BU)',
     '出荷予定日 / 時刻',
     '入荷予定日 / 時刻',
     'ピッキング',
@@ -317,16 +383,18 @@ export const DeliveryDocumentItemList = ({
   const [closedPopup, setClosedPopup] = useState(true);
   const [documentImageInfo, setDocumentImageInfo] = useState({} as any);
 
-  const list  = useAppSelector(state => state.deliveryDocumentItem) as {
+  const list = useAppSelector(state => state.deliveryDocumentItem) as {
     [DeliveryDocumentTablesEnum.deliveryDocumentItem]: any,
   };
 
-  if (!list[DeliveryDocumentTablesEnum.deliveryDocumentItem]) { return <div></div> }
+  if (!list[DeliveryDocumentTablesEnum.deliveryDocumentItem]) {
+    return <div></div>;
+  }
 
   return (
     <ListElement className={clsx(
       `List`,
-      className
+      className,
     )}>
       <ListSection>
         <ListHeaderInfoFlexStart>
@@ -376,14 +444,14 @@ export const DeliveryDocumentItemList = ({
                   <div>
                     <span>総重量: </span><span style={{
                     fontSize: rem(24),
-                  }}>{list[DeliveryDocumentTablesEnum.deliveryDocumentItem].HeaderGrossWeight?.toLocaleString}</span>
+                  }}>{list[DeliveryDocumentTablesEnum.deliveryDocumentItem].HeaderGrossWeight?.toLocaleString()}</span>
                   </div>
                   <div style={{
                     marginLeft: rem(10),
                   }}>
                     <span>正味重量: </span><span style={{
                     fontSize: rem(24),
-                  }}>{list[DeliveryDocumentTablesEnum.deliveryDocumentItem].HeaderNetWeight?.toLocaleString}</span>
+                  }}>{list[DeliveryDocumentTablesEnum.deliveryDocumentItem].HeaderNetWeight?.toLocaleString()}</span>
                   </div>
                   <div style={{
                     marginLeft: rem(10),
@@ -430,7 +498,7 @@ export const DeliveryDocumentItemList = ({
       </ListSection>
 
       <PopupTranslucent
-        title={`${documentImageInfo ? `入出荷ID: ` + documentImageInfo['OrdersID'] + ` 明細: ` + documentImageInfo['OrdersItem'] : ``}`}
+        title={`${documentImageInfo ? `入出荷ID: ` + documentImageInfo['DeliveryDocument'] + ` 明細: ` + documentImageInfo['DeliveryDocumentItem'] : ``}`}
         closedPopup={closedPopup}
         setClosedPopup={setClosedPopup}
         isHeightFull={true}

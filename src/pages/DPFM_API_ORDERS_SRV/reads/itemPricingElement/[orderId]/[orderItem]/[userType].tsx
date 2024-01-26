@@ -97,10 +97,10 @@ const OrdersPricingElement: React.FC<PageProps> = (data) => {
     <Wrapper className={'Wrapper'}>
       <Header
         backName={'トップ'}
-        category={`${data.userType === 'buyer' ? '受注' : '発注'}`}
+        category={`${data.userType === 'buyer' ? '発注' : '受注'}`}
         pageName={'価格決定要素'}
         className={'text-2xl'}
-        color={`${data.userType === 'buyer' ? 'purple' : 'pink'}`}
+        color={`${data.userType === 'buyer' ? 'pink' : 'purple'}`}
         headerContentNext={`/DPFM_API_ORDERS_SRV/reads/` +
           `singleUnit/` +
           `${data.orderId}/` +

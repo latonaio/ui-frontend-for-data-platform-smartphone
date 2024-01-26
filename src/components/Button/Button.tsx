@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import React, { ReactNode } from 'react';
 
 interface ButtonProps {
-  hrefPath?: string | undefined;
+  hrefPath?: string | undefined | null;
   children?: ReactNode,
   className?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -35,7 +35,7 @@ interface QuantityPostCancelButtonButtonProps extends ButtonProps {
 
 export const BackButton = (
   {
-    hrefPath,
+    hrefPath = null,
     children,
     className,
     style = {},
@@ -48,7 +48,9 @@ export const BackButton = (
       'font-bold',
       className,
     )} onClick={async () => {
-      await router.push(hrefPath === 'undefined' ? '/' : hrefPath === undefined ? '/' : hrefPath);
+      if (hrefPath) {
+        await router.push(hrefPath === 'undefined' ? '/' : hrefPath === undefined ? '/' : hrefPath);
+      }
     }}
                    style={style}
     >

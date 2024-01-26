@@ -64,20 +64,20 @@ const DetailListTableElement = ({
             onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            clickHandler(
-              // `/DPFM_API_PRODUCTION_ORDER_SRV/reads/itemOperation/input/${item.ProductionOrder}/${item.ProductionOrderItem}/${item.Operations}/${item.OperationsItem}/userType`,
-              ``,
-              router
-            );
+            // clickHandler(
+            //   // `/DPFM_API_PRODUCTION_ORDER_SRV/reads/itemOperation/input/${item.ProductionOrder}/${item.ProductionOrderItem}/${item.Operations}/${item.OperationsItem}/userType`,
+            //   ``,
+            //   router
+            // );
           }}>
-            <td>{item.ScheduleLine}</td>
+            <td className={'text-right'}>{item.ScheduleLine}</td>
             <td>{item.StockConfirmationBusinessPartnerName} / {item.StockConfirmationPlantName}</td>
             <td></td>
             <td>{item.RequestedDeliveryDate} / {item.RequestedDeliveryTime}</td>
-            <td></td>
-            <td></td>
-            <td>{item.DeliveredQuantityInBaseUnit}</td>
-            <td>{item.UndeliveredQuantityInBaseUnit}</td>
+            <td className={'text-right'}>{item.ScheduleLineOrderQuantityInBaseUnit?.toLocaleString()}</td>
+            <td className={'text-right'}>{item.ConfirmedOrderQuantityByPDTAvailCheckInBaseUnit?.toLocaleString()}</td>
+            <td className={'text-right'}>{item.DeliveredQuantityInBaseUnit?.toLocaleString()}</td>
+            <td className={'text-right'}>{item.UndeliveredQuantityInBaseUnit?.toLocaleString()}</td>
           </tr>
         );
       });
@@ -113,8 +113,8 @@ export const OrdersItemScheduleLine = ({
     '在庫確認BP / プラント',
     'ロット',
     '要求納入日付 / 時刻',
-    '要求数量<br />(DU)',
-    '引当済数量<br />(DU)',
+    '要求数量<br />(BU)',
+    '引当済数量<br />(BU)',
     '入出荷済',
     '未入出荷',
   ];
