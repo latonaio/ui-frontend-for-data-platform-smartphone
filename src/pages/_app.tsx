@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { store } from '@/store/store';
 import '@/styles/global/globals.scss'
 import '@/assets/icomoon/style.css';
+import '@/styles/global/pdf.scss';
 import { GlobalLoading } from '@/components/Loading';
 import { GlobalDialog } from '@/components/Dialog';
 import { SnackbarError } from '@/components/Snackbar';

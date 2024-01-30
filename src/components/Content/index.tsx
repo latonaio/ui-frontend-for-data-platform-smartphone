@@ -7,3 +7,4 @@ export * from './product/single-unit';
 export * from './qr-code';
 export * from './delivery-document/single-unit';
 export * from './orders/single-unit';
+export * from './orders/item-pdf';

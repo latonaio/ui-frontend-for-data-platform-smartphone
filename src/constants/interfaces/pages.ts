@@ -35,6 +35,7 @@ interface OrdersSingleUnitProps {
   Images: {
     Product: ProductImage;
     QRCode: QRCodeImage;
+    DocumentImageOrders: DocumentImage;
   };
   UserType: string;
   Pagination: any;

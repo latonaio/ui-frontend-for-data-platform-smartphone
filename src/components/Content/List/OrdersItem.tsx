@@ -43,6 +43,7 @@ export interface OrdersItemListProps {
 interface DetailListTableElementProps {
   summary: string[];
   orderId: number;
+  userType: string;
   list: any[];
   closedPopup: boolean;
   setClosedPopup: (closedPopup: boolean) => void;
@@ -53,6 +54,7 @@ const DetailListTableElement = ({
                                   summary,
                                   list,
                                   orderId,
+                                  userType,
                                   closedPopup,
                                   setClosedPopup,
                                   setDocumentImageInfo,
@@ -273,21 +275,45 @@ const DetailListTableElement = ({
                 e.stopPropagation();
                 e.preventDefault();
 
-                setClosedPopup && setClosedPopup(!closedPopup);
-                setDocumentImageInfo(item.Images?.DocumentImageOrders || null);
+                // setClosedPopup && setClosedPopup(!closedPopup);
+                // setDocumentImageInfo(item.Images?.DocumentImageOrders || null);
               }}
             >
-              <img
-                className={`imageSlide m-auto`}
-                style={{
-                  padding: rem(10),
-                }}
-                src={
-                  item.Images?.DocumentImageOrders &&
-                  generateDocumentImageUrl(item.Images?.DocumentImageOrders) || ''
-                }
-                alt={``}
-              />
+
+              {/*<img*/}
+              {/*  className={`imageSlide m-auto`}*/}
+              {/*  style={{*/}
+              {/*    padding: rem(10),*/}
+              {/*  }}*/}
+              {/*  src={*/}
+              {/*    item.Images?.DocumentImageOrders &&*/}
+              {/*    generateDocumentImageUrl(item.Images?.DocumentImageOrders) || ''*/}
+              {/*  }*/}
+              {/*  alt={``}*/}
+              {/*/>*/}
+
+              {
+                item.Images?.DocumentImageOrders &&
+                <span
+                  className='icon-file-text2'
+                  style={{
+                    fontSize: rem(60),
+                    color: `#6e6e6e`,
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                      `item/` +
+                      `${orderId}/` +
+                      `${item.OrderItem}/` +
+                      `${userType}/` +
+                      `pdf`,
+                    );
+                  }}>
+              </span>
+              }
             </td>
           </tr>
         );
@@ -329,7 +355,7 @@ export const OrdersItemList = ({
     '数量単位(BU)',
     '数量単位(DU)',
     '入出荷予定日 / 時刻',
-    '文書',
+    'ミルシート生成',
   ];
 
   const [closedPopup, setClosedPopup] = useState(true);
@@ -438,6 +464,7 @@ export const OrdersItemList = ({
         <DetailListTableElement
           summary={summary}
           orderId={list[OrdersTablesEnum.ordersItem].OrderID}
+          userType={list[OrdersTablesEnum.ordersItem].UserType}
           list={list[OrdersTablesEnum.ordersItem].Item}
           setClosedPopup={setClosedPopup}
           closedPopup={closedPopup}

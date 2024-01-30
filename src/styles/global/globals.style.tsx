@@ -11,4 +11,8 @@ export const Main = styled.div`
   width: 100%;
   margin: 0 auto ${rem(150)};
   padding: 0;
+  
+  &.Main-bg-dark {
+    background-color: #525659;
+  }
 `;

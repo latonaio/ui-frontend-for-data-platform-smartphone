@@ -80,6 +80,11 @@ export const generateDocumentImageUrl = (documentImage: DocumentImage) => {
     `${env.nest.port}/mill-sheet-pdf/${documentImage.DocID}.${documentImage.FileExtension}`;
 };
 
+export const generateDocumentPdfUrl = (documentImage: DocumentImage) => {
+  return `${env.nest.host}:` +
+    `${env.nest.port}/mill-sheet-pdf/mill-sheet-pdf/${documentImage.DocID}.${documentImage.FileExtension}`;
+};
+
 export const generateBarcodeImageUrl = (barcode: BarcodeImage) => {
   const fileExtension = 'png'
 
