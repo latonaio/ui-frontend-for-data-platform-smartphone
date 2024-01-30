@@ -34,6 +34,9 @@ import {
   closeItem,
 } from '@/store/slices/orders/item';
 import { Refresh } from '@/components/Refresh';
+import { setDialog } from '@/store/slices/dialog';
+import { Template as cancelDialogTemplate } from '@/components/Dialog';
+import { reads } from '@/api/orders/item-single-unit-mill-sheet';
 
 export interface OrdersItemListProps {
   className?: string;
@@ -304,13 +307,39 @@ const DetailListTableElement = ({
                     e.preventDefault();
                     e.stopPropagation();
 
-                    router.push(`/DPFM_API_ORDERS_SRV/reads/` +
-                      `item/` +
-                      `${orderId}/` +
-                      `${item.OrderItem}/` +
-                      `${userType}/` +
-                      `pdf`,
-                    );
+                    dispatch(setDialog({
+                      type: 'consent',
+                      consent: {
+                        isOpen: true,
+                        children: (
+                          cancelDialogTemplate(
+                            dispatch,
+                            'ミルシートを生成します',
+                            async () => {
+                              const response = await reads({
+                                orderId: orderId,
+                                orderItem: item.OrderItem,
+                                language: '',
+                                businessPartner: 0,
+                                userId: '',
+                                userType: userType,
+                              });
+
+                              if (response) {
+                                router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                                  `item/` +
+                                  `${orderId}/` +
+                                  `${item.OrderItem}/` +
+                                  `${userType}/` +
+                                  `pdf` +
+                                  `?pdfUrl=${response.MillSheetPdfMountPath}`
+                                );
+                              }
+                            },
+                          )
+                        ),
+                      }
+                    }))
                   }}>
               </span>
               }
