@@ -16,6 +16,7 @@ import {
   WorkCenterTablesEnum,
   ProductionVersionTablesEnum,
   QuotationsTablesEnum,
+  InspectionLotTablesEnum,
 } from '@/constants';
 
 export class CacheDatabase extends Tables {
@@ -107,6 +108,13 @@ export class CacheDatabase extends Tables {
 
       [QuotationsTablesEnum.quotationsListBuyerItem]: '++id',
       [QuotationsTablesEnum.quotationsListSellerItem]: '++id',
+
+      [InspectionLotTablesEnum.inspectionLotSingleUnit]: 'InspectionLot',
+      [InspectionLotTablesEnum.inspectionLotSpecDetail]: 'InspectionLot',
+      [InspectionLotTablesEnum.inspectionLotComponentComposition]: 'InspectionLot',
+      [InspectionLotTablesEnum.inspectionLotInspection]: 'InspectionLot',
+      [InspectionLotTablesEnum.inspectionLotUsageControlChain]: 'InspectionLot',
+      [InspectionLotTablesEnum.inspectionLotList]: 'InspectionLot',
     });
   }
 

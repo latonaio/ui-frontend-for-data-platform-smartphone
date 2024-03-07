@@ -36,8 +36,11 @@ export const OrdersItemPdf = ({
 
   const router = useRouter();
 
+  const { query } = router;
+
   const fileName = generateDocumentPdfUrl(
-    detail[OrdersTablesEnum.ordersSingleUnit].Images?.DocumentImageOrders
+    query.pdfUrl ? query.pdfUrl.toString() : '',
+    query.type ? query.type.toString() : '',
   ) || ''
 
   return (

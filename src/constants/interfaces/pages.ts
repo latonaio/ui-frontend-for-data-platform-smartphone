@@ -12,7 +12,13 @@ import {
   DocumentImage,
   OrdersItemScheduleLineItem,
   OrdersItemPricingElementItem,
-  DeliveryDocumentItem, OrdersItem,
+  DeliveryDocumentItem,
+  OrdersItem,
+  InspectionLotSpecDetail,
+  InspectionLotComponentComposition,
+  InspectionLotInspection,
+  InspectionLotHeader,
+  InspectionLotPartner,
 } from '@/constants';
 import { AuthedUser } from '@/constants';
 
@@ -152,6 +158,8 @@ interface DeliveryDocumentSingleUnitProps {
   DeliverToPlantName: string;
   DeliverFromPartyName: string;
   DeliverFromPlantName: string;
+  OrderID: number;
+  OrderItem: number;
 
   Images: {
     Product: ProductImage;
@@ -229,7 +237,7 @@ interface DeliveryDocumentDetailProps extends ProductDetail {
 }
 
 interface BusinessPartnerDetailProps {
-  businessPartner: AuthedUser['businessPartner'] | null;
+  businessPartner: AuthedUser['businessPartner'];
   businessPartnerName: AuthedUser['businessPartnerName'];
   localRegion: string;
   district: string;
@@ -493,6 +501,128 @@ interface BillOfMaterialDetailProps extends ProductDetail {
   // BusinessPartner: AuthedUser['businessPartner'];
 }
 
+interface InspectionLotSingleUnitProps {
+  InspectionLot: number;
+  InspectionLotDate: string;
+  InspectionPlantBusinessPartner: number;
+  InspectionPlantBusinessPartnerName: string;
+  InspectionPlant: string;
+  InspectionPlantName: string;
+  Product: string;
+  ProductSpecification: string;
+  ProductionOrder: number;
+  ProductionOrderItem: number;
+  UsageControlChain: string;
+  CertificateAuthorityChain: string;
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+    DocumentImageOrders: DocumentImage;
+  };
+  Pagination: any;
+}
+
+interface InspectionLotSpecDetailProps {
+  SpecDetail: InspectionLotSpecDetail[];
+  InspectionLot: number;
+  SpecType: string;
+  SpecTypeText: string;
+  UpperLimitValue: number;
+  LowerLimitValue: number;
+  StandardValue: number;
+  SpecTypeUnit: string;
+  Formula: string;
+}
+
+interface InspectionLotComponentCompositionProps {
+  ComponentComposition: InspectionLotComponentComposition[];
+  InspectionLot: number;
+  InspectionLotDate: string;
+  InspectionPlantBusinessPartner: number;
+  InspectionPlantBusinessPartnerName: string;
+  InspectionPlant: string;
+  InspectionPlantName: string;
+  Product: string;
+  ProductSpecification: string;
+  ProductionOrder: number;
+  ProductionOrderItem: number;
+  UsageControlChain: string;
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+  };
+}
+
+interface InspectionLotInspectionProps {
+  Inspection: InspectionLotInspection[];
+  InspectionLot: number;
+  InspectionLotDate: string;
+  InspectionPlantBusinessPartner: number;
+  InspectionPlantBusinessPartnerName: string;
+  InspectionPlant: string;
+  InspectionPlantName: string;
+  Product: string;
+  ProductSpecification: string;
+  ProductionOrder: number;
+  ProductionOrderItem: number;
+  UsageControlChain: string;
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+  };
+}
+
+interface InspectionLotUsageControlChainProps {
+  InspectionLot: number;
+  CertificateAuthorityChain: string;
+  CertificateObject: string;
+  CertificateObjectLabel: string;
+  DataIssuerName: string;
+  DataAuthorizerName: string;
+  DataDistributorName: string;
+
+  Perpetual: boolean;
+  Rental: boolean;
+  Duration: number;
+  DurationUnit: string;
+  ValidityStartDate: string;
+  ValidityStartTime: string;
+  ValidityEndDate: string;
+  ValidityEndTime: string;
+  DeleteAfterValidityEnd: boolean;
+  ServiceLabelRestriction: string;
+  ApplicationRestriction: string;
+  PurposeRestriction: string;
+  BusinessPartnerRoleRestriction: string;
+  DataStateRestriction: string;
+  NumberOfUsageRestriction: number;
+  NumberOfActualUsage: number;
+  IPAddressRestriction: string;
+  MACAddressRestriction: string;
+  ModifyIsAllowed: boolean;
+  LocalLoggingIsAllowed: boolean;
+  RemoteNotificationIsAllowed: boolean;
+  DistributeOnlyIfEncrypted: boolean;
+  AttachPolicyWhenDistribute: boolean;
+  PostalCode: string;
+  LocalSubRegion: string;
+  LocalRegion: string;
+  Country: string;
+  GlobalRegion: string;
+  TimeZone: string;
+  CreationDate: string;
+  CreationTime: string;
+
+  Images: {
+    Product: ProductImage;
+    QRCode: QRCodeImage;
+  };
+}
+
+interface InspectionLotListProps extends InspectionLotHeader {
+  Partner: InspectionLotPartner[];
+}
+
 export type {
   OrdersSingleUnitProps,
   OrdersItemScheduleLineProps,
@@ -513,4 +643,10 @@ export type {
   ProductSingleUnitProps,
   ProductStockSingleUnitProps,
   ProductStockByStorageBinByBatchProps,
+  InspectionLotSingleUnitProps,
+  InspectionLotSpecDetailProps,
+  InspectionLotComponentCompositionProps,
+  InspectionLotInspectionProps,
+  InspectionLotUsageControlChainProps,
+  InspectionLotListProps,
 }

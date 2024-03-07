@@ -8,6 +8,7 @@ export enum UserTypeEnum {
   OwnerProductionPlantBusinessPartner = 'OwnerProductionPlantBusinessPartner',
   BusinessPartner = 'BusinessPartner',
   OwnerBusinessPartner = 'OwnerBusinessPartner',
+  InspectionPlantBP = 'InspectionPlantBP',
 }
 
 export enum OrdersTablesEnum {
@@ -131,3 +132,11 @@ export enum QuotationsTablesEnum{
 	quotationsListDetailListHeader = 'quotationsListDetailListHeader',
 }
 
+export enum InspectionLotTablesEnum {
+  inspectionLotSingleUnit = 'inspectionLotSingleUnit',
+  inspectionLotSpecDetail = 'inspectionLotSpecDetail',
+  inspectionLotComponentComposition = 'inspectionLotComponentComposition',
+  inspectionLotInspection = 'inspectionLotInspection',
+  inspectionLotUsageControlChain = 'inspectionLotUsageControlChain',
+  inspectionLotList = 'inspectionLotList',
+}

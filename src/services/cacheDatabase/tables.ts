@@ -101,6 +101,9 @@ import {
   ProductStockTablesEnum,
   ProductStockSingleUnitProps,
   ProductStockByStorageBinByBatchProps,
+
+  // inspectionLot
+  InspectionLotTablesEnum,
 } from '@/constants';
 
 export class Tables extends Dexie {
@@ -189,4 +192,11 @@ export class Tables extends Dexie {
   [QuotationsTablesEnum.quotationsListSellerItem]!: Table<QuotationsSellerItem>;
   [QuotationsTablesEnum.quotationsListDetailListItem]!: Table<QuotationsDetailListItem>;
   [QuotationsTablesEnum.quotationsListDetailListHeader]!: Table<QuotationsDetailListHeader>;
+
+  [InspectionLotTablesEnum.inspectionLotSingleUnit]!: Table<any>;
+  [InspectionLotTablesEnum.inspectionLotSpecDetail]!: Table<any>;
+  [InspectionLotTablesEnum.inspectionLotComponentComposition]!: Table<any>;
+  [InspectionLotTablesEnum.inspectionLotInspection]!: Table<any>;
+  [InspectionLotTablesEnum.inspectionLotUsageControlChain]!: Table<any>;
+  [InspectionLotTablesEnum.inspectionLotList]!: Table<any>;
 }

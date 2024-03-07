@@ -31,7 +31,8 @@ if (process.browser) {
   //   import.meta.url,
   // ).toString();
 
-  pdfjs.GlobalWorkerOptions.workerSrc = `${env.nest.host}:${env.nest.port}/mill-sheet-pdf/mill-sheet-pdf/pdf.worker.min.js`;
+  // TODO 後でS3から取得するように変更する
+  pdfjs.GlobalWorkerOptions.workerSrc = `${env.nest.host}:${env.nest.port}/mill-sheet-pdf/scripts/pdf.worker.min.js`;
 }
 
 const options = {
@@ -49,6 +50,7 @@ interface PageProps {
   orderId: number;
   orderItem: number;
   userType: string;
+  type: string;
 }
 
 export type onUpdateItem = (
@@ -195,7 +197,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const {
     orderId,
     orderItem,
-    userType
+    userType,
+    type,
   } = context.query;
 
   return {
@@ -203,6 +206,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       orderId: Number(orderId),
       orderItem: Number(orderItem),
       userType,
+      type,
     }
   }
 }

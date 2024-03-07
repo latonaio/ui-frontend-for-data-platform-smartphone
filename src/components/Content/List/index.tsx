@@ -19,3 +19,7 @@ export * from './WorkCenterList';
 export * from './QuotationsList';
 export * from './OrdersItemScheduleLine';
 export * from './OrdersItemPricingElement';
+export * from './InspectionLotSpecDetail';
+export * from './InspectionLotComponentComposition';
+export * from './InspectionLotInspectioin';
+export * from './InspectionLotList';

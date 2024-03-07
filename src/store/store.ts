@@ -25,6 +25,12 @@ import { ordersItemPricingElement } from './slices/orders/item-pricing-element';
 import ordersItemReducer from './slices/orders/item';
 import { billOfMaterialList, } from './slices/bill-of-material/list';
 import { billOfMaterialDetailList, } from './slices/bill-of-material/detail-list';
+import { inspectionLotSingleUnit } from './slices/inspection-lot/single-unit';
+import { inspectionLotSpecDetail } from './slices/inspection-lot/spec-detail';
+import { inspectionLotComponentComposition } from './slices/inspection-lot/component-composition';
+import { inspectionLotInspection } from './slices/inspection-lot/inspection';
+import { inspectionLotUsageControlChain } from './slices/inspection-lot/usage-control-chain';
+import { inspectionLotList } from './slices/inspection-lot/list';
 
 export const store = configureStore({
     reducer: {
@@ -39,6 +45,12 @@ export const store = configureStore({
         ordersItemPricingElement: ordersItemPricingElement.reducer,
         // ordersItem: ordersItem.reducer,
         ordersItem: ordersItemReducer,
+        inspectionLotSingleUnit: inspectionLotSingleUnit.reducer,
+        inspectionLotSpecDetail: inspectionLotSpecDetail.reducer,
+        inspectionLotComponentComposition: inspectionLotComponentComposition.reducer,
+        inspectionLotInspection: inspectionLotInspection.reducer,
+        inspectionLotUsageControlChain: inspectionLotUsageControlChain.reducer,
+        inspectionLotList: inspectionLotList.reducer,
         snackbar: snackbarReducer,
         deliveryDocumentSingleUnit: deliveryDocumentSingleUnit.reducer,
         deliveryDocumentItem: deliveryDocumentItem.reducer,

@@ -7,7 +7,7 @@ import {
   PaymentTerms,
   PaymentMethod,
   Currency,
-  QuantityUnit,
+  QuantityUnit, OrdersItemProps,
 } from '@/constants';
 
 export interface ReadsDetailParams extends UIKeyGeneral {
@@ -56,3 +56,4 @@ export interface ReadsDetailListResponse extends Pagination {
   currency: Currency[];
   quantityUnit: QuantityUnit[];
 }
+

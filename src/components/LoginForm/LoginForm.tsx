@@ -30,6 +30,9 @@ import * as paginationState from '@/store/slices/orders/pagination';
 
 interface LoginFormProps {
   className?: string;
+  emailAddress: string | string[];
+  password: string | string[];
+  destination: string | string[];
 }
 
 type FormState = {
@@ -37,7 +40,12 @@ type FormState = {
   password: string
 }
 
-export const LoginForm = ({ className }: LoginFormProps) => {
+export const LoginForm = ({
+                            className,
+                            emailAddress,
+                            password,
+                            destination,
+                          }: LoginFormProps) => {
   const router = useRouter();
   const dispatch = useDispatch()
 
@@ -95,7 +103,7 @@ export const LoginForm = ({ className }: LoginFormProps) => {
       removeLocalStorage('auth');
     }
 
-    window.location.href = '/';
+    typeof destination === 'string' ? window.location.href = destination : '/';
   };
 
   return (
@@ -107,6 +115,7 @@ export const LoginForm = ({ className }: LoginFormProps) => {
           <div className={`mb-4`}>
             <Tittle className={'font-bold text-base'}>メールアドレス</Tittle>
             <Input
+              defaultValue={emailAddress}
               className={`text-lg ${!!errors.emailAddress ? 'error': ''}`}
               type="emailAddress"
               {...register('emailAddress')}
@@ -116,6 +125,7 @@ export const LoginForm = ({ className }: LoginFormProps) => {
           <div className={`mb-6`}>
             <Tittle className={'font-bold text-base'}>パスワード</Tittle>
             <Input
+              defaultValue={password}
               className={`text-lg ${!!errors.password ? 'error': ''}`}
               type="password"
               {...register('password')}

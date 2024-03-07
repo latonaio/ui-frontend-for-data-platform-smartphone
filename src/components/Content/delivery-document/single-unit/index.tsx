@@ -177,7 +177,6 @@ export const DeliveryDocumentSingleUnit = ({
                         fontSize: rem(18),
                         marginLeft: rem(10),
                       }}>{detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].PlannedGoodsIssueDate} {detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].PlannedGoodsIssueTime}</span>
-
                     </div>
                     <div
                       className={'flex justify-start items-center'}
@@ -231,10 +230,27 @@ export const DeliveryDocumentSingleUnit = ({
                 <div
                   className={'flex justify-start items-center'}
                 >
-                  <span>出荷先: </span>
-                  <span style={{
-                    marginLeft: rem(10),
-                  }}>{detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliverToPartyName}</span>
+                  <div>
+                    <span>出荷先: </span>
+                    <span style={{
+                      marginLeft: rem(10),
+                    }}>{detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliverToPartyName}</span>
+                  </div>
+                  <div>
+                    <span style={{
+                      marginLeft: rem(20),
+                    }}
+                          onClick={async () => {
+                            await router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                              `singleUnit/` +
+                              `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].OrderID}/` +
+                              `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].OrderItem}/` +
+                              `seller`,
+                            );
+                          }}
+                    >オーダー/明細: </span>
+                    <span>{detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].OrderID}/{detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].OrderItem}</span>
+                  </div>
                 </div>
                 <div
                   className={'flex justify-start items-center'}
@@ -253,10 +269,27 @@ export const DeliveryDocumentSingleUnit = ({
                 <div
                   className={'flex justify-start items-center'}
                 >
-                  <span>出荷元: </span>
-                  <span style={{
-                    marginLeft: rem(10),
-                  }}>{detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliverFromPartyName}</span>
+                  <div>
+                    <span>出荷元: </span>
+                    <span style={{
+                      marginLeft: rem(10),
+                    }}>{detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].DeliverFromPartyName}</span>
+                  </div>
+                  <div>
+                    <span style={{
+                      marginLeft: rem(20),
+                    }}
+                          onClick={async () => {
+                            await router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                              `singleUnit/` +
+                              `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].OrderID}/` +
+                              `${detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].OrderItem}/` +
+                              `buyer`,
+                            );
+                          }}
+                    >オーダー/明細: </span>
+                    <span>{detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].OrderID}/{detail[DeliveryDocumentTablesEnum.deliveryDocumentSingleUnit].OrderItem}</span>
+                  </div>
                 </div>
                 <div
                   className={'flex justify-start items-center'}
@@ -278,7 +311,7 @@ export const DeliveryDocumentSingleUnit = ({
                 <ProductDetailSectionContentQRCodeBox>
                   <div className={'column column-left'}>
                     <div className={'productMenu'}>
-                      <div>
+                    <div>
                         <PublicImage
                           className={'m-auto'}
                           imageName={'scrList'}

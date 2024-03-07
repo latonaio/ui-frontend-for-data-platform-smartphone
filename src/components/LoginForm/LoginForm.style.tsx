@@ -22,8 +22,8 @@ export const Input = styled.input`
   width: 100%;
   border: 1px solid ${borderColor};
   padding: ${rem(5)};
-  color: #adadad;
-  
+  color: #2c2c2c;
+
   &.error {
     background: #ffbfbf;
   }

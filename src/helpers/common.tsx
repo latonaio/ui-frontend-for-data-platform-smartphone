@@ -80,9 +80,30 @@ export const generateDocumentImageUrl = (documentImage: DocumentImage) => {
     `${env.nest.port}/mill-sheet-pdf/${documentImage.DocID}.${documentImage.FileExtension}`;
 };
 
-export const generateDocumentPdfUrl = (documentImage: DocumentImage) => {
+export const generateDocumentPdfUrl = (
+  documentImageUrl: string,
+  type: string,
+) => {
+  let pdfType = '';
+
+  if (type === 'mill-sheet-pdf') {
+    pdfType = 'mill-sheet-pdf';
+  }
+
+  if (type === 'order-pdf') {
+    pdfType = 'order-pdf';
+  }
+
+  if (type === 'delivery-instruction-pdf') {
+    pdfType = 'delivery-instruction-pdf';
+  }
+
+  if (type === 'inspection-lot-mill-sheet-pdf') {
+    pdfType = 'inspection-lot-mill-sheet-pdf';
+  }
+
   return `${env.nest.host}:` +
-    `${env.nest.port}/mill-sheet-pdf/mill-sheet-pdf/${documentImage.DocID}.${documentImage.FileExtension}`;
+    `${env.nest.port}/${pdfType}${documentImageUrl}`;
 };
 
 export const generateBarcodeImageUrl = (barcode: BarcodeImage) => {

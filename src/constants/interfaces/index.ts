@@ -15,3 +15,5 @@ export * from './operations';
 export * from './supplyChainRelationship';
 export * from './workCenter';
 export * from './quotations';
+export * from './inspectionLot';
+export * from './certificateAuthorityChain';

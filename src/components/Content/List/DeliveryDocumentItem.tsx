@@ -8,15 +8,12 @@ import {
   ListSection,
 } from './List.style';
 import {
-  OrdersItemScheduleLineItem,
-  OrdersTablesEnum,
-  OrdersItemScheduleLineProps,
   DeliveryDocumentTablesEnum,
   DeliveryDocumentItem,
-  DeliveryDocumentItemProps, DocumentImage,
+  DocumentImage,
 } from '@/constants';
-import { clickHandler, summaryHead } from './List';
-import { BackButton } from '@/components/Button';
+import { summaryHead } from './List';
+import { BackButton, BlueButton } from '@/components/Button';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { rem } from 'polished';
@@ -31,6 +28,11 @@ import { DateTimePicker, TextField } from '@/components/Form';
 import { checkInvalid, closeItem } from '@/store/slices/delivery-document/item';
 import { PopupTranslucent } from '@/components/Popup';
 import { Refresh } from '@/components/Refresh';
+import { setDialog } from '@/store/slices/dialog';
+import { Template as cancelDialogTemplate } from '@/components/Dialog';
+import { setLoading } from '@/store/slices/loadging';
+import { reads as detailListForAnDeliveryInstruction } from '@/api/deliveryDocument/detail-list-for-a-delivery-instruction';
+import { setGlobalSnackbar } from '@/store/slices/snackbar';
 
 export interface DeliveryDocumentItemListProps {
   className?: string;
@@ -67,16 +69,17 @@ const DetailListTableElement = ({
     rem(10),
     `10%`,
     `8%`,
-    `5%`,
-    `5%`,
+    `3%`,
+    `3%`,
     `5%`,
     `5%`,
     `5%`,
     null,
     null,
-    `5%`,
-    `5%`,
-    `15%`,
+    null,
+    null,
+    // `5%`,
+    // `15%`,
   ];
 
   const renderList = (list: any[]) => {
@@ -311,29 +314,10 @@ const DetailListTableElement = ({
                 }}
               />
             </td>
-            <td></td>
-            <td></td>
-            <td
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-
-                setClosedPopup && setClosedPopup(!closedPopup);
-                setDocumentImageInfo(item.Images?.DocumentImageDeliveryDocument || null);
-              }}
-            >
-              <img
-                className={`imageSlide m-auto`}
-                style={{
-                  padding: rem(10),
-                }}
-                src={
-                  item.Images?.DocumentImageDeliveryDocument &&
-                  generateDocumentImageUrl(item.Images?.DocumentImageDeliveryDocument) || ''
-                }
-                alt={``}
-              />
-            </td>
+            <td>{item.ActualGoodsIssueDate} <br /> {item.ActualGoodsIssueTime}</td>
+            <td>{item.ActualGoodsReceiptDate} <br /> {item.ActualGoodsReceiptTime}</td>
+            {/*<td></td>*/}
+            {/*<td></td>*/}
           </tr>
         );
       });
@@ -375,11 +359,15 @@ export const DeliveryDocumentItemList = ({
     '数量単位(BU)',
     '出荷予定日 / 時刻',
     '入荷予定日 / 時刻',
-    'ピッキング',
-    '出荷',
-    '文書',
+    '出荷実績日 / 時刻',
+    '入荷実績日 / 時刻',
+    // 'ピッキング',
+    // '出荷',
   ];
 
+  const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
+  const router = useRouter();
   const [closedPopup, setClosedPopup] = useState(true);
   const [documentImageInfo, setDocumentImageInfo] = useState({} as any);
 
@@ -472,6 +460,58 @@ export const DeliveryDocumentItemList = ({
                       refresh && refresh();
                     }}
                   ></Refresh>
+                </div>
+                <div>
+                  <BlueButton
+                    className={'mr-2'}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+
+                      dispatch(setDialog({
+                        type: 'consent',
+                        consent: {
+                          isOpen: true,
+                          children: (
+                            cancelDialogTemplate(
+                              dispatch,
+                              '出荷指示書を生成します',
+                              async () => {
+                                dispatch(setLoading({ isOpen: true }));
+
+                                try {
+                                  const response = await detailListForAnDeliveryInstruction({
+                                    deliveryDocument: list[DeliveryDocumentTablesEnum.deliveryDocumentItem].DeliveryDocument,
+                                    language: '',
+                                    businessPartner: 0,
+                                    userId: '',
+                                  });
+
+                                  if (response) {
+                                    router.push(`/DPFM_API_DELIVERY_DOCUMENT_SRV/reads/` +
+                                      `item/` +
+                                      `${list[DeliveryDocumentTablesEnum.deliveryDocumentItem].DeliveryDocument}/` +
+                                      `${list[DeliveryDocumentTablesEnum.deliveryDocumentItem].DeliveryDocumentItem}/` +
+                                      `pdf/` +
+                                      `${list[DeliveryDocumentTablesEnum.deliveryDocumentItem].UserType}/` +
+                                      `?pdfUrl=${response.mount_path}&type=delivery-instruction-pdf`
+                                    );
+                                  }
+                                } catch (e) {
+                                  appDispatch(setGlobalSnackbar({
+                                    message: `エラーです`,
+                                    variant: 'error',
+                                  }));
+                                }
+
+                                dispatch(setLoading({ isOpen: false }));
+                              },
+                            )
+                          ),
+                        }
+                      }))
+                    }}
+                  >出荷指示書を生成</BlueButton>
                 </div>
                 <div>
                   <BackButton

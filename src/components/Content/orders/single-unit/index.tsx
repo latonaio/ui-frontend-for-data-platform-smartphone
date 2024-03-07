@@ -278,7 +278,7 @@ export const OrdersSingleUnit = ({
                         emailAddress,
                       }: AuthedUser = getLocalStorage('auth');
 
-                     const response = await ordersCache.updateOrdersSingleUnit({
+                      const response = await ordersCache.updateOrdersSingleUnit({
                         orderId: Number(detail[OrdersTablesEnum.ordersSingleUnit].OrderID),
                         orderItem:  Number(detail[OrdersTablesEnum.ordersSingleUnit].OrderItem.toString()),
                         userType: detail[OrdersTablesEnum.ordersSingleUnit].UserType,

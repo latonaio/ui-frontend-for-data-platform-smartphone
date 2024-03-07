@@ -366,3 +366,45 @@ export const BluePanel = styled.div`
     color: #c4c4c4;
   }
 `;
+
+export const UsageControlListBox = styled.div`
+  position: relative;
+
+  .UsageControlListBoxCover {
+    &.type-mini {
+      min-height: ${rem(120)};
+    }
+    
+    padding: ${rem(10)} ${rem(10)};
+    color: #fff;
+    font-weight: bold;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    min-height: ${rem(120)};
+    border-radius: ${rem(10)};
+    text-align: left;
+    font-size: ${rem(10)};
+    word-wrap: break-word;
+
+    &.red {
+      background-color: rgba(255, 89, 89, 0.5);
+    }
+
+    &.yellow {
+      background-color: rgba(158, 156, 25, 0.5);
+    }
+
+    &.blue {
+      background-color: rgba(25, 87, 158, 0.5);
+    }
+
+    &.green {
+      background-color: rgba(119, 207, 76, 0.5);
+    }
+
+    &.gray {
+      background-color: rgba(109, 109, 109, 0.5);
+    }
+  }
+`;

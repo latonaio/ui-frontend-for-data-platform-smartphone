@@ -14,7 +14,7 @@ import {
   DocumentImage,
 } from '@/constants';
 import { clickHandler, summaryHead } from './List';
-import { BackButton } from '@/components/Button';
+import { BackButton, BlueButton } from '@/components/Button';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { rem } from 'polished';
@@ -36,7 +36,10 @@ import {
 import { Refresh } from '@/components/Refresh';
 import { setDialog } from '@/store/slices/dialog';
 import { Template as cancelDialogTemplate } from '@/components/Dialog';
-import { reads } from '@/api/orders/item-single-unit-mill-sheet';
+import { reads as itemSingleUnitMillSheetReads } from '@/api/orders/item-single-unit-mill-sheet';
+import { reads as detailListForAnOrderDocument } from '@/api/orders/detail-list-for-an-order-document';
+import { setLoading } from '@/store/slices/loadging';
+import { setGlobalSnackbar } from '@/store/slices/snackbar';
 
 export interface OrdersItemListProps {
   className?: string;
@@ -295,28 +298,29 @@ const DetailListTableElement = ({
               {/*  alt={``}*/}
               {/*/>*/}
 
-              {
-                item.Images?.DocumentImageOrders &&
-                <span
-                  className='icon-file-text2'
-                  style={{
-                    fontSize: rem(60),
-                    color: `#6e6e6e`,
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+              <span
+                className='icon-file-text2'
+                style={{
+                  fontSize: rem(60),
+                  color: `#6e6e6e`,
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
 
-                    dispatch(setDialog({
-                      type: 'consent',
-                      consent: {
-                        isOpen: true,
-                        children: (
-                          cancelDialogTemplate(
-                            dispatch,
-                            'ミルシートを生成します',
-                            async () => {
-                              const response = await reads({
+                  dispatch(setDialog({
+                    type: 'consent',
+                    consent: {
+                      isOpen: true,
+                      children: (
+                        cancelDialogTemplate(
+                          dispatch,
+                          'ミルシートを生成します',
+                          async () => {
+                            dispatch(setLoading({ isOpen: true }));
+
+                            try {
+                              const response = await itemSingleUnitMillSheetReads({
                                 orderId: orderId,
                                 orderItem: item.OrderItem,
                                 language: '',
@@ -332,17 +336,24 @@ const DetailListTableElement = ({
                                   `${item.OrderItem}/` +
                                   `${userType}/` +
                                   `pdf` +
-                                  `?pdfUrl=${response.MillSheetPdfMountPath}`
+                                  `?pdfUrl=${response.MillSheetPdfMountPath}&type=mill-sheet-pdf`
                                 );
                               }
-                            },
-                          )
-                        ),
-                      }
-                    }))
-                  }}>
+                            } catch (e) {
+                              appDispatch(setGlobalSnackbar({
+                                message: `Inspection Lot が null です`,
+                                variant: 'error',
+                              }));
+                            }
+
+                            dispatch(setLoading({ isOpen: false }));
+                          },
+                        )
+                      ),
+                    }
+                  }))
+                }}>
               </span>
-              }
             </td>
           </tr>
         );
@@ -387,6 +398,9 @@ export const OrdersItemList = ({
     'ミルシート生成',
   ];
 
+  const dispatch = useDispatch();
+  const appDispatch = useAppDispatch();
+  const router = useRouter();
   const [closedPopup, setClosedPopup] = useState(true);
   const [documentImageInfo, setDocumentImageInfo] = useState({} as any);
 
@@ -444,6 +458,58 @@ export const OrdersItemList = ({
                   refresh && refresh();
                 }}
               ></Refresh>
+            </div>
+            <div>
+              <BlueButton
+                className={'mr-2'}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+
+                  dispatch(setDialog({
+                    type: 'consent',
+                    consent: {
+                      isOpen: true,
+                      children: (
+                        cancelDialogTemplate(
+                          dispatch,
+                          '注文書を生成します',
+                          async () => {
+                            dispatch(setLoading({ isOpen: true }));
+
+                            try {
+                              const response = await detailListForAnOrderDocument({
+                                orderId: list[OrdersTablesEnum.ordersItem].OrderID,
+                                language: '',
+                                businessPartner: 0,
+                                userId: '',
+                              });
+
+                              if (response) {
+                                router.push(`/DPFM_API_ORDERS_SRV/reads/` +
+                                  `item/` +
+                                  `${list[OrdersTablesEnum.ordersItem].OrderID}/` +
+                                  `${list[OrdersTablesEnum.ordersItem].OrderItem}/` +
+                                  `${list[OrdersTablesEnum.ordersItem].UserType}/` +
+                                  `pdf` +
+                                  `?pdfUrl=${response.mount_path}&type=order-pdf`
+                                );
+                              }
+                            } catch (e) {
+                              appDispatch(setGlobalSnackbar({
+                                message: `エラーです`,
+                                variant: 'error',
+                              }));
+                            }
+
+                            dispatch(setLoading({ isOpen: false }));
+                          },
+                        )
+                      ),
+                    }
+                  }))
+                }}
+              >注文書を生成</BlueButton>
             </div>
             <div>
               <BackButton

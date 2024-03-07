@@ -2,6 +2,7 @@ import { clsx } from 'clsx';
 import { SelectStyle } from './Select.style';
 import {
   Select as SelectMaterial,
+  MenuItem,
 } from '@material-ui/core';
 import { convertSelectDataStructure } from '@/helpers/common';
 
@@ -67,9 +68,11 @@ export const Select = ({
         {`${isNoLabel ? '' : currentValue}`} {labelName}
       </div>
       <div className={`selectMaterial ${!isEditing ? 'hidden' : ''}`}>
+        {/* https://v4.mui.com/ja/components/selects/ v4.12.2 を参照 */}
         {
           currentValue &&
           <SelectMaterial
+            labelId="label" id="select"
             autoWidth={true}
             value={currentValue}
             onChange={(e) => {
@@ -78,8 +81,8 @@ export const Select = ({
           >
             {selectList.map((item: any) => {
               return (
-                <option value={item.value}>{isNoLabel ? ' ' : `${item.value} `}{item.label}</option>
-              )
+                <MenuItem value={item.value}>{isNoLabel ? ' ' : `${item.value} `}{item.label}</MenuItem>
+              );
             })}
           </SelectMaterial>
         }

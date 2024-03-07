@@ -5,6 +5,7 @@ export const style = {
     pink: '#FF7C80',
     deliveryFromParty: '#B79230',
     deliveryToParty: '#5E813F',
+    inspectionLot: '#818ba6',
   },
   theme: {
     lightBlue400: '#38bdf8',

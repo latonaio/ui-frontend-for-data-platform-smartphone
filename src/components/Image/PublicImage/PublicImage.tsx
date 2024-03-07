@@ -17,6 +17,10 @@ import iconWing2 from '@public/icon-wing-2.png';
 import clock from '@public/clock.png';
 import ordersItemImage001 from '@public/orders-item-image-001.png';
 import deliveryDocumentItemImage001 from '@public/delivery-document-item-image-001.png';
+import inspectionLotSpecDetailImage001 from '@public/inspection-lot-spec-detail-image-001.png';
+import inspectionLotComponentCompositionImage001 from '@public/inspection-lot-component-composition-image-001.png';
+import inspectionLotInspectionImage001 from '@public/inspection-lot-inspection-image-001.png';
+import inspectionLotListImage001 from '@public/inspection-lot-list-image-001.png';
 
 import globalMenuQrcode from '@public/global-menu-qrcode.png';
 import globalMenuCallFunction from '@public/global-menu-call-function.png';
@@ -49,6 +53,17 @@ import picking from '@public/global-menu/picking.png';
 import order from '@public/global-menu/order.png';
 import lot from '@public/global-menu/lot.png';
 import price from '@public/global-menu/price.png';
+import componentComposition from '@public/global-menu/component-composition.png';
+import productionOrder from '@public/global-menu/production-order.png';
+import specDetail from '@public/global-menu/spec-detail.png';
+import dataCertificate from '@public/global-menu/data-certificate.png';
+import document from '@public/global-menu/document.png';
+
+import usageControlDurations from '@public/usage-control-durations.png';
+import usageControlRestrictions from '@public/usage-control-restrictions.png';
+import usageControlAccessControl from '@public/usage-control-access-control.png';
+import usageControlDistributions from '@public/usage-control-distributions.png';
+import usageControlOthers from '@public/usage-control-others.png';
 
 // demo
 import imageSample01 from '@public/demo/image-sample01.png';
@@ -78,6 +93,12 @@ const publicImageMap = {
   imageSample01Material01,
   imageQrcode01,
 
+  usageControlDurations,
+  usageControlRestrictions,
+  usageControlAccessControl,
+  usageControlDistributions,
+  usageControlOthers,
+
   imgBox,
   imgLeaf,
   aionLogo,
@@ -94,6 +115,10 @@ const publicImageMap = {
   clock,
   ordersItemImage001,
   deliveryDocumentItemImage001,
+  inspectionLotSpecDetailImage001,
+  inspectionLotComponentCompositionImage001,
+  inspectionLotInspectionImage001,
+  inspectionLotListImage001,
   picking,
   order,
 
@@ -126,6 +151,11 @@ const publicImageMap = {
   estimate,
   lot,
   price,
+  componentComposition,
+  productionOrder,
+  specDetail,
+  dataCertificate,
+  document,
 
 } as PublicImageMap;
 

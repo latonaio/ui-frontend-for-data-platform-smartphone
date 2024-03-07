@@ -40,6 +40,10 @@ export const HeaderContent = styled.div`
   &.deliveryToParty {
     background-color: ${style.header.deliveryToParty};
   }
+
+  &.inspectionLot {
+    background-color: ${style.header.inspectionLot};
+  }
 `;
 
 export const HeaderContentCenter = styled(HeaderContentDefault)`
